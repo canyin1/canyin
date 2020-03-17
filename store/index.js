@@ -5,7 +5,6 @@ import localconfig from '../util/localconfig.js'
 import httpUtil from '../util/httpUtil.js'
 import socketUtil from '../util/socketUtil.js'
 // #ifdef H5
-import wx from '@/node_modules/jweixin-module/lib/index.js'
 // #endif
 Vue.use(Vuex)
 
@@ -57,6 +56,7 @@ const store = new Vuex.Store({
 	},
 	//全局同步方法  必须是同步函数 通过commit函数来执行	
 	mutations: {
+		
 		login(state, userInfo) {
 			console.log('fake登陆成功:', userInfo);
 			uni.setStorage({

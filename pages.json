@@ -29,7 +29,6 @@
 	"tabBar":{
 		"color":"#999999",
 		"selectedColor":"#ffba59",
-		"borderStyle":"#999",
 		"backgroundColor":"#F5F5F5",
 		"height":"50px",
 		"fontSize":"10px",
