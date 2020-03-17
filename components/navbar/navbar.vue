@@ -1,0 +1,176 @@
+<template>
+	<view style="z-index: 9999;">
+		<view class='status_bar' :class="{'alpabackgroud':backcolorType==0,'whitebackgroud':backcolorType==1,'graybackgroud':backcolorType==2}"
+		 :style="{'padding-top':pddTitleTop+'px','height':pddTitleHeight+'px'}">
+			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}">{{title}}</view>
+			<view v-if="showBack" class="navback1" @click='navBack'>
+				<image v-if="whiteback==1" src="/static/back.png" mode='aspectFit' class="back1"></image>
+				<image v-else src="/static/back1.png" mode='aspectFit' class="back1"></image>
+			</view>
+		</view>
+		<view v-if="showKongPanel" class="KongPanel" :style="{height:kongHeight+'px'}">
+
+		</view>
+	</view>
+
+
+</template>
+
+<script>
+	//var statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px'
+	export default {
+		data() {
+			return {
+				//statusBarHeight: statusBarHeight,
+				showBack: true,
+				pddTitleHeight: 32,
+				pddTitleTop: 25,
+				kongHeight: 68
+			}
+		},
+		props: {
+			// pddTitleTop: {
+			// 	type: Number,
+			// 	default: null
+			// },
+			title: {
+				type: String,
+				default: ""
+			},
+			whiteback: { //后退按钮的颜色 1黑色 其他白色
+				type: String,
+				default: "1"
+			},
+			backcolorType: { //顶部导航的背景颜色 0 透明 1白色，2灰色
+				type: Number,
+				default: 0
+			},
+
+			bgcw: {
+				type: [Boolean, String],
+				default: false
+			},
+			showKongPanel: {
+				type: [Boolean, String],
+				default: false
+			},
+		},
+
+		name: 'navbar',
+		created: function(e) {
+			//console.log("自定义组件--------------------------------",getCurrentPages());
+			let pages = getCurrentPages();
+			//console.log('navbar的created' + (new Date()).getTime());
+			let a = pages.length <= 1 && pages[0].route != "pages/tabBar/activity/activity";
+			let b = pages.length > 1;
+			if (a || b) {
+				this.showBack = true;
+			} else {
+				this.showBack = false;
+			}
+			this.pddTitleTop = this.$store.state.pddTitleTop;
+			this.pddTitleHeight = this.$store.state.pddTitleHeight;
+			this.kongHeight = this.$store.state.kongHeight;
+
+			// if (a) {
+			// 	setTimeout(() => {
+			// 		this.pddTitleTop = this.$store.state.pddTitleTop;
+			// 		this.pddTitleHeight = this.$store.state.pddTitleHeight;
+			// 		this.kongHeight = this.$store.state.kongHeight;
+			// 	}, 500)
+			// }
+		},
+		methods: {
+			
+			refreshPddTitleTop() {
+				this.pddTitleTop = this.$store.state.pddTitleTop;
+				this.pddTitleHeight = this.$store.state.pddTitleHeight;
+				this.kongHeight = this.$store.state.kongHeight;
+			},
+			navBack(e) {
+				var pages1 = getCurrentPages();
+				let first = pages1[0];
+				if (pages1.length > 1 ) {
+					uni.navigateBack();
+				} else {
+					uni.switchTab({
+						url: '/pages/tabbar/index'
+					})
+				}
+			},
+		}
+	}
+</script>
+
+<style>
+	/* 自定义导航 上*/
+	.fontwhite {
+		color: #fff;
+	}
+
+	.fontblack {
+		color: #000;
+	}
+
+	.whitebackgroud {
+		background-color: #ffffff;
+	}
+
+	.alpabackgroud {}
+
+	.graybackgroud {
+		background-color: #F5F5F5;
+	}
+
+	.status_bar {
+		height: 32px;
+		line-height: 32px;
+		padding-top: var(--status-bar-height);
+		padding-bottom: 5px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 20000;
+		/* 		background-color: #F5F5F5;
+ */
+		width: 100%;
+		overflow: hidden;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		text-align: center;
+		font-weight: Medium;
+		font-size: 36upx;
+	}
+
+
+	.back1 {
+		width: 25px;
+		height: 25px;
+	}
+
+	.customtitlediv {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		width: 200px;
+		margin-left: calc(50% - 100px);
+		position: absolute;
+		font-size: 18px;
+		text-align: center;
+		font-family: PingFang-SC-Medium;
+	}
+
+	.navback1 {
+		margin-left: 20upx;
+		font-size: 13px;
+		display: flex;
+		align-items: center;
+		line-height: 1;
+		color: #fff;
+	}
+
+	/* 自定义导航 下*/
+</style>
