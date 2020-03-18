@@ -38,7 +38,7 @@
 		methods:{
 			commentClick(){
 				uni.navigateTo({
-					url:'comment'
+					url:'comment/comment'
 				})
 			},
 		}

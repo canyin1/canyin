@@ -2,13 +2,13 @@
 	<view style="z-index: 9999;">
 		<view class='status_bar' :class="{'alpabackgroud':backcolorType==0,'whitebackgroud':backcolorType==1,'graybackgroud':backcolorType==2}"
 		 :style="{'padding-top':pddTitleTop+'px','height':pddTitleHeight+'px'}">
-			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}" @click="chooseClick">{{title=='000'?food:title}} <span v-if="downType" class='iconfont icon-icon--'></span></view>
+			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}" @click="chooseClick">{{title=='000'?food:title}} <span v-if="downType" class='iconfont icon-jiantou1'></span></view>
 			<view v-if="showBack" class="navback1" @click='navBack'>
 				<image v-if="whiteback==1" src="/static/back.png" mode='aspectFit' class="back1"></image>
 				<image v-else src="/static/back1.png" mode='aspectFit' class="back1"></image>
 			</view>
 			<view class="date_view" v-if="dateType">
-				{{time}} <span class='iconfont icon-icon--'></span>
+				{{time}} <span class='iconfont icon-jiantou1'></span>
 			</view>
 		</view>
 		<view v-if="showKongPanel" class="KongPanel" :style="{height:kongHeight+'px'}">
@@ -200,13 +200,14 @@
 		line-height: 1;
 		color: #fff;
 	}
-	.icon-icon--{
-		font-size: 36upx;
-		color: #333333;
+	.icon-jiantou1{
+		font-size: 28upx;
+		color: #FFFFFF;
 		padding-left: 10upx;
 	}
 	.date_view{
 		font-size: 26upx;
+		color: #FFFFFF;
 	}
 	/* 自定义导航 下*/
 </style>

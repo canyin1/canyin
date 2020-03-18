@@ -1,14 +1,34 @@
 <template>
 	<view class="page">
-		<navbar title="000" :backcolorType='2' :showKongPanel="true" :downType="true" :dateType="true"></navbar>
-		
+		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true"></navbar>
+
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
-			<scroll-view scroll-y="true" class="scrollY"  :style="{height:scrollHeight +'px'}">
+			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
 				<view v-for="(item,index1) in week" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.week}}</view>
 			</scroll-view>
-			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
-				<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="foodClick">{{item.date}}</view>
-			</scroll-view>
+			<view class="scrollX_view">
+				<view class="tab_view">
+					<view class="tab" :class="{'active1':typeAll.zongheType}" @click="tabClick('zongheType')">
+						综合<span class="iconfont icon-jiantou1" :class='{"icon-jiantou2":typeAll.zongheType==2}' v-if='typeAll.zongheType'></span>
+					</view>
+					<view class="tab" :class="{active1:typeAll.monthType}" @click="tabClick('monthType')">
+						月售<span class="iconfont icon-jiantou1" :class='{"icon-jiantou2":typeAll.monthType==2}' v-if='typeAll.monthType'></span>
+					</view>
+					<view class="tab" :class="{active1:typeAll.cashType}" @click="tabClick('cashType')">
+						价格<span class="iconfont icon-jiantou1" :class='{"icon-jiantou2":typeAll.cashType==2}' v-if='typeAll.cashType'></span>
+					</view>
+					<view class="tab" :class="{active1:typeAll.levelType}" @click="tabClick('levelType')">
+						评分<span class="iconfont icon-jiantou1" :class='{"icon-jiantou2":typeAll.levelType==2}' v-if='typeAll.levelType'></span>
+					</view>
+					<view class="tab" :class="{active1:typeAll.newType}" @click="tabClick('newType')">
+						新菜<span class="iconfont icon-jiantou1" :class='{"icon-jiantou2":typeAll.newType==2}' v-if='typeAll.newType'></span>
+					</view>
+				</view>
+				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight1 +'px'}">
+					<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="foodClick">{{item.date}}</view>
+				</scroll-view>
+			</view>
+
 		</view>
 		<view class="bottom_view">
 			<view class="money_view">
@@ -36,14 +56,15 @@
 				uni.getSystemInfo({
 					success: function(res) {
 						console.log(res)
-						that.scrollHeight = res.windowHeight - data.top -50
+						that.scrollHeight = res.windowHeight - data.top - 55
+						that.scrollHeight1 = res.windowHeight - data.top - 100
 					}
 				})
 				// this.scrollHeight = this.$store.state.
 			}).exec();
 		},
-		data(){
-			return{
+		data() {
+			return {
 				week: [{
 					'week': '周日',
 					'date': '8'
@@ -66,36 +87,67 @@
 					'week': '周六',
 					'date': '14'
 				}],
-				scrollHeight:0,
-				indexs1:'',
-				indexs2:''
+				scrollHeight: 0,
+				scrollHeight1:0,
+				indexs1: '',
+				indexs2: '',
+				typeAll: {
+					'zongheType': 0,
+					'levelType': 0,
+					'newType': 0,
+					'monthType': 0,
+					'cashType': 0
+				}
 			}
 		},
-		methods:{
+		methods: {
 			indexClick(index) {
 				this.indexs = index
 			},
-			indexClick1(index){
+			indexClick1(index) {
 				this.indexs1 = index
 			},
-			foodClick(){
+			foodClick() {
 				uni.navigateTo({
-					url:'foodDetail'
+					url: 'foodDetail'
 				})
+			},
+			tabClick(type) {
+				if (this.typeAll[type] != 0) {
+					if (this.typeAll[type] == 1) {
+						this.typeAll[type] = 2
+					} else {
+						this.typeAll[type] = 1
+					}
+				} else {
+					this.typeAll = {
+						'zongheType': 0,
+						'levelType': 0,
+						'newType': 0,
+						'monthType': 0,
+						'cashType': 0
+					}
+					this.typeAll[type] = 1
+
+				}
+				console.log(this.typeAll)
 			},
 		}
 	}
-	
 </script>
 
 <style>
 	.active {
 		background: #ffba59 !important;
 	}
+	.active1{
+		color: #FFBA59 !important;
+	}
 	.scroll {
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
+		border-top: 10upx solid #F5F5F5;
 	}
 
 	.scrollY {
@@ -110,9 +162,38 @@
 		font-size: 28upx;
 	}
 
-	.scrollX {
+	.scrollX_view {
 		width: 77%;
+	}
+
+	.tab_view {
+		width: 100%;
+		height: 80upx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.tab {
+		width: 20%;
+		line-height: 80upx;
+		text-align: center;
+		font-size: 26upx;
+		color: #333333;
+	}
+
+	.icon-jiantou1 {
+		font-size: 24upx;
+		color: #FFBA59;
+	}
+	.icon-jiantou2{
+		display: inline-block;
+		transform: rotate(180deg);
+	}
+	.scrollX {
+		width: 100%;
 		background: #F5F5F5;
+		border-top: 10upx solid #F5F5F5;
 	}
 
 	.scroll2 {
@@ -121,10 +202,12 @@
 		height: 240upx;
 		border-bottom: 20upx solid #F5F5F5;
 	}
-	.scroll2:last-of-type{
+
+	.scroll2:last-of-type {
 		border: none;
 	}
-	.bottom_view{
+
+	.bottom_view {
 		background: #F1F1F1;
 		height: 100upx;
 		width: 100%;
@@ -137,21 +220,25 @@
 		justify-content: space-between;
 		padding: 0 12upx;
 		box-sizing: border-box;
-		box-shadow: 0 -10upx 20upx rgba(0,0,0,0.1);
+		box-shadow: 0 -10upx 20upx rgba(0, 0, 0, 0.1);
 	}
-	.money_view{
+
+	.money_view {
 		display: flex;
 		align-items: center;
 		color: #FFBA59;
 	}
-	.icon-gouwuche{
+
+	.icon-gouwuche {
 		font-size: 60upx;
 	}
-	.money{
+
+	.money {
 		font-size: 32upx;
 		padding-left: 10upx;
 	}
-	.buy_btn{
+
+	.buy_btn {
 		width: 148upx;
 		height: 68upx;
 		color: #333;

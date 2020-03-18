@@ -31,7 +31,13 @@
 			"navigationStyle":"custom"
 		}
 	},{
-		"path": "pages/index/comment",
+		"path": "pages/index/comment/comment",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
+	},{
+		"path": "pages/index/comment/addComment",
 		"style": {
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
