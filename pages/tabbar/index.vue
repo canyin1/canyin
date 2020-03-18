@@ -17,10 +17,10 @@
 		<view id="line"></view>
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY"  :style="{height:scrollHeight +'px'}">
-				<view v-for="(item,index1) in week" :key="index1" class="scroll1" :class="index1==indexs1?'active':''">{{item.week}}</view>
+				<view v-for="(item,index1) in week" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.week}}</view>
 			</scroll-view>
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
-				<view class="scroll2" v-for="(item,index2) in week" :key='index2'>{{item.date}}</view>
+				<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="bugClick">{{item.date}}</view>
 			</scroll-view>
 		</view>
 	</view>
@@ -82,6 +82,14 @@
 		methods: {
 			indexClick(index) {
 				this.indexs = index
+			},
+			indexClick1(index){
+				this.indexs1 = index
+			},
+			bugClick(){
+				uni.navigateTo({
+					url:"../index/choose"
+				})
 			},
 		}
 	}
@@ -181,5 +189,8 @@
 		background-color: #FFFFFF;
 		height: 240upx;
 		border-bottom: 20upx solid #F5F5F5;
+	}
+	.scroll2:last-of-type{
+		border: none;
 	}
 </style>
