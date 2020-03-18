@@ -10,14 +10,45 @@
 				<view class="add_btn">加入购物车</view>
 			</view>
 		</view>
-		
+		<view class="food_introduction">
+			<view class="top_view">
+				商品简介
+			</view>
+			<view class="introduction">梅菜+肉</view>
+		</view>
+		<view class="comment_view" @click="commentClick">
+			<view class="comment">商品评论(5)</view>
+			<span class="iconfont icon-jiantou"></span>
+		</view>
 	</view>
 </template>
 
 <script>
+	import navbar from "@/components/navbar/navbar.vue"
+	export default{
+		components: {
+			navbar
+		},
+		data(){
+			
+		},
+		onLoad() {
+			
+		},
+		methods:{
+			commentClick(){
+				uni.navigateTo({
+					url:'comment'
+				})
+			},
+		}
+	}
 </script>
 
 <style>
+	page{
+		color: #333333;
+	}
 	.food_img{
 		width: 100%;
 		height: 480upx;
@@ -63,6 +94,42 @@
 		color: #FFFFFF;
 		line-height: 54upx;
 		text-align: center;
-		
+	}
+	.top_view{
+		font-size: 38upx;
+		width: 100%;
+		padding: 20upx 24upx;
+		color: #333333;
+		border-bottom: 4upx solid #F5F5F5;
+	}
+	.introduction{
+		font-size: 26upx;
+		line-height: 1;
+		padding-top: 32upx;
+		padding-left: 24upx;
+		color: #333333;
+	}
+	.comment_view{
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: space-between;
+		padding: 60upx 24upx 24upx;
+		width: 100%;
+		border-bottom: 1upx solid #F5F5F5;
+		box-sizing: border-box;
+	}
+	.comment{
+		font-size: 38upx;
+		line-height: 1;
+		color: #333333;
+		font-weight: 400;
+		opacity: 0.9;
+	}
+	.icon-jiantou{
+		font-size: 32upx;
+		color: #333333;
+		font-weight: 400;
+		opacity: 0.9;
 	}
 </style>

@@ -48,8 +48,8 @@
 				default: ""
 			},
 			whiteback: { //后退按钮的颜色 1黑色 其他白色
-				type: String,
-				default: ""
+				type: Number,
+				default: 0
 			},
 			downType:{
 				type: [Boolean, String],

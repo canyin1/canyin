@@ -30,6 +30,12 @@
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
 		}
+	},{
+		"path": "pages/index/comment",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
 	}
 	],
 	"globalStyle": {

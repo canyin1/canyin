@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('/static/iconfont.ttf?t=1584449201236') format('truetype'); /* iOS 4.1- */
+  src: url('/static/iconfont.ttf?t=1584519041338') format('truetype'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -8,6 +8,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiantou:before {
+  content: "\e610";
 }
 
 .icon-aixin:before {
