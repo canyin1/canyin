@@ -8,7 +8,7 @@
 				<image v-else src="/static/back1.png" mode='aspectFit' class="back1"></image>
 			</view>
 			<view class="date_view" v-if="dateType">
-				
+				{{time}} <span class='iconfont icon-icon--'></span>
 			</view>
 		</view>
 		<view v-if="showKongPanel" class="KongPanel" :style="{height:kongHeight+'px'}">
@@ -31,7 +31,11 @@
 				pddTitleTop: 25,
 				kongHeight: 68,
 				foodType:['早餐','午餐','晚餐','夜宵'],
-				food:'早餐'
+				food:'早餐',
+				time:'5月20日 周三',
+				range:[],
+				ranges:'1',
+				index:1
 			}
 		},
 		props: {
@@ -144,7 +148,7 @@
 	.alpabackgroud {}
 
 	.graybackgroud {
-		background-color: #F5F5F5;
+		background-color: #FFBA59;
 	}
 
 	.status_bar {
@@ -199,6 +203,10 @@
 	.icon-icon--{
 		font-size: 36upx;
 		color: #333333;
+		padding-left: 10upx;
+	}
+	.date_view{
+		font-size: 26upx;
 	}
 	/* 自定义导航 下*/
 </style>
