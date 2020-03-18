@@ -2,15 +2,19 @@
 	<view style="z-index: 9999;">
 		<view class='status_bar' :class="{'alpabackgroud':backcolorType==0,'whitebackgroud':backcolorType==1,'graybackgroud':backcolorType==2}"
 		 :style="{'padding-top':pddTitleTop+'px','height':pddTitleHeight+'px'}">
-			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}">{{title}}</view>
+			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}" @click="chooseClick">{{title=='000'?food:title}} <span v-if="downType" class='iconfont icon-icon--'></span></view>
 			<view v-if="showBack" class="navback1" @click='navBack'>
 				<image v-if="whiteback==1" src="/static/back.png" mode='aspectFit' class="back1"></image>
 				<image v-else src="/static/back1.png" mode='aspectFit' class="back1"></image>
+			</view>
+			<view class="date_view" v-if="dateType">
+				
 			</view>
 		</view>
 		<view v-if="showKongPanel" class="KongPanel" :style="{height:kongHeight+'px'}">
 
 		</view>
+		
 	</view>
 
 
@@ -25,7 +29,9 @@
 				showBack: true,
 				pddTitleHeight: 32,
 				pddTitleTop: 25,
-				kongHeight: 68
+				kongHeight: 68,
+				foodType:['早餐','午餐','晚餐','夜宵'],
+				food:'早餐'
 			}
 		},
 		props: {
@@ -39,7 +45,15 @@
 			},
 			whiteback: { //后退按钮的颜色 1黑色 其他白色
 				type: String,
-				default: "1"
+				default: ""
+			},
+			downType:{
+				type: [Boolean, String],
+				default: false
+			},
+			dateType:{
+				type: [Boolean, String],
+				default: false
 			},
 			backcolorType: { //顶部导航的背景颜色 0 透明 1白色，2灰色
 				type: Number,
@@ -81,7 +95,18 @@
 			// }
 		},
 		methods: {
-			
+			chooseClick(){
+				if(this.downType==0){
+					return false
+				}
+				let that = this
+				uni.showActionSheet({
+					itemList: this.foodType,
+					success(res) {
+						that.food = that.foodType[res.tapIndex]
+					},
+				})
+			},
 			refreshPddTitleTop() {
 				this.pddTitleTop = this.$store.state.pddTitleTop;
 				this.pddTitleHeight = this.$store.state.pddTitleHeight;
@@ -171,6 +196,9 @@
 		line-height: 1;
 		color: #fff;
 	}
-
+	.icon-icon--{
+		font-size: 36upx;
+		color: #333333;
+	}
 	/* 自定义导航 下*/
 </style>
