@@ -10,24 +10,14 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		union_kefu_qrcode: '',
-		union_kefu_wxaccount: '',
-		kefu_qrcode: '',
-		kefu_wxaccount: '',
 		isWxBrowser: false,
 		serverUserInfo: null, //invitor -1=表示末填写 0=无人邀请 其他=邀请人
 		platform: '',
 		hasMobile: true,
 		shareObj: null,
 		globalFormIds: null,
-		screenWidth: 0,
-		screenHeight: 0,
-		windowHeight: 0,
 		navHeight: 0, //顶部导航条的高度
 		iphoneXBottomH: 0,
-		mi8: false,
-		isAndroid: 0,
-		isIos: 0,
 		isRelease: false,
 		loginProvider: "",
 		openid: null,
@@ -48,11 +38,6 @@ const store = new Vuex.Store({
 		pddTitleTop: 5, //这个是圆点上面的bar的高度
 		kongHeight: 32 + 5 + 5, //这个是微信右上角原点icon的高度+顶部bar的高度+圆点下面特意留了5px的padding-bottom
 		// #endif
-		version: '1.0.0', // 版本号
-		invitor: null,
-		union_type: 0, //1=高级联运 2=超级联运 3=金牌联运
-		is_member: 0,
-		user_bind: null
 	},
 	//全局同步方法  必须是同步函数 通过commit函数来执行	
 	mutations: {
@@ -110,21 +95,6 @@ const store = new Vuex.Store({
 			});
 			state.serverUserInfo = null
 		},
-		setNickname(state, nickname) {
-			state.serverUserInfo.nickname = nickname;
-		},
-		setAvatar(state, avatar) {
-			state.serverUserInfo.avatar = avatar;
-		},
-		setMobile(state, mobile) {
-			state.serverUserInfo.mobile = mobile;
-		},
-		updateUserinfo(state, userinfo) {
-			state.serverUserInfo = userinfo;
-		},
-		setUserBind(state, obj) {
-
-		},
 		logout(state) {
 			state.hasMobile = false
 			state.openid = null
@@ -174,30 +144,6 @@ const store = new Vuex.Store({
 					toolUtil.wxShare2();
 				// #endif
 			}, null, 1)
-		},
-		getUserData(context) {
-			let param = {}
-
-			httpUtil.post2('/api/wxapp.account/get_user_data', param, (obj2) => {
-				console.log("个人信息：", obj2);
-				context.state.is_member = obj2.data.user_bind.is_member;
-				context.state.union_type = obj2.data.user_bind.union_type;
-				context.state.user_bind = obj2.data.user_bind;
-				// is_member: 0
-				// is_union: 0      is_member是否会员  is_union是否联运
-				//commit('setUserBind', obj2.data)
-			});
-		},
-
-		getConfig(context) {
-			let params = {};
-			httpUtil.post2("/api/wxapp.index/get_kefu_conf", params, (obj) => {
-				console.log(obj)
-				context.state.kefu_qrcode = obj.data.kefu_qrcode;
-				context.state.kefu_wxaccount = obj.data.kefu_wxaccount;
-				context.state.union_kefu_qrcode = obj.data.union_kefu_qrcode;
-				context.state.union_kefu_wxaccount = obj.data.union_kefu_wxaccount;
-			})
 		},
 
 
