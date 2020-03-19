@@ -79,9 +79,8 @@
 			//console.log("自定义组件--------------------------------",getCurrentPages());
 			let pages = getCurrentPages();
 			//console.log('navbar的created' + (new Date()).getTime());
-			let a = pages.length <= 1 && pages[0].route != "pages/tabBar/activity/activity";
 			let b = pages.length > 1;
-			if (a || b) {
+			if (b) {
 				this.showBack = true;
 			} else {
 				this.showBack = false;

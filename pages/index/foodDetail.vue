@@ -30,7 +30,7 @@
 			navbar
 		},
 		data(){
-			
+			return{}
 		},
 		onLoad() {
 			

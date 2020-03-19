@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true"></navbar>
+		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" v-on:chooseClick='TchooseClick'></navbar>
 
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
@@ -101,6 +101,9 @@
 			}
 		},
 		methods: {
+			TchooseClick(){
+				console.log(1)
+			},
 			indexClick(index) {
 				this.indexs = index
 			},

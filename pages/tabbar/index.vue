@@ -1,5 +1,6 @@
 <template>
 	<view class="page">
+		<navbar title="订餐" :backcolorType='2' :showKongPanel="true" :whiteback='2'></navbar>
 		<view class="welcome">{{welcome}}</view>
 		<view class="address_view">
 			<span class="icon iconfont icon-ic_tomap"></span>
@@ -177,6 +178,7 @@
 		text-align: center;
 		background: #F1F1F1;
 		font-size: 28upx;
+		border-bottom: 2upx solid #FFFFFF;
 	}
 
 	.scrollX {
