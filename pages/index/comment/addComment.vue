@@ -23,6 +23,14 @@
 					 :key='index' @click.stop="evaluateClick('weightType',index)"></span>
 				</view>
 			</view>
+			<view class="input_view">
+				<textarea @input="inputClick" type="text" value="" />
+				<view class="img_view">
+					<image v-for="(item,index1) in img" :src="item" mode="aspectFill" v-if="img.length>0" :key="index1"></image>
+					<span class="iconfont icon-jiahao1" @click='addImg' v-if="img.length<3"></span>
+				</view>
+			</view>
+			<view class="comfire_btn">立即评论</view>
 		</view>
 	</view>
 </template>
@@ -38,6 +46,7 @@
 		data() {
 			return {
 				levels: '3.5',
+				value:'',
 				params: {
 					'taste': ['', '', '', '', ''],
 					'hygiene': ['', ''],
@@ -45,15 +54,54 @@
 					tasteType: 0,
 					hygieneType: 0,
 					weightType: 0,
-				}
+				},
+				img:['/static/微信图片_20200318092008.jpg','/static/微信图片_20200318092008.jpg','/static/微信图片_20200318092008.jpg']
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
+			inputClick(e){
+				this.value = e.detail.value
+			},
 			evaluateClick(type, index) {
 				this.params[type] = index + 1
+			},
+			addImg(){
+				let that = this
+				uni.chooseImage({
+					count:3,
+					success(res) {
+						console.log(res.tempFilePaths[0])
+						// that.uploadImg(res.tempFilePaths)
+					}
+				})
+			},
+			uploadImg(tempFilePaths){
+				let teamparr = tempFilePaths
+				function uploadimg(){
+					while(teamparr.length > 0){
+						let item = teamparr.pop()
+						uni.uploadFile({
+							url:'https://daoyin-prd-1252569296.cos.ap-guangzhou.myqcloud.com/',
+							name: 'file',
+							filePath:item,
+							formData: {
+							  'key': Key,
+							  'success_action_status': 200,
+							  'Signature': AuthData.Authorization,
+							  'x-cos-security-token': AuthData.XCosSecurityToken,
+							  'Content-Type': '',
+							},
+							success(resa){
+								console.log(resa)
+								return
+								that.img.push(resa)
+							}
+						})
+					}
+				}
 			},
 		}
 	}
@@ -103,5 +151,49 @@
 		font-size: 46upx;
 		padding-right: 10upx;
 		color: #999999;
+	}
+	.icon-jiahao1{
+		font-size: 120upx;
+		color: #999999;
+		margin-top: 5upx;
+	}
+	.input_view{
+		width: 710upx;
+		background-color: #F5F5F5;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		border-radius: 24upx;
+		margin: 20upx auto;
+		padding: 32upx 24upx;
+		box-sizing: border-box;
+	}
+	.img_view{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_view image{
+		width: 120upx;
+		height: 120upx;
+		margin-right: 10upx;
+	}
+	.img_view image:last-of-type{
+		margin-right: 0;
+	}
+	textarea{
+		font-size: 32upx;
+		color: #333333;
+	}
+	.comfire_btn{
+		width: 680upx;
+		height: 88upx;
+		line-height: 88upx;
+		margin: 20upx auto 0;
+		color: #FFFFFF;
+		font-size: 32upx;
+		text-align: center;
+		border-radius: 44upx;
+		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
 	}
 </style>
