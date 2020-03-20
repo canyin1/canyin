@@ -14,21 +14,21 @@
 			<span class="iconfont icon-ziyuan"></span>
 		</view>
 		<view class="hengview">
-			<view class="hengview1">
+			<view class="hengview1" @click="goClick(0)">
 				<view class="hengLeft">
 					<span class="iconfont icon-tubiaolunkuo- icon-s"></span>
 					<view class="hengname">我的钱包</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view>
-			<view class="hengview1">
+			<view class="hengview1" @click="goClick(1)">
 				<view class="hengLeft">
 					<span class="iconfont icon-ic_tomap icon-s"></span>
 					<view class="hengname">收货地址</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view>
-			<view class="hengview1">
+			<view class="hengview1" @click="goClick(2)">
 				<view class="hengLeft">
 					<span class="iconfont icon-aixin icon-s"></span>
 					<view class="hengname">我的收藏</view>
@@ -64,7 +64,12 @@
 
 		},
 		methods: {
-
+			goClick(type){
+				let url = ['../me/myWallet','../me/myAddress','../me/myCollect']
+				uni.navigateTo({
+					url:url[type]
+				})
+			},
 		}
 	}
 </script>
