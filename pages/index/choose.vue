@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" v-on:chooseClick='TchooseClick'></navbar>
+		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick' @foods="foodTypeClick"></navbar>
 
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
@@ -87,22 +87,28 @@
 					'week': '周六',
 					'date': '14'
 				}],
+				startDate:'',
+				endDate: '',
 				scrollHeight: 0,
 				scrollHeight1:0,
 				indexs1: '',
 				indexs2: '',
+				date:'请选择日期',
 				typeAll: {
 					'zongheType': 0,
 					'levelType': 0,
 					'newType': 0,
 					'monthType': 0,
-					'cashType': 0
+					'cashType': 0,
 				}
 			}
 		},
 		methods: {
-			TchooseClick(){
-				console.log(1)
+			foodTypeClick(e){
+				this.foods = e
+			},
+			tPickerClick(e){
+				this.date = e.split(' ')[0]
 			},
 			indexClick(index) {
 				this.indexs = index

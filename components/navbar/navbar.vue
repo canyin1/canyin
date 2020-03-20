@@ -1,5 +1,5 @@
 <template>
-	<view style="z-index: 9999;">
+	<view style="z-index: 997;">
 		<view class='status_bar' :class="{'alpabackgroud':backcolorType==0,'whitebackgroud':backcolorType==1,'graybackgroud':backcolorType==2}"
 		 :style="{'padding-top':pddTitleTop+'px','height':pddTitleHeight+'px'}">
 			<view class="customtitlediv" :class="{'fontwhite':whiteback==2,'fontblack':whiteback!=2}" @click="chooseClick">{{title=='000'?food:title}} <span v-if="downType" class='iconfont icon-jiantou1'></span></view>
@@ -8,7 +8,10 @@
 				<image v-else src="/static/back1.png" mode='aspectFit' class="back1"></image>
 			</view>
 			<view class="date_view" v-if="dateType">
-				{{time}} <span class='iconfont icon-jiantou1'></span>
+				
+				<picker mode="date" @change="pickerClick" @cancel="cancelClick">
+					<view>{{date}} </view>
+				</picker><span class='iconfont icon-jiantou1'></span>
 			</view>
 		</view>
 		<view v-if="showKongPanel" class="KongPanel" :style="{height:kongHeight+'px'}">
@@ -32,9 +35,9 @@
 				kongHeight: 68,
 				foodType:['早餐','午餐','晚餐','夜宵'],
 				food:'早餐',
-				time:'5月20日 周三',
 				range:[],
 				ranges:'1',
+				date: '请选择日期',
 				index:1
 			}
 		},
@@ -76,6 +79,7 @@
 
 		name: 'navbar',
 		created: function(e) {
+			console.log(111,this.startDate,222,this.endDate)
 			//console.log("自定义组件--------------------------------",getCurrentPages());
 			let pages = getCurrentPages();
 			//console.log('navbar的created' + (new Date()).getTime());
@@ -98,6 +102,17 @@
 			// }
 		},
 		methods: {
+			cancelClick(e){
+				console.log(555,e)
+			},
+			pickerClick(e){
+				console.log(e)
+				var arr="日一二三四五六".split("") 
+				this.weeks = arr[new Date(e.detail.value).getDay()]
+				console.log(this.weeks)
+				this.date = e.detail.value + ' ' + '周' + this.weeks
+				this.$emit("weeks", this.date,)
+			},
 			chooseClick(){
 				if(this.downType==0){
 					return false
@@ -107,6 +122,7 @@
 					itemList: this.foodType,
 					success(res) {
 						that.food = that.foodType[res.tapIndex]
+						that.$emit("foods", that.food,)
 					},
 				})
 			},
@@ -158,7 +174,7 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: 20000;
+		z-index: 997;
 		/* 		background-color: #F5F5F5;
  */
 		width: 100%;
@@ -205,8 +221,11 @@
 		padding-left: 10upx;
 	}
 	.date_view{
-		font-size: 26upx;
+		font-size: 25upx;
 		color: #FFFFFF;
+		display: flex;
+		flex-direction: row;
+		padding-right: 10upx;
 	}
 	/* 自定义导航 下*/
 </style>

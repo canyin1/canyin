@@ -77,7 +77,7 @@
 		background: #FFBA59;
 		text-align: center;
 		font-size: 24upx;
-		color: #333333;
+		color: #FFFFFF;
 		border-radius: 24upx;
 	}
 	.goods_left{

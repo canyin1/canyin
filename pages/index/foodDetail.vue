@@ -9,7 +9,7 @@
 				<view class="cash">￥10.00</view>
 				<view class="btn_view">
 					<view class="collect_btn">收藏</view>
-					<view class="add_btn">加入购物车</view>
+					<view class="add_btn" @click="addGoodsClick">加入购物车</view>
 				</view>
 			</view>
 		</view>
@@ -23,6 +23,22 @@
 			<view class="comment">商品评论(5)</view>
 			<span class="iconfont icon-jiantou"></span>
 		</view>
+		<view class="chooseWindow_view">
+			<view class="chooseBg"></view>
+			<view class="chooseWindow">
+				<text>请选择</text>
+				<view class="box">
+					<text>学生:</text>
+					<view class="checkbox">
+						<checkbox-group>
+							<label v-for="(item,index) in student" :key='index' @click='checkClick(item.id)'>
+								<checkbox :value="item.id" :checked='item.checked'  /><text>{{item.name}}</text>
+							</label>
+						</checkbox-group>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -33,7 +49,20 @@
 			navbar
 		},
 		data(){
-			return{}
+			return{
+				boxType:false,
+				student:[{
+					'name':'1',
+					'id': '1',
+					checked:false
+				},
+				{
+					'name':'2',
+					'id': '2',
+					checked:false
+				}],
+				allId:[]
+			}
 		},
 		onLoad() {
 			
@@ -43,6 +72,19 @@
 				uni.navigateTo({
 					url:'comment/comment'
 				})
+			},
+			addGoodsClick(){
+				this.boxType = true
+			},
+			checkClick(id){
+				console.log(id)
+				for(let i = 0;i<this.student.length;i++){
+					if(this.student[i].id==id){
+						this.student[i].checked = !this.student[i].checked
+						console.log('111',this.student)
+						break;
+					}
+				}
 			},
 		}
 	}
@@ -157,5 +199,19 @@
 		color: #FFFFFF;
 		line-height: 54upx;
 		text-align: center;
+	}
+	.box{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	checkbox-group{
+		padding-left: 20upx;
+	}
+	label{
+		padding-right: 20upx;
+	}
+	label:last-of-type{
+		padding-right: 0;
 	}
 </style>
