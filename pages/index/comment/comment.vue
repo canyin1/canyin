@@ -1,16 +1,24 @@
 <template>
 	<view class="page">
 		<navbar title="商品评论" :backcolorType='2' :whiteback='2' :showKongPanel="true"></navbar>
-		<view class="tab_view" :style="{top:kongHeight+'px'}">
+		<!-- <view class="tab_view" :style="{top:kongHeight+'px'}">
 			<view class="tab" :class="type==0?'tab_avtive':''" @click="tabClick(0)">全部<view>(100)</view>
 			</view>
-			<view class="tab" :class="type==1?'tab_avtive':''" @click="tabClick(1)"><span class='iconfont icon-good'></span>
+			<view class="tab" :class="type==1?'tab_avtive':''" @click="tabClick(1)">
+				
+			</view>
+			<view class="tab" :class="type==2?'tab_avtive':''" @click="tabClick(2)">
 				<view>(50)</view>
 			</view>
-			<view class="tab" :class="type==2?'tab_avtive':''" @click="tabClick(2)"><span class='iconfont icon-good icon-good1'></span>
-				<view>(50)</view>
+		</view> -->
+		<view class="tab_view" :style='{top:heights +"px"}'>
+			<view class="tab_box">
+				<view class="tab" :class="{active:type==0}" @click="tabClick(0)">全部<view>(100)</view></view>
+				<view class="tab" :class="{active:type==1}" @click="tabClick(1)"><span class='iconfont icon-good' :class='{active:type==1}'></span><view>(50)</view></view>
+				<view class="tab" :class="{active:type==2}" @click="tabClick(2)"><span class='iconfont icon-good icon-good1' :class='{active:type==2}'></span><view>(50)</view></view>
 			</view>
 		</view>
+		<view class="kongHeights"></view>
 		<view class="commentDetail_view">
 			<commentDetail v-for='(item,index) in comment' :key='index' @click='addComment'></commentDetail>
 		</view>
@@ -25,6 +33,9 @@
 		components: {
 			navbar,
 			commentDetail
+		},
+		onReady() {
+			this.heights = this.$store.state.kongHeight
 		},
 		created: function(e) {
 			this.kongHeight = this.$store.state.kongHeight;
@@ -55,47 +66,48 @@
 	page {
 		background: #F5F5F5;
 	}
-
-	.tab_view {
+.tab_view {
+		height: 68upx;
 		width: 100%;
-		display: flex;
-		flex-direction: row;
 		background: #FFFFFF;
 		position: fixed;
 		left: 0;
-		z-index: 999999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999999;
 	}
-
-	.tab {
-		width: 33.3%;
-		text-align: center;
-		height: 46upx;
-		line-height: 46upx;
-		padding: 22upx 0;
-		font-size: 32upx;
+	.tab_box{
+		height: 48upx;
+		border-radius: 64upx;
+		background: #F5F5F5;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-
-	.tab view {
-		padding-left: 10upx;
+	.tab{
+		width: 200upx;
+		font-size: 28upx;
 		color: #333333;
+		text-align: center;
+		line-height: 48upx;
+		height: 48upx;
+		border-radius: 64upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
-
-	.tab_avtive {
-		position: relative;
+	.tab view{
+		padding-left: 10upx;
 	}
-
-	.tab_avtive::after {
-		content: '';
-		width: 100upx;
-		position: absolute;
-		left: calc(50%-50upx);
-		bottom: 0;
-		height: 4upx;
-		border-radius: 4upx;
-		background: #FFBA59;
+	.active{
+		background: #FFBA59 !important;
+		color: #FFFFFF !important;
+	}
+	.kongHeights{
+		height: 68upx;
+		width: 100%;
+		opacity: 0;
 	}
 
 	.icon-good {
@@ -110,7 +122,6 @@
 		transform: rotateX(180deg);
 	}
 	.commentDetail_view{
-		padding-top: 90upx;
 		position: relative;
 		z-index: 1;
 		padding-bottom: 40upx;

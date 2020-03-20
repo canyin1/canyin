@@ -7,7 +7,10 @@
 			<view class="sale_num">月售100份</view>
 			<view class="cash_view">
 				<view class="cash">￥10.00</view>
-				<view class="add_btn">加入购物车</view>
+				<view class="btn_view">
+					<view class="collect_btn">收藏</view>
+					<view class="add_btn">加入购物车</view>
+				</view>
 			</view>
 		</view>
 		<view class="food_introduction">
@@ -77,10 +80,15 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
-		padding-top: 20upx;
+		box-sizing: border-box;
+		padding: 20upx 24upx;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		box-shadow: 0 -10upx 20upx rgba(0,0,0,0.1);
 	}
 	.cash{
-		font-size: 26upx;
+		font-size: 36upx;
 		line-height: 1;
 		color: #FFBA59;
 		
@@ -88,7 +96,8 @@
 	.add_btn{
 		width: 168upx;
 		height: 54upx;
-		border-radius: 34upx;
+		border-top-right-radius: 24upx;
+		border-bottom-right-radius: 24upx;
 		background: #FFBA59;
 		font-size: 26upx;
 		color: #FFFFFF;
@@ -131,5 +140,22 @@
 		color: #333333;
 		font-weight: 400;
 		opacity: 0.9;
+	}
+	.btn_view{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.collect_btn{
+		width: 140upx;
+		height: 54upx;
+		border-top-left-radius: 24upx;
+		border-bottom-left-radius: 24upx;
+		background: #FF4D4C;
+		font-size: 26upx;
+		color: #FFFFFF;
+		line-height: 54upx;
+		text-align: center;
 	}
 </style>

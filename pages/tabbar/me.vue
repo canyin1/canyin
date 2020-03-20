@@ -196,7 +196,7 @@
 	}
 
 	.icon-ic_tomap {
-		color: #6DD2C0;
+		color: #FFAF25;
 	}
 
 	.icon-aixin {
@@ -208,6 +208,6 @@
 	}
 
 	.icon-cedaohang-hezuohuoba {
-		color: #FFAF25;
+		color: #6DD2C0;
 	}
 </style>
