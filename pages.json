@@ -60,6 +60,12 @@
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
 		}
+	},{
+		"path": "pages/login",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
 	}
 	],
 	"globalStyle": {

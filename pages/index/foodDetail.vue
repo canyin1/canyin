@@ -37,6 +37,16 @@
 						</checkbox-group>
 					</view>
 				</view>
+				<view class="box">
+					<text>学生:</text>
+					<view class="checkbox">
+						<checkbox-group>
+							<label v-for="(item,index) in student" :key='index' @click='checkClick(item.id)'>
+								<checkbox :value="item.id" :checked='item.checked'  /><text>{{item.name}}</text>
+							</label>
+						</checkbox-group>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>

@@ -79,7 +79,6 @@
 
 		name: 'navbar',
 		created: function(e) {
-			console.log(111,this.startDate,222,this.endDate)
 			//console.log("自定义组件--------------------------------",getCurrentPages());
 			let pages = getCurrentPages();
 			//console.log('navbar的created' + (new Date()).getTime());

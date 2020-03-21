@@ -5,7 +5,6 @@ import toolUtil from 'util/toolUtil.js'
 
 Vue.config.productionTip = false
 Vue.prototype.$store = store
-Vue.prototype.$toolUtil = toolUtil
 
 App.mpType = 'app'
 
