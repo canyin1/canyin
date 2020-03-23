@@ -23,7 +23,7 @@
 			<view class="comment">商品评论(5)</view>
 			<span class="iconfont icon-jiantou"></span>
 		</view>
-		<view class="chooseWindow_view">
+		<!-- <view class="chooseWindow_view">
 			<view class="chooseBg"></view>
 			<view class="chooseWindow">
 				<text>请选择</text>
@@ -48,7 +48,7 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -156,13 +156,13 @@
 	}
 	.add_btn{
 		width: 168upx;
-		height: 54upx;
+		height: 68upx;
 		border-top-right-radius: 24upx;
 		border-bottom-right-radius: 24upx;
 		background: #FFBA59;
 		font-size: 26upx;
 		color: #FFFFFF;
-		line-height: 54upx;
+		line-height: 68upx;
 		text-align: center;
 	}
 	.top_view{
@@ -210,13 +210,13 @@
 	}
 	.collect_btn{
 		width: 140upx;
-		height: 54upx;
+		height: 68upx;
 		border-top-left-radius: 24upx;
 		border-bottom-left-radius: 24upx;
 		background: #FF4D4C;
 		font-size: 26upx;
 		color: #FFFFFF;
-		line-height: 54upx;
+		line-height: 68upx;
 		text-align: center;
 	}
 	.box{

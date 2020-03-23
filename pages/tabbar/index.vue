@@ -22,7 +22,7 @@
 			</scroll-view>
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
 
-				<indexBox  v-for="(item,index2) in week" :key='index2' @click="bugClick" ></indexBox>
+				<indexBox  v-for="(item,index2) in week" :key='index2' ></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -90,11 +90,7 @@
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			bugClick() {
-				uni.navigateTo({
-					url: "../index/choose"
-				})
-			},
+			
 		}
 	}
 </script>

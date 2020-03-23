@@ -45,7 +45,7 @@
 		},
 		data() {
 			return {
-				levels: '3.5',
+				levels: '1',
 				value:'',
 				params: {
 					'taste': ['', '', '', '', ''],

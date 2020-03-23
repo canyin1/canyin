@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<view class="scroll2">
+		<view class="scroll2" @click="bugClick">
 			<view class="scroll_img_view">
 				<image class="scroll_img" src="/static/微信图片_20200318092008.jpg"></image>
 			</view>
@@ -30,7 +30,11 @@
 
 		},
 		methods: {
-
+			bugClick() {
+				uni.navigateTo({
+					url: "../index/choose"
+				})
+			},
 		}
 	}
 </script>
