@@ -62,13 +62,17 @@
 			return{
 				boxType:false,
 				student:[{
-					'name':'1',
-					'id': '1',
+					name:"全部",
+					id:"0",
+					'checked':false
+				},{
+					name:'1',
+					id: '1',
 					checked:false
 				},
 				{
-					'name':'2',
-					'id': '2',
+					name:'2',
+					id: '2',
 					checked:false
 				}],
 				allId:[]
@@ -88,7 +92,12 @@
 			},
 			checkClick(id){
 				console.log(id)
-				for(let i = 0;i<this.student.length;i++){
+				if(id=='0'){
+					for(let i =1;i<this.student.length;i++){
+						this.student[i].checked = true
+					}
+				}
+				for(let i = 1;i<this.student.length;i++){
 					if(this.student[i].id==id){
 						this.student[i].checked = !this.student[i].checked
 						console.log('111',this.student)
