@@ -20,7 +20,7 @@
 		</view>
 		<view class="kongHeights"></view>
 		<view class="commentDetail_view">
-			<commentDetail v-for='(item,index) in comment' :key='index' @click='addComment'></commentDetail>
+			<commentDetail v-for='(item,index) in comment' :key='index' ></commentDetail>
 		</view>
 		
 	</view>
@@ -43,6 +43,7 @@
 		},
 		data() {
 			return {
+				heights:'',
 				type: 0,
 				level: 1.5,
 				comment:['1','2','3','4','5'],
@@ -52,11 +53,6 @@
 		methods: {
 			tabClick(type) {
 				this.type = type
-			},
-			addComment(){
-				uni.navigateTo({
-					url:'addComment'
-				})
 			},
 		}
 	}

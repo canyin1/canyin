@@ -5,13 +5,6 @@
 		<view class="big_view">
 			<view class="food_name">梅菜肉</view>
 			<view class="sale_num">月售100份</view>
-			<view class="cash_view">
-				<view class="cash">￥10.00</view>
-				<view class="btn_view">
-					<view class="collect_btn">收藏</view>
-					<view class="add_btn" @click="addGoodsClick">加入购物车</view>
-				</view>
-			</view>
 		</view>
 		<view class="food_introduction">
 			<view class="top_view">
@@ -23,32 +16,30 @@
 			<view class="comment">商品评论(5)</view>
 			<span class="iconfont icon-jiantou"></span>
 		</view>
-		<!-- <view class="chooseWindow_view">
+		<view class="cash_view">
+			<view class="cash">￥10.00</view>
+			<view class="btn_view">
+				<view class="collect_btn">收藏</view>
+				<view class="add_btn" @click="addGoodsClick">加入购物车</view>
+			</view>
+		</view>
+		<view class="chooseWindow_view" v-if="boxType">
 			<view class="chooseBg"></view>
 			<view class="chooseWindow">
-				<text>请选择</text>
+				<view class="choose_text">请选择</view>
 				<view class="box">
-					<text>学生:</text>
+					<view class="text">学生:</view>
 					<view class="checkbox">
 						<checkbox-group>
 							<label v-for="(item,index) in student" :key='index' @click='checkClick(item.id)'>
-								<checkbox :value="item.id" :checked='item.checked'  /><text>{{item.name}}</text>
+								<checkbox :value="item.id" :checked='item.checked'  style="transform:scale(0.7)" /><text>{{item.name}}</text>
 							</label>
 						</checkbox-group>
 					</view>
 				</view>
-				<view class="box">
-					<text>学生:</text>
-					<view class="checkbox">
-						<checkbox-group>
-							<label v-for="(item,index) in student" :key='index' @click='checkClick(item.id)'>
-								<checkbox :value="item.id" :checked='item.checked'  /><text>{{item.name}}</text>
-							</label>
-						</checkbox-group>
-					</view>
-				</view>
+				<view class="choose_btn">添加</view>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 
@@ -62,19 +53,26 @@
 			return{
 				boxType:false,
 				student:[{
-					name:"全部",
-					id:"0",
-					'checked':false
-				},{
-					name:'1',
+					name:'周速度',
 					id: '1',
 					checked:false
 				},
 				{
-					name:'2',
+					name:'放方法',
 					id: '2',
 					checked:false
-				}],
+				},
+				// {
+				// 	name:'放方法',
+				// 	id: '2',
+				// 	checked:false
+				// },
+				// {
+				// 	name:'放方法',
+				// 	id: '2',
+				// 	checked:false
+				// },
+				],
 				allId:[]
 			}
 		},
@@ -91,12 +89,6 @@
 				this.boxType = true
 			},
 			checkClick(id){
-				console.log(id)
-				if(id=='0'){
-					for(let i =1;i<this.student.length;i++){
-						this.student[i].checked = true
-					}
-				}
 				for(let i = 1;i<this.student.length;i++){
 					if(this.student[i].id==id){
 						this.student[i].checked = !this.student[i].checked
@@ -146,6 +138,7 @@
 		position: fixed;
 		bottom: 0;
 		left: 0;
+		z-index: 1;
 		box-shadow: 0 -10upx 20upx rgba(0,0,0,0.1);
 	}
 	.cash{
@@ -223,14 +216,74 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-	}
-	checkbox-group{
-		padding-left: 20upx;
+		width: 100%;
+		justify-content: center;
+		flex-wrap: wrap;
+		font-size: 26upx;
 	}
 	label{
-		padding-right: 20upx;
+		padding-right: 40upx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 	label:last-of-type{
 		padding-right: 0;
+	}
+	label text{
+		font-size: 26upx;
+	}
+	checkbox-group{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.chooseBg{
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 1666upx;
+		background: #000000;
+		opacity: 0.5;
+		z-index: 100000;
+	}
+	.chooseWindow{
+		width: 600upx;
+		padding: 32upx 24upx;
+		border-radius: 24upx;
+		background: #FFFFFF;
+		z-index: 100001;
+		position: fixed;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		top: 20%;
+		left: 50%;
+		margin-left: -300upx;
+	}
+	.choose_text{
+		color: #333333;
+		line-height: 1;
+		margin-bottom: 48upx;
+		width: 100%;
+		text-align: center;
+	}
+	.text{
+		padding-right: 80upx;
+	}
+	.chooseWindow_view{
+		z-index: 998;
+	}
+	.choose_btn{
+		width: 120upx;
+		height: 58upx;
+		font-size: 26upx;
+		color: #FFFFFF;
+		background: #FFBA59;
+		border-radius: 24upx;
+		text-align: center;
+		line-height: 58upx;
+		margin-top: 40upx;
 	}
 </style>

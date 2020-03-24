@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="top_view">
-			<image class="me_BG" src="/static/me_BG.png" mode=""></image>
+			<image class="me_BG" src="/static/index_bg.png" mode=""></image>
 			<view class="player_view">
 				<view class="player_img_view">
 					<image class="player_img" src="/static/微信图片_20200318092008.jpg" mode=""></image>
@@ -85,7 +85,7 @@
 
 	.me_BG {
 		width: 100%;
-		height: 256upx;
+		height: 233upx;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -93,7 +93,7 @@
 	}
 
 	.player_view {
-		height: 256upx;
+		height: 233upx;
 		width: 100%;
 		padding: 0 50upx;
 		display: flex;

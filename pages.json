@@ -66,6 +66,12 @@
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
 		}
+	},{
+		"path": "pages/index/shoppingCart",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
 	}
 	],
 	"globalStyle": {

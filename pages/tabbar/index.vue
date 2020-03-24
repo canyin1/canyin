@@ -1,12 +1,24 @@
 <template>
 	<view class="page">
-		<navbar title="订餐" :backcolorType='2' :showKongPanel="true" :whiteback='2'></navbar>
-		<view class="welcome">{{welcome}}</view>
+		<!-- <navbar title="订餐" :backcolorType='2' :showKongPanel="true" :whiteback='2'></navbar> -->
 		<view class="address_view">
-			<span class="icon iconfont icon-ic_tomap"></span>
-			<view class="address">(第五中学)智能饭堂</view>
+			<image class="index_img" src="/static/index_bg.png" mode="aspectFill"></image>
+			<view class="address">
+				<view class="address_left">
+					<view class="address_name">{{welcome}}</view>
+					<!-- <view class="address_location" @click="addressClick">
+						<span class="icon iconfont icon-ic_tomap"></span>
+						<view class="address_location1">(第五中学)智能饭堂</view>
+					</view> -->
+					<view class="address_location">
+						<span class="icon iconfont icon-shouji01"></span>
+						<view class="address_phone">13670000000</view>
+					</view>
+				</view>
+				<view class="scroll1_img_view"><image class="address_img" src='/static/微信图片_20200318092008.jpg' mode="aspectFill"></image></view>
+			</view>
 		</view>
-		<swiper class="swiper" :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
+		<!-- <swiper class="swiper" :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
 		 display-multiple-items='7'>
 			<swiper-item v-for="(item,index) in week" :key="index">
 				<view class="swiper-item" :class="index==indexs?'active':''" @click="indexClick(index)">
@@ -14,15 +26,16 @@
 					<view class="date">{{item.date}}</view>
 				</view>
 			</swiper-item>
-		</swiper>
+		</swiper> -->
 		<view id="line"></view>
+		<!-- <view class="btn"  @click="bugClick">智能点单</view> -->
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
 				<view v-for="(item,index1) in week" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.week}}</view>
 			</scroll-view>
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
-
-				<indexBox  v-for="(item,index2) in week" :key='index2' ></indexBox>
+				<view class="titles"></view>
+				<indexBox v-for="(item,index2) in week" :key='index2'></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -52,7 +65,7 @@
 		},
 		data() {
 			return {
-				welcome: "欢迎来到(第五中学)智能食堂",
+				welcome: "第五中学智能食堂",
 				scrollHeight: 0,
 				week: [{
 					'week': '周日',
@@ -90,17 +103,24 @@
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			
+			addressClick(){
+				uni.openLocation({
+					latitude:24.285592698,
+					longitude:116.074561349
+				})
+			},
+			bugClick(){
+				w
+			},
 		}
 	}
 </script>
 
 <style>
-	.welcome {
+	.address_name {
 		width: 100%;
 		text-align: center;
 		font-size: 32upx;
-		padding-top: 10upx;
 	}
 
 	.address_view {
@@ -108,22 +128,54 @@
 		flex-direction: row;
 		align-items: center;
 		width: 100%;
-		padding: 20upx 24upx;
+		position: relative;
+		height: 233upx;
+		
+	}
+	.index_img{
+		width: 100%;
+		height: 233upx;
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 1;
+	}
+	.address{
+		width: 100%;
+		height: 233upx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		position: absolute;
+		z-index: 2;
+		left: 0;
+		top: 0;
+		justify-content: space-between;
+		color: #FFFFFF;
+		font-size: 24upx;
+		padding: 20upx 60upx;
 		box-sizing: border-box;
 	}
-
+	.address_left{
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.address_img{
+		width: 160upx;
+		height: 160upx;
+		border-radius: 50%;
+	}
+	.address_location{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding-top: 10upx;
+	}
 	.icon-ic_tomap {
-		font-size: 28upx;
-		color: #777;
+		font-size: 20upx;
+		
 	}
-
-	.address {
-		font-size: 32upx;
-		line-height: 1;
-		color: #777;
-		padding-left: 10upx;
-	}
-
 	.swiper {
 		width: 100%;
 		border-top: 2upx solid #F5F5F5;
@@ -152,9 +204,8 @@
 	}
 
 	.active {
-		background: #ffba59 !important;
+		background: #FFBA59 !important;
 	}
-
 	#line {
 		width: 100%;
 		height: 10upx;
@@ -165,6 +216,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
+		
 	}
 
 	.scrollY {
@@ -172,16 +224,51 @@
 	}
 
 	.scroll1 {
-		height: 100upx;
-		line-height: 100upx;
-		text-align: center;
-		background: #F1F1F1;
-		font-size: 28upx;
-		border-bottom: 2upx solid #FFFFFF;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 12upx 0;
+		font-size: 26upx;
+		height: 68upx;
+		line-height: 68upx;
+		border-bottom: 4upx solid #F5F5F5;
+	}
+
+	.scroll1_img_view {
+		font-size: 0;
+	}
+
+	.scroll1_img {
+		width: 88upx;
+		height: 88upx;
+		border-radius: 50%;
+	}
+
+	.scroll1 text {
+		font-size: 24upx;
+		line-height: 1;
+		padding-top: 16upx;
 	}
 
 	.scrollX {
 		width: 77%;
 		background: #F5F5F5;
+	}
+
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		color: transparent;
+	}
+	.btn{
+		width: 200upx;
+		height: 78upx;
+		line-height: 78upx;
+		border-radius: 34upx;
+		background: #FFBA59;
+		color: #FFFFFF;
+		margin: 120upx auto 0;
+		text-align: center;
+		font-size: 34upx;
 	}
 </style>
