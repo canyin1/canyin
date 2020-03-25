@@ -29,6 +29,7 @@
 		data(){
 			return{
 				tabType:0,
+				heights:'',
 				orders:['','','','','','','',]
 			}
 		},
