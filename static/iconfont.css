@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('/static/iconfont.ttf?t=1584633810479') format('truetype'); /* iOS 4.1- */
+  src: url('/static/iconfont.ttf?t=1585793918553') format('truetype'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -8,6 +8,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tongzhi:before {
+  content: "\e6c8";
 }
 
 .icon-ziyuan:before {
