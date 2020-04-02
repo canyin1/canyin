@@ -25,21 +25,21 @@
 					</view>
 				</view>
 				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight1 +'px'}">
-					<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="foodClick">
+					<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick">
 						
 						<view class="foods_left">
 							<view class="foods_img_view"><image class="foods_img" src="/static/微信图片_20200318092008.jpg"></image></view>
 							<view class="foods_name_view">
-								<view class="foods_name">炒粉</view>
+								<view class="foods_name">{{item.name}}</view>
 								<view class="foods_num">月售10</view>
 								<view class="foods_cash">￥10</view>
 							</view>
 						</view>
 						<view class="add_view">
 							<view>
-								<span class="iconfont icon-jianhao"></span>
-								<text>10</text>
-								<span class="iconfont icon-jiahao"></span>
+								<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.id)"></span>
+								<text v-if="item.num>0">{{item.num}}</text>
+								<span class="iconfont icon-jiahao" @click.stop="addClick(item.id)"></span>
 							</view>
 						</view>
 						
@@ -118,10 +118,52 @@
 					'newType': 0,
 					'monthType': 0,
 					'cashType': 0,
-				}
+				},
+				foods:[
+					{
+						name:'炒粉',
+						id:1,
+						num:0
+					},
+					{
+						name:'炒粉',
+						id:2,
+						num:0
+					},
+					{
+						name:'炒粉',
+						id:3,
+						num:0
+					},
+					{
+						name:'炒粉',
+						id:4,
+						num:0
+					},
+					{
+						name:'炒粉',
+						id:5,
+						num:0
+					}
+				
+				]
 			}
 		},
 		methods: {
+			reduceClick(id){
+				for(let i = 0;i<this.foods.length;i++){
+					if(this.foods[i].id == id){
+						this.foods[i].num--
+					}
+				}
+			},
+			addClick(id){
+				for(let i = 0;i<this.foods.length;i++){
+					if(this.foods[i].id == id){
+						this.foods[i].num++
+					}
+				}
+			},
 			shoppingCarClick(){
 				uni.navigateTo({
 					url:"shoppingCart"
