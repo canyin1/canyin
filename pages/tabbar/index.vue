@@ -27,7 +27,9 @@
 				</view>
 			</swiper-item>
 		</swiper> -->
-		<view id="line"></view>
+		<view id="line">
+			<span class="iconfont icon-tongzhi"></span><text>告师生信</text>
+		</view>
 		<!-- <view class="btn"  @click="bugClick">智能点单</view> -->
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
@@ -57,7 +59,7 @@
 				uni.getSystemInfo({
 					success: function(res) {
 						console.log(res)
-						that.scrollHeight = res.windowHeight - data.top - 5
+						that.scrollHeight = res.windowHeight - data.top - 25
 					}
 				})
 				// this.scrollHeight = this.$store.state.
@@ -208,10 +210,23 @@
 	}
 	#line {
 		width: 100%;
-		height: 10upx;
-		background: #F5F5F5;
+		height: 50upx;
+		background: #FFFFFF;
+		padding: 0 32upx;
+		color: #FF374E;
+		font-size: 26upx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		box-sizing: border-box;
 	}
-
+	#line text{
+		text-decoration: underline;
+	}
+	.icon-tongzhi{
+		padding-right: 20upx;
+		
+	}
 	.scroll {
 		display: flex;
 		flex-direction: row;

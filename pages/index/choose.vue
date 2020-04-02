@@ -25,13 +25,31 @@
 					</view>
 				</view>
 				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight1 +'px'}">
-					<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="foodClick">{{item.date}}</view>
+					<view class="scroll2" v-for="(item,index2) in week" :key='index2' @click="foodClick">
+						
+						<view class="foods_left">
+							<view class="foods_img_view"><image class="foods_img" src="/static/微信图片_20200318092008.jpg"></image></view>
+							<view class="foods_name_view">
+								<view class="foods_name">炒粉</view>
+								<view class="foods_num">月售10</view>
+								<view class="foods_cash">￥10</view>
+							</view>
+						</view>
+						<view class="add_view">
+							<view>
+								<span class="iconfont icon-jianhao"></span>
+								<text>10</text>
+								<span class="iconfont icon-jiahao"></span>
+							</view>
+						</view>
+						
+					</view>
 				</scroll-view>
 			</view>
 
 		</view>
 		<view class="bottom_view">
-			<view class="money_view">
+			<view class="money_view" @click="shoppingCarClick">
 				<span class='iconfont icon-gouwuche'></span>
 				<view class="money">￥100.00</view>
 			</view>
@@ -104,6 +122,11 @@
 			}
 		},
 		methods: {
+			shoppingCarClick(){
+				uni.navigateTo({
+					url:"shoppingCart"
+				})
+			},
 			foodTypeClick(e){
 				this.foods = e
 			},
@@ -208,8 +231,14 @@
 	.scroll2 {
 		width: 100%;
 		background-color: #FFFFFF;
-		height: 240upx;
-		border-bottom: 20upx solid #F5F5F5;
+		height: 200upx;
+		border-bottom: 10upx solid #F5F5F5;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 24upx;
+		box-sizing: border-box;
 	}
 
 	.scroll2:last-of-type {
@@ -256,5 +285,55 @@
 		background: #FFBA59;
 		border-radius: 44upx;
 		text-align: center;
+	}
+	/* 食品 */
+	.foods_left{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		font-size: 30upx;
+		color: #333333;
+	}
+	.foods_img_view{
+		font-size: 0;
+	}
+	.foods_img{
+		width: 160upx;
+		height: 160upx;
+		border-radius: 10upx;
+	}
+	.foods_name_view{
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: space-between;
+		height: 160upx;
+		box-sizing: border-box;
+		padding: 10upx 0;
+		padding-left: 20upx;
+	}
+	.add_view{
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: flex-end;
+		height: 160upx;
+		color: #FFBA59;
+		display: flex;
+		font-size: 28upx;
+	}
+	.add_view view{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	.add_view text{
+		color: #333333;
+		line-height: 1;
+		padding: 0 14upx;
+	}
+	.icon-jianhao{
+		color: #999;
+		padding-right: ;
 	}
 </style>
