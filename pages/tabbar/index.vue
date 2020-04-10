@@ -96,23 +96,47 @@
 			}
 		},
 		onLoad() {
-
+			this.loginL()
+			// this.foodsList()
 		},
 		methods: {
+			loginL(){
+				uni.removeStorage({
+					key:'token',
+					success(res) {
+						
+					}
+				})
+				let params = {
+					code:1,
+					schoolId:1
+				}
+				this.httpUtil.post2("/api/parentLogin",params,(obj)=>{
+					console.log(obj)
+					
+					uni.setStorage({
+						key: 'token',
+						data:obj.token
+					})
+					this.foodsList()
+				})
+			},
+			foodsList(){
+				let params = {
+					mealTime:'lunch'
+				}
+				this.httpUtil.get('/api/school/food/list',params,(obj)=>{
+					console.log(123,obj)
+				})
+			},
 			indexClick(index) {
 				this.indexs = index
 			},
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			addressClick(){
-				uni.openLocation({
-					latitude:24.285592698,
-					longitude:116.074561349
-				})
-			},
 			bugClick(){
-				w
+				
 			},
 		}
 	}

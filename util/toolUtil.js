@@ -1156,7 +1156,7 @@ exports.showAd = function(cb) {
 	});
 }
 exports.loadAd = function() {
-	if(chuanshanjia){
+	if (chuanshanjia) {
 		let obj = {
 			rewardname: "活动奖励",
 			rewardcount: 1,
@@ -1165,7 +1165,7 @@ exports.loadAd = function() {
 			screenHeight: store.state.screenHeight
 		};
 		console.log("准备传输:", obj)
-		chuanshanjia.loadAd(941627000, obj);		
+		chuanshanjia.loadAd(941627000, obj);
 	}
 }
 
@@ -1210,63 +1210,48 @@ exports.getOptions = function(options) {
 
 exports.checkLogin = function(callback, options = null, stillCallBack = false) {
 	this.getOptions(options);
-	if (store.state.serverUserInfo != null && store.state.serverUserInfo != "") {
-		if (store.state.invitor && store.state.invitor != "" && store.state.invitor != 0) {
-			bindinvitor();
-		} else {
-			if (callback)
-				callback(options);
-		}
-	} else {
-		let token = uni.getStorageSync('token');
-		if (token) {
-			var params = {
-				token: token,
-				// #ifdef APP-PLUS
-				version: plus.runtime.version,
-				// #endif
-				// #ifdef MP-WEIXIN || H5
-				version: localconfig.version
-				// #endif
-			}
-			if (store.state.invitor) {
-				params.invitor = store.state.invitor;
-			}
-			httpUtil.post2('/api/wxapp.account/login', params, (res) => {
-				store.commit('login', res.data.userInfo);
-				callback(options);
-			}, (error) => {
-				//if (error.code == 401) {
-				console.log("token过期了？？", error);
-				uni.removeStorage({
-					key: 'token',
-				});
-				// #ifdef H5
-				if (store.state.isWxBrowser)
-					miniProLogin.apply();
-				// #endif
-				if (stillCallBack) {
-					callback(options);
-				}
-				//}
-
-			});
-		} else {
-			// #ifdef MP-WEIXIN 
-			miniProLogin.apply();
-			// #endif
-			// #ifdef H5 || APP-PLUS
-			if (callback)
-				callback(options);
-			// #endif
+	let token = uni.getStorageSync('token');
+	if (token) {
+		var params = {
+			token: token,
 			// #ifdef APP-PLUS
-			shanyan.init(store.state.platform);
+			version: plus.runtime.version,
+			// #endif
+			// #ifdef MP-WEIXIN || H5
+			version: localconfig.version
 			// #endif
 		}
-
+		if (store.state.invitor) {
+			params.invitor = store.state.invitor;
+		}
+		httpUtil.post2('/api/wxapp.account/login', params, (res) => {
+			store.commit('login', res.data.userInfo);
+			callback(options);
+		}, (error) => {
+			console.log("token过期了？？", error);
+			uni.removeStorage({
+				key: 'token',
+			});
+			// #ifdef H5
+			if (store.state.isWxBrowser)
+				miniProLogin.apply();
+			// #endif
+			if (stillCallBack) {
+				callback(options);
+			}
+		});
+	} else {
+		// #ifdef MP-WEIXIN 
+		miniProLogin.apply();
+		// #endif
+		// #ifdef H5 || APP-PLUS
+		if (callback)
+			callback(options);
+		// #endif
+		// #ifdef APP-PLUS
+		shanyan.init(store.state.platform);
+		// #endif
 	}
-
-
 	function miniProLogin() {
 		uni.login({
 			success: res => {
@@ -1274,33 +1259,10 @@ exports.checkLogin = function(callback, options = null, stillCallBack = false) {
 					code: res.code,
 					version: localconfig.version
 				};
-				if (store.state.invitor)
-					param.invitor = store.state.invitor;
-				httpUtil.post2('/api/wxapp.account/minipro_login', param, (res) => {
-					store.commit("login", res.data.userInfo);
+				httpUtil.post2('/api/parentLogin', param, (res) => {
 					callback(options);
 				})
 			}
 		})
 	}
-
-	function bindinvitor() {
-		let param = {};
-		param.invitor = store.state.invitor;
-		store.state.invitor = null;
-		httpUtil.post2('/api/wxapp.account/invitor_bind', param, (res) => {
-			if (callback)
-				callback(options);
-		})
-	}
-}
-
-exports.getTuanzhangid = function() {
-	if (!store.state.serverUserInfo) {
-		return 0;
-	}
-	if (store.state.user_bind && store.state.user_bind.union_type == 0 && store.state.user_bind.invitor != 0) {
-		return store.state.user_bind.invitor;
-	} else
-		return store.state.serverUserInfo.user_id;
 }

@@ -1,15 +1,16 @@
-import localconfig from './localconfig'
+
 import toolUtil from './toolUtil'
 import Vue from 'vue'
 //获取应用实例    
 
 exports.get = function(funName, obj, callback) {
-
+	let  token = uni.getStorageSync("token");
 	uni.request({
-		url: localconfig.httpurl + funName,
+		url: 'http://food-edu.net' + funName,
 		data: obj,
 		header: {
-			'content-type': 'application/json' // 默认值
+			'content-type': 'application/json' ,// 默认值
+			'Authorization' : "Bearer" + ' ' + token
 		},
 		success: function(res) {
 			console.log(res.data);
@@ -19,13 +20,13 @@ exports.get = function(funName, obj, callback) {
 }
 
 exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0, _complete = null, log = true) {
-	console.log("请求http：" + funName, _data);
+	console.log("请求http：" +'http://food-edu.net' + funName, _data);
 	let  token = uni.getStorageSync("token");
 	if (token) {
 		_data.token = token;
 	}
 	uni.request({
-		url: (type == 0 ? (localconfig.httpurl + funName) : funName),
+		url: 'http://food-edu.net' + funName,
 		data: _data,
 		method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 		header: {
@@ -33,8 +34,8 @@ exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0
 		}, // 设置请求的 header
 		success: function(res) {
 			if (log)
-				console.log("返回http：" + funName, res.data);
-			if (res.data.code == 1) {
+				console.log("返回http：" + 'http://food-edu.net/' + funName, res.data);
+			if (res.data.code == 200) {
 				callback(res.data);
 			}else {
 				if (res.data.msg) {
