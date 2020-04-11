@@ -78,7 +78,6 @@
 						that.scrollHeight1 = res.windowHeight - data.top - 100
 					}
 				})
-				// this.scrollHeight = this.$store.state.
 			}).exec();
 		},
 		data() {
