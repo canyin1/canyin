@@ -19,6 +19,20 @@ exports.get = function(funName, obj, callback) {
 	})
 }
 
+exports.get1 = function(funName, obj, callback) {
+	let  token = uni.getStorageSync("token");
+	uni.request({
+		url: 'http://food-edu.net' + funName + obj,
+		header: {
+			'content-type': 'application/json' ,// 默认值
+			'Authorization' : "Bearer" + ' ' + token
+		},
+		success: function(res) {
+			console.log(res.data);
+			callback(res.data);
+		}
+	})
+}
 exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0, _complete = null, log = true) {
 	console.log("请求http：" +'http://food-edu.net' + funName, _data);
 	let  token = uni.getStorageSync("token");
@@ -31,6 +45,7 @@ exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0
 		method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 		header: {
 			'content-type': 'application/x-www-form-urlencoded'
+			
 		}, // 设置请求的 header
 		success: function(res) {
 			if (log)

@@ -55,7 +55,7 @@
 					hygieneType: 0,
 					weightType: 0,
 				},
-				img:['/static/微信图片_20200318092008.jpg','/static/微信图片_20200318092008.jpg','/static/微信图片_20200318092008.jpg']
+				img:[]
 			}
 		},
 		onLoad() {
@@ -75,33 +75,31 @@
 					success(res) {
 						console.log(res.tempFilePaths[0])
 						// that.uploadImg(res.tempFilePaths)
+						let teamparr = res.tempFilePaths
+						function uploadimg(){
+							while(teamparr.length > 0){
+								let item = teamparr.pop()
+								
+								let params={
+									file:item
+								}
+								that.httpUtil.post2('/api/common/upload',params,(obj)=>{
+									console.log(333,obj)
+									return false
+									that.img.push(obj)
+									if(teamparr.length>0){
+										uploadimg()
+									}
+								})
+								
+							}
+						}
+						uploadimg()
 					}
 				})
 			},
 			uploadImg(tempFilePaths){
-				let teamparr = tempFilePaths
-				function uploadimg(){
-					while(teamparr.length > 0){
-						let item = teamparr.pop()
-						uni.uploadFile({
-							url:'https://daoyin-prd-1252569296.cos.ap-guangzhou.myqcloud.com/',
-							name: 'file',
-							filePath:item,
-							formData: {
-							  'key': Key,
-							  'success_action_status': 200,
-							  'Signature': AuthData.Authorization,
-							  'x-cos-security-token': AuthData.XCosSecurityToken,
-							  'Content-Type': '',
-							},
-							success(resa){
-								console.log(resa)
-								return
-								that.img.push(resa)
-							}
-						})
-					}
-				}
+				
 			},
 		}
 	}

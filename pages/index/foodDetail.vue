@@ -1,23 +1,23 @@
 <template>
 	<view class="page">
 		<navbar title="" :backcolorType='0' ></navbar>
-		<image class="food_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image>
+		<image class="food_img"  :src="food.images" mode="aspectFill"></image>
 		<view class="big_view">
-			<view class="food_name">梅菜肉</view>
-			<view class="sale_num">月售100份</view>
+			<view class="food_name">{{food.name}}</view>
+			<view class="sale_num">月售{{food.monthlySales}}份</view>
 		</view>
 		<view class="food_introduction">
 			<view class="top_view">
 				商品简介
 			</view>
-			<view class="introduction">梅菜+肉</view>
+			<view class="introduction">{{food.name}}</view>
 		</view>
 		<view class="comment_view" @click="commentClick">
 			<view class="comment">商品评论(5)</view>
 			<span class="iconfont icon-jiantou"></span>
 		</view>
 		<view class="cash_view">
-			<view class="cash">￥10.00</view>
+			<view class="cash">￥{{food.price}}</view>
 			<view class="btn_view">
 				<view class="collect_btn">收藏</view>
 				<view class="add_btn" @click="addGoodsClick">加入购物车</view>
@@ -73,13 +73,21 @@
 				// 	checked:false
 				// },
 				],
-				allId:[]
+				allId:[],
+				food:[]
 			}
 		},
-		onLoad() {
-			
+		onLoad(options) {
+			this.foodDetail(options.id)
 		},
 		methods:{
+			foodDetail(id){
+				let params= id
+				this.httpUtil.get1('/api/school/food/',params,(obj)=>{
+					
+					this.food = obj.data
+				})
+			},
 			commentClick(){
 				uni.navigateTo({
 					url:'comment/comment'

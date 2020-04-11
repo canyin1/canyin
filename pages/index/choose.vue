@@ -25,14 +25,14 @@
 					</view>
 				</view>
 				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight1 +'px'}">
-					<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick">
+					<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick(item.id)">
 						
 						<view class="foods_left">
 							<view class="foods_img_view"><image class="foods_img" src="/static/微信图片_20200318092008.jpg"></image></view>
 							<view class="foods_name_view">
 								<view class="foods_name">{{item.name}}</view>
-								<view class="foods_num">月售10</view>
-								<view class="foods_cash">￥10</view>
+								<view class="foods_num">月售{{item.monthlySales}}</view>
+								<view class="foods_cash">￥{{item.price}}</view>
 							</view>
 						</view>
 						<view class="add_view">
@@ -120,36 +120,24 @@
 					'cashType': 0,
 				},
 				foods:[
-					{
-						name:'炒粉',
-						id:1,
-						num:0
-					},
-					{
-						name:'炒粉',
-						id:2,
-						num:0
-					},
-					{
-						name:'炒粉',
-						id:3,
-						num:0
-					},
-					{
-						name:'炒粉',
-						id:4,
-						num:0
-					},
-					{
-						name:'炒粉',
-						id:5,
-						num:0
-					}
-				
+					
 				]
 			}
 		},
+		onLoad() {
+			this.foodDetail()
+		},
 		methods: {
+			foodDetail(){
+				let params= {
+					mealTime:'lunch'
+				}
+				this.httpUtil.get('/api/school/food/list',params,(obj)=>{
+					console.log(obj)
+					
+					this.foods = obj.rows
+				})
+			},
 			reduceClick(id){
 				for(let i = 0;i<this.foods.length;i++){
 					if(this.foods[i].id == id){
@@ -181,9 +169,9 @@
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			foodClick() {
+			foodClick(id) {
 				uni.navigateTo({
-					url: 'foodDetail'
+					url: 'foodDetail?id=' + id
 				})
 			},
 			tabClick(type) {

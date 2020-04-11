@@ -30,13 +30,23 @@
 			return{
 				tabType:0,
 				heights:'',
-				orders:['','','','','','','',]
+				orders:[]
 			}
 		},
 		onLoad() {
-			
+			this.orderList()
 		},
 		methods:{
+			orderList(){
+				let params={
+					pageNum:1,
+					pageSize:10
+				}
+				this.httpUtil.get("/api/school/order/list",params,(obj)=>{
+					this.orders = obj.rows
+					console.log(obj)
+				})
+			},
 			tabClick(type){
 				this.tabType = type
 			},
