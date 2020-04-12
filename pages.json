@@ -72,6 +72,12 @@
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
 		}
+	},{
+		"path": "pages/index/pay",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
 	}
 	],
 	"globalStyle": {
