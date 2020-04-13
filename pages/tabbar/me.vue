@@ -28,13 +28,13 @@
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view>
-			<view class="hengview1" @click="goClick(2)">
+			<!-- <view class="hengview1" @click="goClick(2)">
 				<view class="hengLeft">
 					<span class="iconfont icon-aixin icon-s"></span>
 					<view class="hengname">我的收藏</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
-			</view>
+			</view> -->
 			<view class="hengview1">
 				<view class="hengLeft">
 					<span class="iconfont icon-fuwu icon-s"></span>

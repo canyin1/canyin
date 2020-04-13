@@ -1,23 +1,37 @@
 <template>
-	<view class="order">
-		<view class="order_top">
-			<view class="order_time">3月10日</view>
-			<view class="order_time">晚餐</view>
-			<view class="order_status">未就餐</view>
-		</view>
-		<view class="order_top">
-			<view class="goods_left">
-				<view class="goods_img_view"><image class="good_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image></view>
-				<view class="goods_name">名字</view>
+	<view class="page">
+		<view class="order">
+			<view class="order_top">
+				<view class="order_time">{{item.date}}</view>
+				<view class="order_time" v-if="item.mealTime=='breakfast'">早餐</view>
+				<view class="order_time" v-if="item.mealTime=='lunch'">午餐</view>
+				<view class="order_time" v-if="item.mealTime=='dinner'">晚餐</view>
+				<view class="order_time" v-if="item.mealTime=='supper'">夜宵</view>
+				<view class="order_status" v-if="item.orderState=='NOT_PAY'">未支付</view>
+				<view class="order_status" v-if="item.orderState=='PAID'">未就餐</view>
+				<view class="order_status" v-if="item.orderState=='NOT_COMMENT'">未评论</view>
+				<view class="order_status" v-if="item.orderState=='FINISH'">已完成</view>
+				<view class="order_status" v-if="item.orderState=='CANCELED'">已取消</view>
 			</view>
-			<view class="goods_right">
-				<view class="goods_cash">￥10.00</view>
-				<view class="goods_num">X1</view>
+			<view class="order_top" v-for="(items,index2) in item.detailList" :key="index2">
+				<view class="goods_left">
+					<view class="goods_img_view"><image class="good_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image></view>
+					<view class="goods_name">{{items.itemName}}</view>
+				</view>
+				<view class="goods_right">
+					<view class="goods_cash">￥{{items.itemPrice}}</view>
+					<view class="goods_num">X{{items.itemAmount}}</view>
+				</view>
 			</view>
-		</view>
-		<view class="order_top">
-			<view class="order_num">订单号：4545684</view>
-			<view class="order_btn">取消订单</view>
+			<view class="order_top">
+				<view class="order_num">订单号：4545684</view>
+				<view class="order_btn_view">
+					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'">取消订单</view>
+					<view class="order_btn" v-if="item.orderState=='NOT_PAY'">立即支付</view>
+					<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
+					<view class="order_btn" v-if="item.orderState=='PAID'">确认收货</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -25,13 +39,18 @@
 <script>
 	export default{
 		name: 'orderItem',
-		props:{
-		},
+		props:['item'],
 		data(){
 			return{
-				
 			}
 		},
+		methods:{
+			addCommon(id){
+				uni.navigateTo({
+					url:"../../pages/index/comment/addComment?id=" + id
+				})
+			},
+		}
 	}
 </script>
 
@@ -70,6 +89,11 @@
 		color: #333333;
 		line-height: 1;
 	}
+	.order_btn_view{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
 	.order_btn{
 		width: 148upx;
 		height: 48upx;
@@ -79,6 +103,15 @@
 		font-size: 24upx;
 		color: #FFFFFF;
 		border-radius: 24upx;
+		margin-left: 10upx;
+	}
+	.order_btn1{
+		background: #FFFFFF !important;
+		color: #999 !important;
+		width: 144upx !important;
+		height: 44upx !important;
+		line-height: 44upx !important;
+		border: 2upx solid #999 !important;
 	}
 	.goods_left{
 		display: flex;

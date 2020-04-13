@@ -10,7 +10,7 @@
 		</view>
 		<view class="kongHeights"></view>
 		<view class="order_view">
-			<orderItem v-for='(item,index) in orders' :key="index"></orderItem>
+			<orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem>
 		</view>
 	</view>
 </template>
@@ -30,7 +30,8 @@
 			return{
 				tabType:0,
 				heights:'',
-				orders:[]
+				orders:[],
+				orderState:''
 			}
 		},
 		onLoad() {
@@ -40,15 +41,31 @@
 			orderList(){
 				let params={
 					pageNum:1,
-					pageSize:10
+					pageSize:10,
+					orderState: this.orderState
 				}
 				this.httpUtil.get("/api/school/order/list",params,(obj)=>{
-					this.orders = obj.rows
+					for(let i = 0 ;i<obj.rows.length;i++){
+						obj.rows[i].date = obj.rows[i].mealDate.split(' ')[0]
+					}
+					
+					this.orders = this.orders.concat(obj.rows)
 					console.log(obj)
 				})
 			},
 			tabClick(type){
 				this.tabType = type
+				if(type==0){
+					this.orderState = ''
+				}
+				if(type==1){
+					this.orderState = 'FINISH'
+				}
+				if(type==2){
+					this.orderState = 'NOT_COMMENT'
+				}
+				this.orders = []
+				this.orderList()
 			},
 		}
 	}

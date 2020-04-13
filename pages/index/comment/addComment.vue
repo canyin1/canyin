@@ -4,7 +4,7 @@
 		<view class="big_view">
 			<view class="pingfen">
 				<text>总分：</text>
-				<level :levels="levels" :fontSizeType='1'></level>
+				<level :levels="4" :fontSizeType='1'></level>
 			</view>
 			<view class="evaluate_view">
 				<view class="evaluate">
@@ -26,7 +26,7 @@
 			<view class="input_view">
 				<textarea @input="inputClick" type="text" value="" />
 				<view class="img_view">
-					<image v-for="(item,index1) in img" :src="item" mode="aspectFill" v-if="img.length>0" :key="index1"></image>
+					<image v-for="(item,index1) in img" :src="item" mode="aspectFill" v-if="img.length>0" :key="index1" @click="imageClick(index1)"></image>
 					<span class="iconfont icon-jiahao1" @click='addImg' v-if="img.length<3"></span>
 				</view>
 			</view>
@@ -55,13 +55,39 @@
 					hygieneType: 0,
 					weightType: 0,
 				},
-				img:[]
+				img:[],
+				id:''
 			}
 		},
-		onLoad() {
-
+		onLoad(options) {
+			if(options.id){
+				this.id = options.id
+			}
 		},
 		methods: {
+			imageClick(index){
+				let img = this.img[index]
+				let that = this
+				uni.showActionSheet({
+					itemList:['查看图片','删除','全部清空'],
+					itemColor:'#333333',
+					success(res) {
+						console.log(res)
+						if(res.tapIndex==0){
+							uni.previewImage({
+								current:img,
+								urls:that.img
+							})
+						}
+						if(res.tapIndex==1){
+							that.img.splice(index,1)
+						}
+						if(res.tapIndex==2){
+							that.img = []
+						}
+					},
+				})
+			},
 			inputClick(e){
 				this.value = e.detail.value
 			},
@@ -73,25 +99,32 @@
 				uni.chooseImage({
 					count:3,
 					success(res) {
-						console.log(res.tempFilePaths[0])
+						console.log(res.tempFilePaths)
+						
 						// that.uploadImg(res.tempFilePaths)
 						let teamparr = res.tempFilePaths
 						function uploadimg(){
 							while(teamparr.length > 0){
 								let item = teamparr.pop()
 								
-								let params={
-									file:item
-								}
-								that.httpUtil.post2('/api/common/upload',params,(obj)=>{
-									console.log(333,obj)
-									return false
-									that.img.push(obj)
-									if(teamparr.length>0){
-										uploadimg()
-									}
-								})
-								
+								uni.uploadFile({
+								    url: 'http://food-edu.net/api/common/upload', //仅为示例，非真实的接口地址
+								    filePath: item,
+									header:{
+										'Authorization':  "Bearer" + ' ' + uni.getStorageSync("token")
+									},
+								    name: 'file',
+								    success: (uploadFileRes) => {
+								        let data = JSON.parse(uploadFileRes.data)
+										console.log(data)
+										that.img.push(data.url)
+										if(teamparr.length>0){
+											uploadimg()
+										}else{
+										}
+										
+								    }
+								});
 							}
 						}
 						uploadimg()
@@ -175,9 +208,6 @@
 		width: 120upx;
 		height: 120upx;
 		margin-right: 10upx;
-	}
-	.img_view image:last-of-type{
-		margin-right: 0;
 	}
 	textarea{
 		font-size: 32upx;

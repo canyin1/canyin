@@ -14,8 +14,8 @@
 		name: 'level',
 		props:{
 			levels: {
-				type: String,
-				default: ""
+				type: Number,
+				default: 0
 			},
 			fontSizeType: { 
 				type: Number,

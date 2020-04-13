@@ -1,5 +1,5 @@
 <template>
-	<view class="comment_detail" @click="addComment">
+	<view class="comment_detail">
 		<view class="top_view">
 			<view class="player_view">
 				<view class="player_img_view">
@@ -40,11 +40,6 @@
 			
 		},
 		methods:{
-			addComment(){
-				uni.navigateTo({
-					url:'addComment'
-				})
-			},
 		}
 	}
 </script>
