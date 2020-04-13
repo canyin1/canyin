@@ -75,15 +75,15 @@ exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0
 exports.post4 = function(url, data, successCallback = null, failCallBack = null, type = 0) {
 	console.log("请求http：" + url, data);
 	let  token = uni.getStorageSync("token");
-	if (token) {
-		data.token = token;
-	}
+	// if (token) {
+	// 	data.token = token;
+	// }
 	uni.request({
-		url: (type == 0 ? (localconfig.httpurl + url) : url),
+		url: 'http://food-edu.net' + url,
 		data: data,
 		method: 'POST',
 		header: {
-			'content-type': 'application/x-www-form-urlencoded'
+			'Authorization': 'Bearer' + ' ' + token
 		},
 		success: function(rs) {
 			if(rs.data.code == 1){

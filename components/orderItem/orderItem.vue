@@ -27,7 +27,7 @@
 				<view class="order_num">订单号：4545684</view>
 				<view class="order_btn_view">
 					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'">取消订单</view>
-					<view class="order_btn" v-if="item.orderState=='NOT_PAY'">立即支付</view>
+					<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="addCommon(item.id)">立即支付</view>
 					<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
 					<view class="order_btn" v-if="item.orderState=='PAID'">确认收货</view>
 				</view>

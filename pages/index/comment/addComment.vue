@@ -2,25 +2,32 @@
 	<view class="page">
 		<navbar title="评论" :backcolorType='2' :whiteback='2' :showKongPanel="true"></navbar>
 		<view class="big_view">
-			<view class="pingfen">
-				<text>总分：</text>
-				<level :levels="4" :fontSizeType='1'></level>
+			<view class="top_view">
+				<view class="pingfen">
+					<text>总分：</text>
+					<level :levels="4" :fontSizeType='1'></level>
+				</view>
+				<checkbox-group>
+					<label @click='checkClick'>
+						<checkbox style="transform:scale(0.5)" color="#007aff" /><text>匿名</text>
+					</label>
+				</checkbox-group>
 			</view>
 			<view class="evaluate_view">
 				<view class="evaluate">
 					<text>味道</text>
-					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.tasteType>=index+1}" v-for='(item,index) in params.taste'
-					 :key='index' @click.stop="evaluateClick('tasteType',index)"></span>
+					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.taste>=index+1}" v-for='(item,index) in tasteArr'
+					 :key='index' @click.stop="evaluateClick('taste',index)"></span>
 				</view>
 				<view class="evaluate">
 					<text>卫生</text>
-					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.hygieneType>=index+1}" v-for='(item,index) in params.hygiene'
-					 :key='index' @click.stop="evaluateClick('hygieneType',index)"></span>
+					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.health>=index+1}" v-for='(item,index) in healthArr'
+					 :key='index' @click.stop="evaluateClick('health',index)"></span>
 				</view>
 				<view class="evaluate">
 					<text>份量</text>
-					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.weightType>=index+1}" v-for='(item,index) in params.weight'
-					 :key='index' @click.stop="evaluateClick('weightType',index)"></span>
+					<span class="iconfont icon-weixiao" :class="{'icon-weixiao-':params.weight>=index+1}" v-for='(item,index) in weightArr'
+					 :key='index' @click.stop="evaluateClick('weight',index)"></span>
 				</view>
 			</view>
 			<view class="input_view">
@@ -30,7 +37,7 @@
 					<span class="iconfont icon-jiahao1" @click='addImg' v-if="img.length<3"></span>
 				</view>
 			</view>
-			<view class="comfire_btn">立即评论</view>
+			<view class="comfire_btn" @click="comfireClick">立即评论</view>
 		</view>
 	</view>
 </template>
@@ -47,16 +54,17 @@
 			return {
 				levels: '1',
 				value:'',
+				'tasteArr': ['', '', '', '', ''],
+				'healthArr': ['', '', '', '', ''],
+				'weightArr': ['', '', '', '', ''],
 				params: {
-					'taste': ['', '', '', '', ''],
-					'hygiene': ['', ''],
-					'weight': ['', '', ''],
-					tasteType: 0,
-					hygieneType: 0,
-					weightType: 0,
+					taste: 0,
+					health: 0,
+					weight: 0,
 				},
 				img:[],
-				id:''
+				id:'',
+				anonymous:false
 			}
 		},
 		onLoad(options) {
@@ -87,6 +95,9 @@
 						}
 					},
 				})
+			},
+			checkClick(){
+				this.anonymous = !this.anonymous
 			},
 			inputClick(e){
 				this.value = e.detail.value
@@ -131,8 +142,33 @@
 					}
 				})
 			},
-			uploadImg(tempFilePaths){
-				
+			comfireClick(){
+				if(this.params.taste==0||this.params.health==0||this.params.weight==0){
+					uni.showToast({
+						title:'请先点击笑脸评论',
+						icon:'none',
+						duration:2000
+					})
+					return false
+				}
+				if(this.value==''){
+					uni.showToast({
+						title:'请写评论语',
+						icon:'none',
+						duration:2000
+					})
+					return false
+				}
+				let params= this.params
+				params.orderId = this.id
+				params.content = this.value
+				params.anonymous = this.anonymous
+				if(this.img.length!=0){
+					params.images = JSON.stringify(this.img)
+				}
+				this.httpUtil.post4("/api/school/comment",params,(obj)=>{
+					console.log(obj)
+				})
 			},
 		}
 	}
@@ -147,7 +183,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		padding: 32upx 24upx;
+		padding: 32upx 0;
 	}
 
 	.pingfen text {
@@ -223,5 +259,17 @@
 		text-align: center;
 		border-radius: 44upx;
 		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
+	}
+	checkbox-group{
+		font-size: 28upx;
+	}
+	.top_view{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: 100%;
+		justify-content: space-between;
+		padding: 0 24upx;
+		box-sizing: border-box;
 	}
 </style>
