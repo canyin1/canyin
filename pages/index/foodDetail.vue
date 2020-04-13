@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<navbar title="" :backcolorType='0' ></navbar>
-		<image class="food_img"  :src="food.images" mode="aspectFill"></image>
+		<image class="food_img"  :src="food.imgs" mode="aspectFill"></image>
 		<view class="big_view">
 			<view class="food_name">{{food.name}}</view>
 			<view class="sale_num">月售{{food.monthlySales}}份</view>
@@ -13,7 +13,7 @@
 			<view class="introduction">{{food.name}}</view>
 		</view>
 		<view class="comment_view" @click="commentClick">
-			<view class="comment">商品评论(5)</view>
+			<view class="comment">商品评论({{food.commentAmount}})</view>
 			<span class="iconfont icon-jiantou"></span>
 		</view>
 		<view class="cash_view">
@@ -74,23 +74,29 @@
 				// },
 				],
 				allId:[],
-				food:[]
+				food:[],
+				id:''
 			}
 		},
 		onLoad(options) {
+			this.id = options.id
 			this.foodDetail(options.id)
 		},
 		methods:{
 			foodDetail(id){
 				let params= id
 				this.httpUtil.get1('/api/school/food/',params,(obj)=>{
-					
+					if(obj.data.images&&obj.data.images!=''){
+						obj.data.imgs = JSON.parse(obj.data.images)[0]
+						
+					}
 					this.food = obj.data
+					console.log(this.food)
 				})
 			},
 			commentClick(){
 				uni.navigateTo({
-					url:'comment/comment'
+					url:'comment/comment?id=' + this.id
 				})
 			},
 			addGoodsClick(){

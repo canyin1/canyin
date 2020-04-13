@@ -46,13 +46,44 @@
 				heights:'',
 				type: 0,
 				level: 1.5,
-				comment:['1','2','3','4','5'],
-				kongHeight:''
+				comment:[],
+				kongHeight:'',
+				id:''
 			}
 		},
+		onLoad(options) {
+			this.id = options.id
+			this.numList(options.id)
+			this.commentList(options.id)
+		},
 		methods: {
+			numList(id){
+				let param={
+					foodId: this.id
+				}
+				this.httpUtil.get("/api/school/comment/summary",param,(obj)=>{
+					console.log(obj)
+				})
+			},
+			commentList(id){
+				let type=''
+				if(this.type==1){
+					type='recommend'
+				}
+				if(this.type==2){
+					type='complaint'
+				}
+				let param={
+					foodId: this.id,
+					type: type
+				}
+				this.httpUtil.get("/api/school/comment",param,(obj)=>{
+					this.comment = this.comment.concat(obj.rows)
+				})
+			},
 			tabClick(type) {
 				this.type = type
+				this.commentList()
 			},
 		}
 	}

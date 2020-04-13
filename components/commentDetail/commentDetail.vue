@@ -8,7 +8,7 @@
 				<view class="player_name_view">
 					<view class="player_name">名字</view>
 					<view class="level_view">
-						<level :levels="levels"></level>
+						<level :levels="5"></level>
 					</view>
 				</view>
 			</view>

@@ -13,13 +13,19 @@ exports.get = function(funName, obj, callback) {
 			'Authorization' : "Bearer" + ' ' + token
 		},
 		success: function(res) {
-			console.log(res.data);
-			callback(res.data);
+			if(res.code==200){
+				callback(res.data);
+			}
+			else{
+				if (res.data.msg) {
+				}
+				failCallBack()
+			}
 		}
 	})
 }
 
-exports.get1 = function(funName, obj, callback) {
+exports.get1 = function(funName, obj, callback,failCallBack=null) {
 	let  token = uni.getStorageSync("token");
 	uni.request({
 		url: 'http://food-edu.net' + funName + obj,
@@ -29,7 +35,14 @@ exports.get1 = function(funName, obj, callback) {
 		},
 		success: function(res) {
 			console.log(res.data);
-			callback(res.data);
+			if(res.code==200){
+				callback(res.data);
+			}else{
+				if (res.data.msg) {
+					
+				}
+				failCallBack()
+			}
 		}
 	})
 }
