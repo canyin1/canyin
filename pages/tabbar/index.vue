@@ -97,10 +97,19 @@
 				indexs1: 0,
 			}
 		},
-		onLoad() {
-			this.loginL()
+		onLoad(options) {
+			if(options.code){
+				this.toolUtil.checkLogin(this.nextT(),options)
+			}else{
+				this.loginL()
+			}
+			
 		},
 		methods: {
+			nextT(){
+					this.getTypeList()
+					this.getTypeSubList()
+			},
 			loginL(){
 				uni.removeStorage({
 					key:'token',
@@ -119,8 +128,7 @@
 						key: 'token',
 						data:obj.token
 					})
-					this.getTypeList()
-					this.getTypeSubList()
+					this.nextT()
 				})
 			},
 			getTypeList(){

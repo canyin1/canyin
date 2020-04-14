@@ -1212,57 +1212,15 @@ exports.checkLogin = function(callback, options = null, stillCallBack = false) {
 	this.getOptions(options);
 	let token = uni.getStorageSync('token');
 	if (token) {
-		var params = {
-			token: token,
-			// #ifdef APP-PLUS
-			version: plus.runtime.version,
-			// #endif
-			// #ifdef MP-WEIXIN || H5
-			version: localconfig.version
-			// #endif
-		}
-		if (store.state.invitor) {
-			params.invitor = store.state.invitor;
-		}
-		httpUtil.post2('/api/wxapp.account/login', params, (res) => {
-			store.commit('login', res.data.userInfo);
-			callback(options);
-		}, (error) => {
-			console.log("token过期了？？", error);
-			uni.removeStorage({
-				key: 'token',
-			});
-			// #ifdef H5
-			if (store.state.isWxBrowser)
-				miniProLogin.apply();
-			// #endif
-			if (stillCallBack) {
-				callback(options);
-			}
-		});
+		callback(options);
 	} else {
-		// #ifdef MP-WEIXIN 
-		miniProLogin.apply();
-		// #endif
-		// #ifdef H5 || APP-PLUS
-		if (callback)
+		let param = {
+			code: options.code,
+			schoolId:1
+		};
+		httpUtil.post2('/api/parentLogin', param, (res) => {
 			callback(options);
-		// #endif
-		// #ifdef APP-PLUS
-		shanyan.init(store.state.platform);
-		// #endif
-	}
-	function miniProLogin() {
-		uni.login({
-			success: res => {
-				let param = {
-					code: res.code,
-					version: localconfig.version
-				};
-				httpUtil.post2('/api/parentLogin', param, (res) => {
-					callback(options);
-				})
-			}
 		})
 	}
+	
 }
