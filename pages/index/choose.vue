@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick' @foods="foodTypeClick"></navbar>
+		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick' @foods="foodTypeClick" :date='date' :date1='date1'></navbar>
 
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
@@ -110,7 +110,7 @@
 				scrollHeight1:0,
 				indexs1: '',
 				indexs2: '',
-				date:'请选择日期',
+				date:'',
 				typeAll: {
 					'zongheType': 0,
 					'levelType': 0,
@@ -120,18 +120,31 @@
 				},
 				foods:[
 					
-				]
+				],
+				subTypeId:''
 			}
 		},
-		onLoad() {
-			this.foodDetail()
+		onLoad(options) {
+			if(options.id){
+				this.subTypeId = options.id
+			}
+			
+			let date = Date.parse(new Date())
+			this.date1 = this.toolUtil.getTimeStrOnlyDateAuthen(date)
+			var arr="日一二三四五六".split("") 
+			let weeks = arr[new Date(date).getDay()]
+			this.date = this.date1 + ' ' + "周" + weeks
+			this.foodDetail(options.id)
 		},
 		methods: {
-			foodDetail(){
+			foodDetail(id){
 				let params= {
-					mealTime:'lunch'
+					date: this.date1,
+					schoolId: 1,
+					subTypeId:id? id:this.subTypeId
+					
 				}
-				this.httpUtil.get('/api/school/food/list',params,(obj)=>{
+				this.httpUtil.get('/api/school/foodplan/list',params,(obj)=>{
 					console.log(obj)
 					
 					this.foods = obj.rows
@@ -160,7 +173,9 @@
 				this.foods = e
 			},
 			tPickerClick(e){
-				this.date = e.split(' ')[0]
+				this.date = e
+				this.date1 = e.split(' ')[0]
+				this.foodDetail()
 			},
 			indexClick(index) {
 				this.indexs = index

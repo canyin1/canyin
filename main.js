@@ -7,6 +7,7 @@ import httpUtil from 'util/httpUtil.js'
 Vue.config.productionTip = false
 Vue.prototype.$store = store
 Vue.prototype.httpUtil = httpUtil
+Vue.prototype.toolUtil = toolUtil
 
 App.mpType = 'app'
 

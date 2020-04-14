@@ -1,11 +1,11 @@
 <template>
 	<view class="page">
-		<view class="scroll2" @click="bugClick">
+		<view class="scroll2" @click="bugClick(typeSubList.id)">
 			<view class="scroll_img_view">
 				<image class="scroll_img" src="/static/微信图片_20200318092008.jpg"></image>
 			</view>
 			<view class="name_view">
-				<view class="top_name">早餐</view>
+				<view class="top_name">{{typeSubList.name}}</view>
 				<view class="time">早上7:00-8:00</view>
 				<view class="intro">美好的一天从早餐开始~</view>
 			</view>
@@ -16,11 +16,9 @@
 <script>
 	export default {
 		name: 'indexBox',
-		props:{
-			item:{
-				type:Array,
-			}
-		},
+		props:[
+			'typeSubList'
+		],
 		data() {
 			return {
 
@@ -30,9 +28,9 @@
 
 		},
 		methods: {
-			bugClick() {
+			bugClick(id) {
 				uni.navigateTo({
-					url: "../index/choose"
+					url: "../index/choose?id=" + id
 				})
 			},
 		}

@@ -37,7 +37,6 @@
 				food:'早餐',
 				range:[],
 				ranges:'1',
-				date: '请选择日期',
 				index:1
 			}
 		},
@@ -47,6 +46,10 @@
 			// 	default: null
 			// },
 			title: {
+				type: String,
+				default: ""
+			},
+			date: {
 				type: String,
 				default: ""
 			},
@@ -109,8 +112,8 @@
 				var arr="日一二三四五六".split("") 
 				this.weeks = arr[new Date(e.detail.value).getDay()]
 				console.log(this.weeks)
-				this.date = e.detail.value + ' ' + '周' + this.weeks
-				this.$emit("weeks", this.date,)
+				let date = e.detail.value + ' ' + '周' + this.weeks
+				this.$emit("weeks", date,)
 			},
 			chooseClick(){
 				if(this.downType==0){

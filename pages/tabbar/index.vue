@@ -33,11 +33,11 @@
 		<!-- <view class="btn"  @click="bugClick">智能点单</view> -->
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
-				<view v-for="(item,index1) in week" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.week}}</view>
+				<view v-for="(item,index1) in typeList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.name}}</view>
 			</scroll-view>
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
 				<view class="titles"></view>
-				<indexBox v-for="(item,index2) in week" :key='index2'></indexBox>
+				<indexBox v-for="(item,index2) in typeSubList" :key='index2' :typeSubList='item'></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -69,6 +69,8 @@
 			return {
 				welcome: "第五中学智能食堂",
 				scrollHeight: 0,
+				typeList:[],
+				typeSubList:[],
 				week: [{
 					'week': '周日',
 					'date': '8'
@@ -97,7 +99,6 @@
 		},
 		onLoad() {
 			this.loginL()
-			// this.foodsList()
 		},
 		methods: {
 			loginL(){
@@ -118,15 +119,26 @@
 						key: 'token',
 						data:obj.token
 					})
-					this.foodsList()
+					this.getTypeList()
+					this.getTypeSubList()
 				})
 			},
-			foodsList(){
+			getTypeList(){
 				let params = {
-					mealTime:'lunch'
+					
 				}
-				this.httpUtil.get('/api/school/food/list',params,(obj)=>{
+				this.httpUtil.get('/api/school/foodType/list',params,(obj)=>{
 					console.log(123,obj)
+					this.typeList = obj.rows
+				})
+			},
+			getTypeSubList(){
+				let params = {
+					
+				}
+				this.httpUtil.get('/api/school/foodType/list',params,(obj)=>{
+					console.log(123,obj)
+					this.typeSubList = obj.rows
 				})
 			},
 			indexClick(index) {
