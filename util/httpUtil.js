@@ -6,7 +6,7 @@ import Vue from 'vue'
 exports.get = function(funName, obj, callback,failCallBack = null) {
 	let  token = uni.getStorageSync("token");
 	uni.request({
-		url: 'http://food-edu.net' + funName,
+		url: 'http://h5.food-edu.net' + funName,
 		data: obj,
 		header: {
 			'content-type': 'application/json' ,// 默认值
@@ -28,7 +28,7 @@ exports.get = function(funName, obj, callback,failCallBack = null) {
 exports.get1 = function(funName, obj, callback,failCallBack = null) {
 	let  token = uni.getStorageSync("token");
 	uni.request({
-		url: 'http://food-edu.net' + funName + obj,
+		url: 'http://h5.food-edu.net' + funName + obj,
 		header: {
 			'content-type': 'application/json' ,// 默认值
 			'Authorization' : "Bearer" + ' ' + token
@@ -46,13 +46,13 @@ exports.get1 = function(funName, obj, callback,failCallBack = null) {
 	})
 }
 exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0, _complete = null, log = true) {
-	console.log("请求http：" +'http://food-edu.net' + funName, _data);
+	console.log("请求http：" +'http://h5.food-edu.net' + funName, _data);
 	let  token = uni.getStorageSync("token");
 	if (token) {
 		_data.token = token;
 	}
 	uni.request({
-		url: 'http://food-edu.net' + funName,
+		url: 'http://h5.food-edu.net' + funName,
 		data: _data,
 		method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 		header: {
@@ -61,7 +61,7 @@ exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0
 		}, // 设置请求的 header
 		success: function(res) {
 			if (log)
-				console.log("返回http：" + 'http://food-edu.net/' + funName, res.data);
+				console.log("返回http：" + 'http://h5.food-edu.net/' + funName, res.data);
 			if (res.data.code == 200) {
 				callback(res.data);
 			}else {
@@ -91,7 +91,7 @@ exports.post4 = function(url, data, successCallback = null, failCallBack = null,
 	// 	data.token = token;
 	// }
 	uni.request({
-		url: 'http://food-edu.net' + url,
+		url: 'http://h5.food-edu.net' + url,
 		data: data,
 		method: 'POST',
 		header: {

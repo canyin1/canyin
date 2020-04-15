@@ -46,5 +46,9 @@
         "setting" : {
             "urlCheck" : true
         }
+    },
+    "h5" : {
+        "title" : "智能食堂",
+        "domain" : "http://h5.food-edu.net"
     }
 }
