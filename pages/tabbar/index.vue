@@ -71,28 +71,6 @@
 				scrollHeight: 0,
 				typeList:[],
 				typeSubList:[],
-				week: [{
-					'week': '周日',
-					'date': '8'
-				}, {
-					'week': '周一',
-					'date': '9'
-				}, {
-					'week': '周二',
-					'date': '10'
-				}, {
-					'week': '周三',
-					'date': '11'
-				}, {
-					'week': '周四',
-					'date': '12'
-				}, {
-					'week': '周五',
-					'date': '13'
-				}, {
-					'week': '周六',
-					'date': '14'
-				}],
 				indexs: 0,
 				indexs1: 0,
 			}
@@ -144,7 +122,7 @@
 				let params = {
 					
 				}
-				this.httpUtil.get('/api/school/foodType/list',params,(obj)=>{
+				this.httpUtil.get('/api/school/foodSubType/list',params,(obj)=>{
 					console.log(123,obj)
 					this.typeSubList = obj.rows
 				})

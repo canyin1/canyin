@@ -4,27 +4,27 @@
 			<image class="me_BG" src="/static/index_bg.png" mode=""></image>
 			<view class="player_view">
 				<view class="player_img_view">
-					<image class="player_img" src="/static/微信图片_20200318092008.jpg" mode=""></image>
+					<image class="player_img" :src="user.headImage" mode="aspectFill"></image>
 				</view>
 				<view class="name_view">
-					<view class="name">名字</view>
-					<view class="phone">1223456456</view>
+					<view class="name">{{user.nickname}}</view>
+					<view class="phone">{{user.phoneNumber}}</view>
 				</view>
 			</view>
 			<span class="iconfont icon-ziyuan"></span>
 		</view>
 		<view class="hengview">
-			<view class="hengview1" @click="goClick(0)">
+			<!-- <view class="hengview1" @click="goClick(0)">
 				<view class="hengLeft">
 					<span class="iconfont icon-tubiaolunkuo- icon-s"></span>
 					<view class="hengname">我的钱包</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
-			</view>
+			</view> -->
 			<view class="hengview1" @click="goClick(1)">
 				<view class="hengLeft">
-					<span class="iconfont icon-ic_tomap icon-s"></span>
-					<view class="hengname">收货地址</view>
+					<span class="iconfont icon-fuwu icon-s"></span>
+					<view class="hengname">绑定学生</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view>
@@ -35,7 +35,7 @@
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view> -->
-			<view class="hengview1">
+			<!-- <view class="hengview1">
 				<view class="hengLeft">
 					<span class="iconfont icon-fuwu icon-s"></span>
 					<view class="hengname">服务中心</view>
@@ -48,7 +48,7 @@
 					<view class="hengname">商务合作</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -57,15 +57,22 @@
 	export default {
 		data() {
 			return {
-
+				user:[]
 			}
 		},
 		onLoad() {
-
+			this.getUserInfo()
 		},
 		methods: {
+			getUserInfo(){
+				let params = {}
+				this.httpUtil.get('/api/getInfo',params,(obj)=>{
+					console.log(obj)
+					this.user = obj.user
+				})
+			},
 			goClick(type){
-				let url = ['../me/myWallet','../me/myAddress','../me/myCollect']
+				let url = ['../me/myWallet','../login','../me/myCollect']
 				uni.navigateTo({
 					url:url[type]
 				})

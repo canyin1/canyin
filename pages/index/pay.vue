@@ -19,14 +19,6 @@
 				<span class="iconfont icon-circle" v-if='index==1'></span>
 				<span class="iconfont icon-ok" v-if='index==0'></span>
 			</view>
-			<view class="checkbox" @click="indexClick(1)">
-				<view class="name_view">
-					<span class="iconfont icon-qian1"></span>
-					<text>零钱支付</text>
-				</view>
-				<span class="iconfont icon-circle" v-if='index==0'></span>
-				<span class="iconfont icon-ok" v-if='index==1'></span>
-			</view>
 		</view>
 		<view class="btn" >确认支付</view>
 	</view>

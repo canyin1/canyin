@@ -111,7 +111,7 @@
 				console.log(e)
 				var arr="日一二三四五六".split("") 
 				this.weeks = arr[new Date(e.detail.value).getDay()]
-				console.log(this.weeks)
+				console.log(999,this.weeks)
 				let date = e.detail.value + ' ' + '周' + this.weeks
 				this.$emit("weeks", date,)
 			},
@@ -124,7 +124,7 @@
 					itemList: this.foodType,
 					success(res) {
 						that.food = that.foodType[res.tapIndex]
-						that.$emit("foods", that.food,)
+						that.$emit("food", that.food,)
 					},
 				})
 			},

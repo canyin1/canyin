@@ -2,12 +2,10 @@
 	<view class="page">
 		<navbar title="学生信息登记" :backcolorType='2' :whiteback='2' :showKongPanel="true"></navbar>
 		<form @submit="submitComfire" @reset="submitCancel">
-			<input class="input input1" type="text" value="" placeholder="姓名" name="userName" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="出生年月(YYYY-MM-DD)" name="birthday" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="身高" name="height" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="体重" name="weight" placeholder-class="placeholder" />
-			<input class="input" type="text" value="" placeholder="近视度数( )左眼( )右眼" name="eye" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="所在班级" name="class" placeholder-class="placeholder" />
+			<input class="input input1" type="text" value="" placeholder="姓名" name="name" placeholder-class="placeholder" />
+			<input class="input input1" type="text" value="" placeholder="班级" name="classId" placeholder-class="placeholder" />
+			<input class="input input1" type="text" value="" placeholder="学校" name="schoolId" placeholder-class="placeholder" />
+			<input class="input input1" type="text" value="" placeholder="学号" name="studentNumber" placeholder-class="placeholder" />
 			<button form-type="submit">提交</button>
 			<button form-type="reset">重置</button>
 		</form>
@@ -22,14 +20,30 @@
 		},
 		data(){
 			return{
+				type:''
 			}
 		},
-		onLoad() {
-			
+		onLoad(options) {
+			if(options.type==1){
+				this.type = options.type
+			}
 		},
 		methods:{
 			submitComfire(e){
-				
+				console.log(e.detail.value)
+				let params = e.detail.value
+				this.httpUtil.post2('/api/school/parent/bindStudent',params,(obj)=>{
+					console.log(obj)
+					if(this.type==1){
+						uni.navigateBack({
+							
+						})
+						return false
+					}
+					uni.switchTab({
+						url:'tabbar/index'
+					})
+				})
 			},
 		}
 	}

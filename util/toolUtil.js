@@ -505,22 +505,11 @@ exports.getTimeStrOnlyDate = function(game_over_timestamp) {
 		return "";
 	var date = new Date(parseInt(game_over_timestamp));
 	var now = new Date();
-	var hours = date.getHours() >= 10 ? date.getHours().toString() : "0" + date.getHours();
-	var minutes = date.getMinutes() >= 10 ? date.getMinutes().toString() : "0" + date.getMinutes();
-	var seconds = date.getSeconds() >= 10 ? date.getSeconds().toString() : "0" + date.getSeconds();
-	let lastwords = hours + ":" + minutes;
-	if (hours == 0 && minutes == 0) {
-		lastwords = "";
-	}
-	if (date.getFullYear() == now.getFullYear() && date.getMonth() == now.getMonth()) {
-		if (date.getDate() - now.getDate() == 0)
-			return "今天" + lastwords;
-		else if (date.getDate() - now.getDate() == 1)
-			return "明天" + lastwords;
-		else if (date.getDate() - now.getDate() == 2)
-			return "后天" + lastwords;
-	}
-	return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+	var month = (date.getMonth() + 1) >= 10 ? (date.getMonth() + 1).toString() : "0" + (date.getMonth() + 1);
+	var day = date.getDate() >= 10 ? date.getDate().toString() : "0" + '' + date.getDate();
+	
+	
+	return date.getFullYear() + "-"  + month + "-" + day;
 }
 
 exports.getTimeStrDate = function(game_over_timestamp) {

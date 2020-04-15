@@ -1,9 +1,7 @@
 <template>
 	<view class="page">
 		<view class="scroll2" @click="bugClick(typeSubList.id)">
-			<view class="scroll_img_view">
-				<image class="scroll_img" src="/static/微信图片_20200318092008.jpg"></image>
-			</view>
+			
 			<view class="name_view">
 				<view class="top_name">{{typeSubList.name}}</view>
 				<view class="time">早上7:00-8:00</view>
