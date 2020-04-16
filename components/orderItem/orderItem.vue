@@ -62,6 +62,7 @@
 		margin: 10upx auto 0;
 		background: #FFFFFF;
 		box-sizing: border-box;
+		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
 	}
 	.order_top{
 		width: 100%;

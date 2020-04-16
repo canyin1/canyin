@@ -167,6 +167,8 @@
 		padding: 0 32upx;
 		box-sizing: border-box;
 		position: relative;
+		border-radius: 34upx;
+		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
 	}
 	.hengview1:last-of-type{
 		position: initial;

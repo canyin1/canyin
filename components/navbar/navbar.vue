@@ -33,8 +33,8 @@
 				pddTitleHeight: 32,
 				pddTitleTop: 25,
 				kongHeight: 68,
-				foodType:['早餐','午餐','晚餐','夜宵'],
-				food:'早餐',
+				
+				
 				range:[],
 				ranges:'1',
 				index:1
@@ -46,6 +46,10 @@
 			// 	default: null
 			// },
 			title: {
+				type: String,
+				default: ""
+			},
+			food: {
 				type: String,
 				default: ""
 			},

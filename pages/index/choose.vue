@@ -1,11 +1,11 @@
 <template>
 	<view class="page">
 		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick'
-		 @food="foodTypeClick" :date='date' :date1='date1'></navbar>
+		 @food="foodTypeClick" :date='date' :date1='date1' :food='food'></navbar>
 
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
-				<view v-for="(item,index1) in typeSubList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.name}}</view>
+				<view v-for="(item,index1) in typeSubList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(item.id)">{{item.name}}</view>
 			</scroll-view>
 			<view class="scrollX_view">
 				<!-- <view class="tab_view">
@@ -101,16 +101,16 @@
 				foods: [
 
 				],
-				subTypeId: '',
-				foodType: ['早餐', '午餐', '晚餐', '夜宵'],
+				foodType: ['早餐', '午餐', '晚餐', '宵夜'],
 				food: '早餐',
 				price: 0,
-				typeSubList:[]
+				typeSubList:[],
+				date1:''
 			}
 		},
 		onLoad(options) {
-			if (options.id) {
-				this.subTypeId = options.id
+			if (options.type) {
+				this.food = this.foodType[options.type]
 			}
 			this.getTypeSubList()
 			let date = Date.parse(new Date())
@@ -118,7 +118,7 @@
 			var arr = "日一二三四五六".split("")
 			let weeks = arr[new Date(date).getDay()]
 			this.date = this.date1 + ' ' + "周" + weeks
-			this.foodDetail(options.id)
+			this.foodDetail(1)
 		},
 		methods: {
 			getTypeSubList(){
@@ -134,7 +134,7 @@
 				let params = {
 					date: '',
 					schoolId: 1,
-					subTypeId: id ? id : this.subTypeId
+					subTypeId: id ? id : this.indexs1
 
 				}
 				this.httpUtil.get('/api/school/foodplan/list', params, (obj) => {

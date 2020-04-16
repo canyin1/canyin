@@ -15,10 +15,12 @@
 						<view class="address_phone">13670000000</view>
 					</view>
 				</view>
-				<view class="scroll1_img_view"><image class="address_img" src='/static/微信图片_20200318092008.jpg' mode="aspectFill"></image></view>
+				<view class="scroll1_img_view">
+					<image class="address_img" src='/static/微信图片_20200318092008.jpg' mode="aspectFill"></image>
+				</view>
 			</view>
 		</view>
-		<!-- <swiper class="swiper" :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
+		<swiper class="swiper" :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
 		 display-multiple-items='7'>
 			<swiper-item v-for="(item,index) in week" :key="index">
 				<view class="swiper-item" :class="index==indexs?'active':''" @click="indexClick(index)">
@@ -26,18 +28,18 @@
 					<view class="date">{{item.date}}</view>
 				</view>
 			</swiper-item>
-		</swiper> -->
+		</swiper>
 		<view id="line">
-			<span class="iconfont icon-tongzhi"></span><text>告师生信</text>
+			
 		</view>
 		<!-- <view class="btn"  @click="bugClick">智能点单</view> -->
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
-			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
+			<!-- <scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
 				<view v-for="(item,index1) in typeList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.name}}</view>
-			</scroll-view>
+			</scroll-view> -->
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
 				<view class="titles"></view>
-				<indexBox v-for="(item,index2) in typeSubList" :key='index2' :typeSubList='item'></indexBox>
+				<indexBox></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -59,7 +61,7 @@
 				uni.getSystemInfo({
 					success: function(res) {
 						console.log(res)
-						that.scrollHeight = res.windowHeight - data.top - 25
+						that.scrollHeight = res.windowHeight - data.top - 5
 					}
 				})
 				// this.scrollHeight = this.$store.state.
@@ -69,61 +71,88 @@
 			return {
 				welcome: "第五中学智能食堂",
 				scrollHeight: 0,
-				typeList:[],
-				typeSubList:[],
+				typeList: [],
+				typeSubList: [],
 				indexs: 0,
 				indexs1: 0,
+				week: [{
+					'week': '周日',
+					'date': '1'
+				},{
+					'week': '周一',
+					'date': '2'
+				},{
+					'week': '周二',
+					'date': '3'
+				},{
+					'week': '周三',
+					'date': '4'
+				},{
+					'week': '周四',
+					'date': '5'
+				},{
+					'week': '周五',
+					'date': '6'
+				},{
+					'week': '周六',
+					'date': '7'
+				},{
+					'week': '周日',
+					'date': '8'
+				},
+				]
+
 			}
 		},
 		onLoad(options) {
-			if(options.code){
-				this.toolUtil.checkLogin(this.nextT(),options)
-			}else{
+			if (options.code) {
+				this.toolUtil.checkLogin(this.nextT(), options)
+			} else {
 				this.loginL()
 			}
-			
+
 		},
 		methods: {
-			nextT(){
-					this.getTypeList()
-					this.getTypeSubList()
+			nextT() {
+				this.getTypeList()
+				this.getTypeSubList()
 			},
-			loginL(){
+			loginL() {
 				uni.removeStorage({
-					key:'token',
+					key: 'token',
 					success(res) {
-						
+
 					}
 				})
 				let params = {
-					code:1,
-					schoolId:1
+					code: 1,
+					schoolId: 1
 				}
-				this.httpUtil.post2("/api/parentLogin",params,(obj)=>{
+				this.httpUtil.post2("/api/parentLogin", params, (obj) => {
 					console.log(obj)
-					
+
 					uni.setStorage({
 						key: 'token',
-						data:obj.token
+						data: obj.token
 					})
 					this.nextT()
 				})
 			},
-			getTypeList(){
+			getTypeList() {
 				let params = {
-					
+
 				}
-				this.httpUtil.get('/api/school/foodType/list',params,(obj)=>{
-					console.log(123,obj)
+				this.httpUtil.get('/api/school/foodType/list', params, (obj) => {
+					console.log(123, obj)
 					this.typeList = obj.rows
 				})
 			},
-			getTypeSubList(){
+			getTypeSubList() {
 				let params = {
-					
+
 				}
-				this.httpUtil.get('/api/school/foodSubType/list',params,(obj)=>{
-					console.log(123,obj)
+				this.httpUtil.get('/api/school/foodSubType/list', params, (obj) => {
+					console.log(123, obj)
 					this.typeSubList = obj.rows
 				})
 			},
@@ -133,8 +162,8 @@
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			bugClick(){
-				
+			bugClick() {
+
 			},
 		}
 	}
@@ -154,9 +183,10 @@
 		width: 100%;
 		position: relative;
 		height: 233upx;
-		
+
 	}
-	.index_img{
+
+	.index_img {
 		width: 100%;
 		height: 233upx;
 		position: absolute;
@@ -164,7 +194,8 @@
 		top: 0;
 		z-index: 1;
 	}
-	.address{
+
+	.address {
 		width: 100%;
 		height: 233upx;
 		display: flex;
@@ -180,44 +211,47 @@
 		padding: 20upx 60upx;
 		box-sizing: border-box;
 	}
-	.address_left{
+
+	.address_left {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 	}
-	.address_img{
+
+	.address_img {
 		width: 160upx;
 		height: 160upx;
 		border-radius: 50%;
 	}
-	.address_location{
+
+	.address_location {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		padding-top: 10upx;
 	}
+
 	.icon-ic_tomap {
 		font-size: 20upx;
-		
+
 	}
+
 	.swiper {
 		width: 100%;
 		border-top: 2upx solid #F5F5F5;
 		height: 90upx;
+		color: #333333;
 	}
 
 	.week {
-		font-size: 28upx;
-		color: #333;
+		font-size: 20upx;
 		line-height: 1;
-		opacity: 0.3;
 	}
 
 	.date {
-		font-size: 30upx;
+		font-size: 32upx;
 		line-height: 1;
-		color: #333333;
-		padding-top: 10upx;
+		padding-top: 20upx;
 	}
 
 	.swiper-item {
@@ -228,11 +262,12 @@
 	}
 
 	.active {
-		background: #FFBA59 !important;
+		color: #e07235 !important;
 	}
+
 	#line {
 		width: 100%;
-		height: 50upx;
+		height: 10upx;
 		background: #FFFFFF;
 		padding: 0 32upx;
 		color: #FF374E;
@@ -242,18 +277,21 @@
 		align-items: center;
 		box-sizing: border-box;
 	}
-	#line text{
+
+	#line text {
 		text-decoration: underline;
 	}
-	.icon-tongzhi{
+
+	.icon-tongzhi {
 		padding-right: 20upx;
-		
+
 	}
+
 	.scroll {
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
-		
+
 	}
 
 	.scrollY {
@@ -288,7 +326,7 @@
 	}
 
 	.scrollX {
-		width: 77%;
+		width: 100%;
 		background: #F5F5F5;
 	}
 
@@ -297,7 +335,8 @@
 		height: 0;
 		color: transparent;
 	}
-	.btn{
+
+	.btn {
 		width: 200upx;
 		height: 78upx;
 		line-height: 78upx;
