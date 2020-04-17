@@ -30,24 +30,24 @@
 
 						<view class="foods_left">
 							<view class="foods_img_view">
-								<image class="foods_img" src="/static/微信图片_20200318092008.jpg"></image>
+								<image class="foods_img" :src="item.food.imgs" mode="aspectFill"></image>
 							</view>
 							<view class="foods_name_view">
-								<view class="foods_name">{{item.name}}</view>
-								<view class="foods_num">月售{{item.monthlySales}}</view>
-								<view class="foods_cash">￥{{item.price}}</view>
+								<view class="foods_name">{{item.food.name}}</view>
+								<view class="foods_num">月售{{item.food.monthlySales}}</view>
+								<view class="foods_cash">￥{{item.food.price}}</view>
 							</view>
 						</view>
-						<!-- <view class="add_view">
+						<view class="add_view">
 							<view>
 								<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.id,index2)"></span>
 								<text v-if="item.num>0">{{item.num}}</text>
-								<span class="iconfont icon-jiahao" @click.stop="addClick(item.id,index2)"></span>
+								<span class="iconfont icon-jiahao" @click.stop="addClick(item.id,item.food.price,item.food.imgs,item.food.name,index2)"></span>
 							</view>
-						</view> -->
-						<view class="add_btn">
-							<view @click.stop="addClick(item.id,item.price,item.imgs,item.name,index2)">添加</view>
 						</view>
+						<!-- <view class="add_btn">
+							<view @click.stop="addClick(item.id,item.price,item.imgs,item.name,index2)">添加</view>
+						</view> -->
 					</view>
 				</scroll-view>
 			</view>
@@ -132,30 +132,51 @@
 			},
 			foodDetail(id) {
 				let params = {
-					date: '',
+					date: this.date1,
 					schoolId: 1,
 					subTypeId: id ? id : this.indexs1
 
 				}
 				this.httpUtil.get('/api/school/foodplan/list', params, (obj) => {
 					console.log(obj)
-					if (obj.rows[0]) {
-						let foods = []
+					if (obj.rows) {
+						let foods = obj.rows
+						let shoppingCarList ={}
+						let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
+						let type = ''
 						if (this.food == '早餐') {
-							foods = obj.rows[0].breakfastList
+							type = typeList[0]
 						} else if (this.food == '午餐') {
-							foods = obj.rows[0].lunchList
+							type = typeList[1]
 						} else if (this.food == '晚餐') {
-							foods = obj.rows[0].dinnerList
+							type = typeList[2]
 						} else {
-							foods = obj.rows[0].supperList
+							type = typeList[3]
 						}
-						for(let i =0;i<foods.length;i++){
-							if(foods[i].images){
-								foods[i].imgs = JSON.parse(foods[i].images)[0]
+						if (uni.getStorageSync('shoppingCarList')) {
+							shoppingCarList = uni.getStorageSync('shoppingCarList')
+							if(shoppingCarList[this.date1]){
+								for(let x = 0;x<shoppingCarList[this.date1].length;x++){
+									for(let y = 0;y<foods.length;y++){
+										if(shoppingCarList[this.date1][x].id == foods[y].id&&shoppingCarList[this.date1][x].type==type){
+											foods[y].num = shoppingCarList[this.date1][x].amount
+										}
+									}
+									
+								}
 							}
 						}
-						this.foods = foods
+						if(obj.rows.length!=0){
+							for(let i =0;i<obj.rows.length;i++){
+								if(foods[i].food.images){
+									foods[i].food.imgs = JSON.parse(foods[i].food.images)[0]
+								}
+							}
+							this.foods = this.foods.concat(foods)
+							
+						}else{
+							this.foods=[]
+						}
 						if (uni.getStorageSync('price')) {
 							this.price = uni.getStorageSync('price').toFixed(2)
 						} else {
@@ -167,11 +188,12 @@
 				})
 			},
 			reduceClick(id) {
-				for (let i = 0; i < this.foods.length; i++) {
-					if (this.foods[i].id == id) {
-						this.foods[i].num--
-					}
-				}
+				this.getnum(id,'reduce')
+				// for (let i = 0; i < this.foods.length; i++) {
+				// 	if (this.foods[i].id == id) {
+				// 		this.foods[i].num--
+				// 	}
+				// }
 			},
 			addClick(id, price, images, name, index) {
 				let shoppingCarList = {}
@@ -247,6 +269,7 @@
 					// this.getnum(id)
 				}
 
+					this.getnum(id,'add')
 				prices = prices + price
 				this.price = prices.toFixed(2)
 				console.log(111, shoppingCarList)
@@ -258,14 +281,19 @@
 					duration: 1500
 				})
 			},
-			getnum(id) {
+			getnum(id,type) {
 				let food = this.foods
 				for (let j = 0; j < food.length; j++) {
 					if (food[j].id == id) {
 						if (!food[j].num) {
 							food[j].num = 0
 						}
-						food[j].num++
+						if(type=='add'){
+							food[j].num++
+						}
+						if(type=='reduce'){
+							food[j].num--
+						}
 						this.foods = food
 						this.$forceUpdate()
 					}
