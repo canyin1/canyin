@@ -6,7 +6,8 @@
 			</view>
 			<view class="name_view">
 				<view class="top_name">{{item.title}} <text>Breakfast</text> </view>
-				<view class="time" :class="item.bookingState=='NOT_BOOK'?'time1':''">未预定</view>
+				<view class="time time1" v-if="item.bookingState=='NOT_BOOK'">未预定</view>
+				<view class="time" v-if="item.bookingState!='NOT_BOOK'">已预定</view>
 				<view class="intro">美好的一天从早餐开始~</view>
 			</view>
 		</view>
