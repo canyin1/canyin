@@ -38,8 +38,8 @@
 				<view v-for="(item,index1) in typeList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(index1)">{{item.name}}</view>
 			</scroll-view> -->
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
-				<view class="titles"></view>
-				<indexBox></indexBox>
+				
+				<indexBox :item='item' v-for='(item,index) in indexList' :key='index'></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -100,17 +100,26 @@
 					'week': '周日',
 					'date': '8'
 				},
-				]
+				],
+				indexList:[]
 
 			}
 		},
 		onLoad(options) {
+			
 			if (options.code) {
 				this.toolUtil.checkLogin(this.nextT(), options)
 			} else {
 				this.loginL()
 			}
-
+			let date = Date.parse(new Date())
+			this.date1 = this.toolUtil.getTimeStrOnlyDate(date)
+			var arr = "日一二三四五六".split("")
+			let week = new Date(date).getDay()
+			let weeks = arr[week]
+			for(let i=0;i<week+1;i++){
+				
+			}
 		},
 		methods: {
 			nextT() {
@@ -140,11 +149,12 @@
 			},
 			getTypeList() {
 				let params = {
-
+					studentId:1,
+					mealDate:'2020-04-19'
 				}
-				this.httpUtil.get('/api/school/foodType/list', params, (obj) => {
+				this.httpUtil.get('/api/school/book/info', params, (obj) => {
 					console.log(123, obj)
-					this.typeList = obj.rows
+					this.indexList = obj.data
 				})
 			},
 			getTypeSubList() {

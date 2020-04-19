@@ -5,18 +5,18 @@
 				<image class="scroll_img" src="/static/breakfast.jpg" mode="aspectFill"></image>
 			</view>
 			<view class="name_view">
-				<view class="top_name">早餐 <text>Breakfast</text> </view>
-				<view class="time" :class="type?'time1':''">未预定</view>
+				<view class="top_name">{{item.title}} <text>Breakfast</text> </view>
+				<view class="time" :class="item.bookingState=='NOT_BOOK'?'time1':''">未预定</view>
 				<view class="intro">美好的一天从早餐开始~</view>
 			</view>
 		</view>
-		<view class="scroll2" @click="bugClick(1)">
+		<!-- <view class="scroll2" @click="bugClick(1)">
 			<view class="scroll_img_view">
 				<image class="scroll_img" src="/static/lunch.jpg" mode="aspectFill"></image>
 			</view>
 			<view class="name_view">
 				<view class="top_name">午餐 <text>Lunch</text></view>
-				<view class="time">未预定</view>
+				<view class="time" :class="indexList.bookingState=='NOT_BOOK'?'time1':''">未预定</view>
 				<view class="intro">学习再忙也要记得吃午餐哦~</view>
 			</view>
 		</view>
@@ -26,7 +26,7 @@
 			</view>
 			<view class="name_view">
 				<view class="top_name">晚餐 <text>Dinner</text></view>
-				<view class="time">未预定</view>
+				<view class="time" :class="indexList.bookingState =='NOT_BOOK'?'time1':''">未预定</view>
 				<view class="intro">来一份美味的晚餐消除一天的疲劳~</view>
 			</view>
 		</view>
@@ -36,10 +36,10 @@
 			</view>
 			<view class="name_view">
 				<view class="top_name">宵夜 <text>Supper</text></view>
-				<view class="time">未预定</view>
+				<view class="time" :class="indexList.bookingState=='NOT_BOOK'?'time1':''">未预定</view>
 				<view class="intro">夜晚的肚子总是容易抗议~</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -47,7 +47,7 @@
 	export default {
 		name: 'indexBox',
 		props: [
-			'typeSubList'
+			'item'
 		],
 		data() {
 			return {
