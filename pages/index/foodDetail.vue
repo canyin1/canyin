@@ -23,23 +23,7 @@
 				<view class="add_btn" @click="addGoodsClick">加入购物车</view>
 			</view>
 		</view>
-		<view class="chooseWindow_view" v-if="boxType">
-			<view class="chooseBg"></view>
-			<view class="chooseWindow">
-				<view class="choose_text">请选择</view>
-				<view class="box">
-					<view class="text">学生:</view>
-					<view class="checkbox">
-						<checkbox-group>
-							<label v-for="(item,index) in student" :key='index' @click='checkClick(item.id)'>
-								<checkbox :value="item.id" :checked='item.checked'  style="transform:scale(0.7)" /><text>{{item.name}}</text>
-							</label>
-						</checkbox-group>
-					</view>
-				</view>
-				<view class="choose_btn">添加</view>
-			</view>
-		</view>
+		
 	</view>
 </template>
 
@@ -75,11 +59,15 @@
 				],
 				allId:[],
 				food:[],
-				id:''
+				id:'',
+				date:'',
+				type:''
 			}
 		},
 		onLoad(options) {
 			this.id = options.id
+			this.type = options.type
+			this.date = options.date
 			this.foodDetail(options.id)
 		},
 		methods:{
@@ -100,7 +88,73 @@
 				})
 			},
 			addGoodsClick(){
-				this.boxType = true
+				let shoppingCarList = {}
+				let prices = ''
+				if (uni.getStorageSync('price')) {
+					prices = uni.getStorageSync('price')
+				} else {
+					prices = 0
+				}
+				
+				let that = this
+				let food = {
+					id: '',
+					amount: '',
+					type: '',
+					name: '',
+					images: '',
+					price: ''
+				}
+				if (uni.getStorageSync('shoppingCarList')) {
+					shoppingCarList = uni.getStorageSync('shoppingCarList')
+					if(shoppingCarList[this.date]){
+						for(let i =0;i<shoppingCarList[this.date].length + 1;i++){
+							if(i==shoppingCarList[this.date].length){
+								food.id = this.id
+								food.amount = 1
+								food.type = this.type
+								food.name = this.food.name
+								food.price = this.food.price
+								food.images = this.food.imgs
+								shoppingCarList[this.date].push(food)
+							}
+							if(shoppingCarList[this.date][i].id == this.id&&shoppingCarList[this.date][i].type==this.type){
+								shoppingCarList[this.date][i].amount ++
+								break
+							}
+						}
+					}else{
+						shoppingCarList[this.date] = []
+						food.id = this.id
+						food.amount = 1
+						food.type = this.type
+						food.name = this.food.name
+						food.price = this.food.price
+						food.images = this.food.imgs
+						shoppingCarList[this.date].push(food)
+					}
+					
+				}else{
+					shoppingCarList[this.date] = []
+					food.id = this.id
+					food.amount = 1
+					food.type = this.type
+					food.name = this.food.name
+					food.price = this.food.price
+					food.images = this.food.imgs
+					shoppingCarList[this.date].push(food)
+				}
+				prices = prices + this.food.price
+				
+				console.log(111, shoppingCarList)
+				uni.setStorageSync("shoppingCarList", shoppingCarList)
+				uni.setStorageSync("price", prices)
+				uni.showToast({
+					title: "添加成功",
+					icon: "none",
+					duration: 1500
+				})
+				
 			},
 			checkClick(id){
 				for(let i = 1;i<this.student.length;i++){

@@ -33,9 +33,9 @@
 				pddTitleHeight: 32,
 				pddTitleTop: 25,
 				kongHeight: 68,
-				
-				
+				foodType:['早餐','午餐','晚餐','夜宵'],
 				range:[],
+				typeList:[],
 				ranges:'1',
 				index:1
 			}
@@ -60,6 +60,10 @@
 			whiteback: { //后退按钮的颜色 1黑色 其他白色
 				type: Number,
 				default: 0
+			},
+			typeListArr:{
+				type: String,
+				default: ""
 			},
 			downType:{
 				type: [Boolean, String],
@@ -98,7 +102,7 @@
 			this.pddTitleTop = this.$store.state.pddTitleTop;
 			this.pddTitleHeight = this.$store.state.pddTitleHeight;
 			this.kongHeight = this.$store.state.kongHeight;
-
+			
 			// if (a) {
 			// 	setTimeout(() => {
 			// 		this.pddTitleTop = this.$store.state.pddTitleTop;
@@ -125,10 +129,10 @@
 				}
 				let that = this
 				uni.showActionSheet({
-					itemList: this.foodType,
+					itemList: this.typeList,
 					success(res) {
-						that.food = that.foodType[res.tapIndex]
-						that.$emit("food", that.food,)
+						
+						that.$emit("food", that.typeList[res.tapIndex])
 					},
 				})
 			},

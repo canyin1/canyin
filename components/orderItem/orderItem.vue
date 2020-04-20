@@ -15,7 +15,9 @@
 			</view>
 			<view class="order_top" v-for="(items,index2) in item.detailList" :key="index2">
 				<view class="goods_left">
-					<view class="goods_img_view"><image class="good_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image></view>
+					<view class="goods_img_view">
+						<image class="good_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image>
+					</view>
 					<view class="goods_name">{{items.itemName}}</view>
 				</view>
 				<view class="goods_right">
@@ -27,7 +29,7 @@
 				<view class="order_num">订单号：4545684</view>
 				<view class="order_btn_view">
 					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'">取消订单</view>
-					<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="addCommon(item.id)">立即支付</view>
+					<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
 					<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
 					<view class="order_btn" v-if="item.orderState=='PAID'">确认收货</view>
 				</view>
@@ -37,17 +39,61 @@
 </template>
 
 <script>
-	export default{
+	export default {
 		name: 'orderItem',
-		props:['item'],
-		data(){
-			return{
-			}
+		props: ['item'],
+		data() {
+			return {}
 		},
-		methods:{
-			addCommon(id){
+		methods: {
+			addCommon(id) {
 				uni.navigateTo({
-					url:"../../pages/index/comment/addComment?id=" + id
+					url: "../../pages/index/comment/addComment?id=" + id
+				})
+			},
+			payClick(id) {
+				let params = {
+					id: id
+				}
+				this.httpUtil.post2('/api/school/order/pay', params, (obj) => {
+					if (obj.code == 200) {
+						WeixinJSBridge.invoke('getBrandWCPayRequest', {
+							'appId': obj.data.appId,
+							'timeStamp': obj.data.timeStamp,
+							'nonceStr': obj.data.nonceStr,
+							'package': obj.data.packageOne,
+							'signType': obj.data.signType,
+							'paySign': obj.data.paySign
+						}, function(res) {
+
+							let param = {
+								outTradeNo: obj.data.outTradeNo,
+
+							}
+							if (res.err_msg === 'get_brand_wcpay_request:ok') {
+								param.result = 'PAID'
+								uni.showToast({
+									title: "取消支付",
+									icon: "none",
+									duration: 1500
+								})
+							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+								param.result = 'CANCELED'
+								uni.showToast({
+									title: "取消支付",
+									icon: "none",
+									duration: 1500
+								})
+							}
+							this.httpUtil.post2('/api/school/order/pay-result',param,(obj)=>{
+								uni.switchTab({
+									url: '../tabbar/myOrder'
+								})
+							})
+							
+						});
+
+					}
 				})
 			},
 		}
@@ -55,16 +101,17 @@
 </script>
 
 <style>
-	.order{
+	.order {
 		width: 710upx;
 		padding: 32upx;
 		border-radius: 14upx;
 		margin: 10upx auto 0;
 		background: #FFFFFF;
 		box-sizing: border-box;
-		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
+		box-shadow: 10upx 10upx 40upx rgba(0, 0, 0, .1);
 	}
-	.order_top{
+
+	.order_top {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
@@ -72,30 +119,36 @@
 		justify-content: space-between;
 		padding-bottom: 20upx;
 	}
-	.order_top:last-of-type{
+
+	.order_top:last-of-type {
 		padding-bottom: 0;
 	}
-	.order_num{
+
+	.order_num {
 		font-size: 26upx;
 		color: #333333;
 		line-height: 1;
 	}
-	.order_status{
+
+	.order_status {
 		font-size: 24upx;
 		color: #999999;
 		line-height: 1;
 	}
-	.order_time{
+
+	.order_time {
 		font-size: 26upx;
 		color: #333333;
 		line-height: 1;
 	}
-	.order_btn_view{
+
+	.order_btn_view {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
-	.order_btn{
+
+	.order_btn {
 		width: 148upx;
 		height: 48upx;
 		line-height: 48upx;
@@ -106,7 +159,8 @@
 		border-radius: 24upx;
 		margin-left: 10upx;
 	}
-	.order_btn1{
+
+	.order_btn1 {
 		background: #FFFFFF !important;
 		color: #999 !important;
 		width: 144upx !important;
@@ -114,39 +168,46 @@
 		line-height: 44upx !important;
 		border: 2upx solid #999 !important;
 	}
-	.goods_left{
+
+	.goods_left {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		width: 80%;
 	}
-	.goods_img_view{
+
+	.goods_img_view {
 		font-size: 0;
 	}
-	.goods_name{
+
+	.goods_name {
 		font-size: 26upx;
 		line-height: 1.5;
 		color: #333333;
 		padding-left: 20upx;
 	}
-	.good_img{
+
+	.good_img {
 		width: 120upx;
 		height: 120upx;
 		border-radius: 9upx;
 	}
-	.goods_right{
+
+	.goods_right {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
 		width: 20%;
 	}
-	.goods_cash{
+
+	.goods_cash {
 		font-size: 26upx;
 		line-height: 1;
 		color: #333333;
-		
+
 	}
-	.goods_num{
+
+	.goods_num {
 		font-size: 24upx;
 		line-height: 1;
 		color: #999999;

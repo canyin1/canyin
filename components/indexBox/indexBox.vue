@@ -1,14 +1,14 @@
 <template>
 	<view class="page">
-		<view class="scroll2" @click="bugClick(0)">
+		<view class="scroll2"  @click="bugClick(item.title,indexs)">
 			<view class="scroll_img_view">
-				<image class="scroll_img" src="/static/breakfast.jpg" mode="aspectFill"></image>
+				<image class="scroll_img" :src="item.image" mode="aspectFill"></image>
 			</view>
 			<view class="name_view">
-				<view class="top_name">{{item.title}} <text>Breakfast</text> </view>
+				<view class="top_name">{{item.title}} <text>{{item.titleUS}}</text> </view>
 				<view class="time time1" v-if="item.bookingState=='NOT_BOOK'">未预定</view>
 				<view class="time" v-if="item.bookingState!='NOT_BOOK'">已预定</view>
-				<view class="intro">美好的一天从早餐开始~</view>
+				<view class="intro">{{item.desc}}</view>
 			</view>
 		</view>
 		<!-- <view class="scroll2" @click="bugClick(1)">
@@ -48,7 +48,13 @@
 	export default {
 		name: 'indexBox',
 		props: [
-			'item'
+			'item',
+			'week',
+			'indexs',
+			'nowStudent',
+			'nowStudentId',
+			'nowSchoolId',
+			'index'
 		],
 		data() {
 			return {
@@ -59,9 +65,17 @@
 
 		},
 		methods: {
-			bugClick(type) {
+			bugClick() {
+			if(this.nowStudentId==''){
+				uni.showToast({
+					title:'请先选择学生',
+					icon:'none',
+					duration:1500
+				})
+				return false
+			}
 				uni.navigateTo({
-					url: "../index/choose?type=" + type
+					url: '../index/choose?date=' + this.week[this.indexs].date + '&week=' + this.week[this.indexs].week + '&studentId=' + this.nowStudentId + '&schoolId=' +this.nowSchoolId + '&student=' + this.nowStudent + '&type=' + this.index
 				})
 			},
 		}

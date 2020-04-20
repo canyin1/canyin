@@ -376,7 +376,7 @@ exports.getTimeStrToDayAndXingqi = function(game_over_timestamp) {
 exports.getTimeStrToDayNotXingqi = function(game_over_timestamp) {
 	if (game_over_timestamp == 0)
 		return "";
-	var date = new Date(parseInt(game_over_timestamp));
+	var date = new Date(game_over_timestamp);
 	var now = new Date();
 	var hours = date.getHours() >= 10 ? date.getHours().toString() : "0" + date.getHours();
 	var minutes = date.getMinutes() >= 10 ? date.getMinutes().toString() : "0" + date.getMinutes();
@@ -1198,18 +1198,23 @@ exports.getOptions = function(options) {
 }
 
 exports.checkLogin = function(callback, options = null, stillCallBack = false) {
-	this.getOptions(options);
-	let token = uni.getStorageSync('token');
-	if (token) {
+	
+	if (uni.getStorageSync('token')) {
 		callback(options);
 	} else {
-		let param = {
-			code: options.code,
-			schoolId:1
-		};
-		httpUtil.post2('/api/parentLogin', param, (res) => {
-			callback(options);
-		})
+		if(options.code){
+			let param = {
+				code: options.code,
+				schoolId:1
+			};
+			httpUtil.post2('/api/parentLogin', param, (res) => {
+				
+				callback(options);
+			})
+		}else{
+			window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+		}
+		
 	}
 	
 }

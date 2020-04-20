@@ -10,10 +10,11 @@
 						<span class="icon iconfont icon-ic_tomap"></span>
 						<view class="address_location1">(第五中学)智能饭堂</view>
 					</view> -->
-					<view class="address_location">
-						<span class="icon iconfont icon-shouji01"></span>
-						<view class="address_phone">13670000000</view>
-					</view>
+					<!-- <view class="address_location" @click="studentClick">
+						<view class="student">当前学生：</view>
+						<view class="address_phone">{{nowStudent}}</view>
+						<span class="iconfont icon-jiantou"></span>
+					</view> -->
 				</view>
 				<view class="scroll1_img_view">
 					<image class="address_img" src='/static/微信图片_20200318092008.jpg' mode="aspectFill"></image>
@@ -25,12 +26,16 @@
 			<swiper-item v-for="(item,index) in week" :key="index">
 				<view class="swiper-item" :class="index==indexs?'active':''" @click="indexClick(index)">
 					<view class="week">{{item.week}}</view>
-					<view class="date">{{item.date}}</view>
+					<view class="date">{{item.day}}</view>
 				</view>
 			</swiper-item>
 		</swiper>
 		<view id="line">
-			
+			<view class="address_location" @click="studentClick">
+				<view class="student">当前学生：</view>
+				<view class="address_phone">{{nowStudent}}</view>
+				<span class="iconfont icon-jiantou"></span>
+			</view>
 		</view>
 		<!-- <view class="btn"  @click="bugClick">智能点单</view> -->
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
@@ -39,7 +44,7 @@
 			</scroll-view> -->
 			<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
 				
-				<indexBox :item='item' v-for='(item,index) in indexList' :key='index'></indexBox>
+				<indexBox :nowStudent='nowStudent' :nowSchoolId='nowSchoolId' :nowStudentId='nowStudentId' :week='week' :indexs='indexs' :index='index' :item='item' v-for='(item,index) in indexList' :key='index' ></indexBox>
 			</scroll-view>
 		</view>
 	</view>
@@ -61,7 +66,7 @@
 				uni.getSystemInfo({
 					success: function(res) {
 						console.log(res)
-						that.scrollHeight = res.windowHeight - data.top - 5
+						that.scrollHeight = res.windowHeight - data.top - 50
 					}
 				})
 				// this.scrollHeight = this.$store.state.
@@ -77,31 +82,39 @@
 				indexs1: 0,
 				week: [{
 					'week': '周日',
-					'date': '1'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周一',
-					'date': '2'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周二',
-					'date': '3'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周三',
-					'date': '4'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周四',
-					'date': '5'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周五',
-					'date': '6'
+					'day': '',
+					'date': ''
 				},{
 					'week': '周六',
-					'date': '7'
-				},{
-					'week': '周日',
-					'date': '8'
-				},
+					'day': '',
+					'date': ''
+				}
 				],
-				indexList:[]
+				indexList:[],
+				student:[],
+				nowStudent: '未选中',
+				nowStudentId: '',
+				nowSchoolId:''
 
 			}
 		},
@@ -112,45 +125,121 @@
 			} else {
 				this.loginL()
 			}
-			let date = Date.parse(new Date())
-			this.date1 = this.toolUtil.getTimeStrOnlyDate(date)
-			var arr = "日一二三四五六".split("")
-			let week = new Date(date).getDay()
-			let weeks = arr[week]
-			for(let i=0;i<week+1;i++){
-				
-			}
+			
 		},
 		methods: {
-			nextT() {
+			studentClick(){
+				let stu = []
+				let that = this
+				for(let i =0;i<this.student.length;i++){
+					stu.push(this.student[i].name)
+				}
+				uni.showActionSheet({
+					itemList:stu,
+					itemColor:'#333333',
+					success(res) {
+						
+						that.nowStudent = that.student[res.tapIndex].name
+						that.nowStudentId = that.student[res.tapIndex].id
+						that.nowSchoolId = that.student[res.tapIndex].schoolId
+						that.$forceUpdate()
+					},
+				})
+			},
+			getStudentList(){
+				let params = {
+					
+				}
+				this.httpUtil.get('/api/school/parent/children',params,(obj)=>{
+					if(obj.total==0){
+						uni.navigateTo({
+							url:"../login"
+						})
+					}
+					else{
+						this.student = obj.rows
+						this.timeList()
+						this.getTypeSubList()
+					}
+					
+				})
+			},
+			// bugClick(type) {
+			// 	uni.navigateTo({
+			// 		url: '../index/choose?date=' + this.week[this.indexs].date + '&week=' + this.week[this.indexs].week + '&studentId=' + 1
+			// 	})
+			// },
+			timeList(){
+				let week = new Date().getDay()
+				var now = new Date(); //当前日期 
+				var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+				var nowDay = now.getDate(); //当前日 
+				var nowMonth = now.getMonth(); //当前月 
+				var nowYear = now.getYear(); //当前年 
+				var weekStartDate = new Date(nowYear + 1900, nowMonth, nowDay - nowDayOfWeek); 
+				let weekStarttime = Date.parse(weekStartDate)
+				let weekStartDay = this.formatDate(weekStartDate)
+				// console.log(weekStartDay)
+				let i = weekStartDay.split('-')
+				this.week[0].day = i[2]
+				this.week[0].date = weekStartDate
+				// this.week[nowDayOfWeek].date = nowYear + ((nowMonth>9)?nowMonth:nowMonth + 1) + nowDay
+				// this.week[nowDayOfWeek].day = nowDay
+				for(let x = 1;x<7;x++){
+					var time = x* 86400000 + weekStarttime
+					var date = this.toolUtil.getTimeStrOnlyDate(time)
+					let y = date.split('-')
+					this.week[x].day = y[2]
+					this.week[x].date = date
+				}
+				
+				this.indexs = nowDayOfWeek
 				this.getTypeList()
-				this.getTypeSubList()
+			},
+			formatDate(date) { 
+			    var myyear = date.getFullYear(); 
+			    var mymonth = date.getMonth()+1; 
+			    var myweekday = date.getDate(); 
+			
+			    if(mymonth < 10){ 
+			       mymonth = "0" + mymonth; 
+			    } 
+			   if(myweekday < 10){ 
+			      myweekday = "0" + myweekday; 
+			   } 
+			   return (myyear+"-"+mymonth + "-" + myweekday); 
+			} ,
+			nextT() {
+				this.getStudentList()
+				
 			},
 			loginL() {
-				uni.removeStorage({
-					key: 'token',
-					success(res) {
+				// uni.removeStorage({
+				// 	key: 'token',
+				// 	success(res) {
 
-					}
-				})
+				// 	}
+				// })
+				if(uni.getStorageSync('token')){
+					this.nextT()
+					return
+				}
 				let params = {
-					code: 1,
+					code: 'this is my code',
 					schoolId: 1
 				}
-				this.httpUtil.post2("/api/parentLogin", params, (obj) => {
-					console.log(obj)
-
-					uni.setStorage({
-						key: 'token',
-						data: obj.token
-					})
-					this.nextT()
+				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
+					if(obj.code==200){
+						uni.setStorageSync('token',obj.token)
+						this.nextT()
+					}
+					
 				})
 			},
 			getTypeList() {
 				let params = {
 					studentId:1,
-					mealDate:'2020-04-19'
+					mealDate: this.week[this.indexs].date
 				}
 				this.httpUtil.get('/api/school/book/info', params, (obj) => {
 					console.log(123, obj)
@@ -172,16 +261,12 @@
 			indexClick1(index) {
 				this.indexs1 = index
 			},
-			bugClick() {
-
-			},
 		}
 	}
 </script>
 
 <style>
 	.address_name {
-		width: 100%;
 		text-align: center;
 		font-size: 32upx;
 	}
@@ -239,6 +324,12 @@
 		flex-direction: row;
 		align-items: center;
 		padding-top: 10upx;
+		font-size: 28upx;
+		padding: 10upx 40upx;
+		background:linear-gradient(270deg,rgba(249,128,80,1) 1%,rgba(255,186,89,1) 100%);
+		color: #FFFFFF;
+		height: 30upx;
+		border-radius: 34upx;
 	}
 
 	.icon-ic_tomap {
@@ -277,20 +368,17 @@
 
 	#line {
 		width: 100%;
-		height: 10upx;
+		height: 100upx;
 		background: #FFFFFF;
-		padding: 0 32upx;
-		color: #FF374E;
+		color: #333;
 		font-size: 26upx;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		box-sizing: border-box;
+		justify-content: center;
 	}
 
-	#line text {
-		text-decoration: underline;
-	}
 
 	.icon-tongzhi {
 		padding-right: 20upx;
@@ -356,5 +444,10 @@
 		margin: 120upx auto 0;
 		text-align: center;
 		font-size: 34upx;
+	}
+	.icon-jiantou{
+		font-size: 28upx;
+		margin-top: 6upx;
+		margin-left: 10upx;
 	}
 </style>

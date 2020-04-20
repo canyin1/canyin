@@ -1,8 +1,26 @@
 <template>
 	<view class="page">
-		<navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick'
-		 @food="foodTypeClick" :date='date' :date1='date1' :food='food'></navbar>
+		<!-- <navbar title="000" :backcolorType='2' :whiteback='2' :showKongPanel="true" :downType="true" :dateType="true" @weeks='tPickerClick'
+		 @food="foodTypeClick" :date='date' :date1='date1' :food='food' :typeListArr='typeListArr'></navbar> -->
+		<view style="z-index: 997;">
+			<view class='status_bar graybackgroud' :style="{'padding-top':pddTitleTop+'px','height':pddTitleHeight+'px'}">
+				<view class="customtitlediv fontwhite" @click="chooseClick">{{food}}<span class='iconfont icon-jiantou1'></span></view>
+				<view class="navback1" @click='navBack'>
 
+					<image src="/static/back1.png" mode='aspectFit' class="back1"></image>
+				</view>
+				<view class="date_view">
+					
+					<picker mode="date" @change="pickerClick" @cancel="cancelClick">
+						<view>{{date}} </view>
+					</picker><span class='iconfont icon-jiantou1'></span>
+				</view>
+			</view>
+			<view class="KongPanel" :style="{height:kongHeight+'px'}">
+		
+			</view>
+			
+		</view>
 		<view class="scroll" :style="{height:scrollHeight +'px'}">
 			<scroll-view scroll-y="true" class="scrollY" :style="{height:scrollHeight +'px'}">
 				<view v-for="(item,index1) in typeSubList" :key="index1" class="scroll1" :class="index1==indexs1?'active':''" @click="indexClick1(item.id)">{{item.name}}</view>
@@ -26,29 +44,34 @@
 					</view>
 				</view> -->
 				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
-					<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick(item.id)">
-
-						<view class="foods_left">
-							<view class="foods_img_view">
-								<image class="foods_img" :src="item.food.imgs" mode="aspectFill"></image>
+					<block v-if="foods.length>0">
+						<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick(item.id,item.num)">
+						
+							<view class="foods_left">
+								<view class="foods_img_view">
+									<image class="foods_img" :src="item.food.imgs" mode="aspectFill"></image>
+								</view>
+								<view class="foods_name_view">
+									<view class="foods_name">{{item.food.name}}</view>
+									<view class="foods_num">月售{{item.food.monthlySales}}</view>
+									<view class="foods_cash">￥{{item.food.price}}</view>
+								</view>
 							</view>
-							<view class="foods_name_view">
-								<view class="foods_name">{{item.food.name}}</view>
-								<view class="foods_num">月售{{item.food.monthlySales}}</view>
-								<view class="foods_cash">￥{{item.food.price}}</view>
+							<view class="add_view">
+								<view>
+									<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.id,item.food.price,index2)"></span>
+									<text v-if="item.num>0">{{item.num}}</text>
+									<span class="iconfont icon-jiahao" @click.stop="addClick(item.id,item.food.price,item.food.imgs,item.food.name,index2)"></span>
+								</view>
 							</view>
+							<!-- <view class="add_btn">
+								<view @click.stop="addClick(item.id,item.price,item.imgs,item.name,index2)">添加</view>
+							</view> -->
 						</view>
-						<view class="add_view">
-							<view>
-								<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.id,index2)"></span>
-								<text v-if="item.num>0">{{item.num}}</text>
-								<span class="iconfont icon-jiahao" @click.stop="addClick(item.id,item.food.price,item.food.imgs,item.food.name,index2)"></span>
-							</view>
-						</view>
-						<!-- <view class="add_btn">
-							<view @click.stop="addClick(item.id,item.price,item.imgs,item.name,index2)">添加</view>
-						</view> -->
-					</view>
+					</block>
+					<block v-if="foods.length==0">
+						<view class="no_foods">还没有商品哦~~</view>
+					</block>
 				</scroll-view>
 			</view>
 
@@ -82,13 +105,26 @@
 				})
 			}).exec();
 		},
+		created: function(e) {
+			//console.log("自定义组件--------------------------------",getCurrentPages());
+			this.pddTitleTop = this.$store.state.pddTitleTop;
+			this.pddTitleHeight = this.$store.state.pddTitleHeight;
+			this.kongHeight = this.$store.state.kongHeight;
+			// if (a) {
+			// 	setTimeout(() => {
+			// 		this.pddTitleTop = this.$store.state.pddTitleTop;
+			// 		this.pddTitleHeight = this.$store.state.pddTitleHeight;
+			// 		this.kongHeight = this.$store.state.kongHeight;
+			// 	}, 500)
+			// }
+		},
 		data() {
 			return {
 				startDate: '',
 				endDate: '',
 				scrollHeight: 0,
 				scrollHeight1: 0,
-				indexs1: '',
+				indexs1: 0,
 				indexs2: '',
 				date: '',
 				typeAll: {
@@ -104,37 +140,97 @@
 				foodType: ['早餐', '午餐', '晚餐', '宵夜'],
 				food: '早餐',
 				price: 0,
+				typeList:[],
+				typeListArr:[],
 				typeSubList:[],
-				date1:''
+				date1:'',
+				schoolId:''
 			}
 		},
 		onLoad(options) {
 			if (options.type) {
 				this.food = this.foodType[options.type]
 			}
-			this.getTypeSubList()
-			let date = Date.parse(new Date())
-			this.date1 = this.toolUtil.getTimeStrOnlyDate(date)
-			var arr = "日一二三四五六".split("")
-			let weeks = arr[new Date(date).getDay()]
-			this.date = this.date1 + ' ' + "周" + weeks
-			this.foodDetail(1)
+			this.studentId = options.studentId
+			this.student = options.student
+			this.schoolId = options.schoolId
+			this.date1 = options.date
+			this.date = options.date + ' ' + options.week
+			// this.getTypeSubList()
+			// let date = Date.parse(new Date())
+		},
+		onShow() {
+			this.foods = []
+			
+			this.getTypeList()
 		},
 		methods: {
-			getTypeSubList(){
-				let params = {
-					
+			
+			pickerClick(e){
+				console.log(e)
+				var arr="日一二三四五六".split("") 
+				this.weeks = arr[new Date(e.detail.value).getDay()]
+				console.log(999,this.weeks)
+				let date = e.detail.value + ' ' + '周' + this.weeks
+				this.date1 = e.detail.value
+				this.date = date
+				this.foods = []
+				this.foodDetail()
+			},
+			chooseClick(){
+				if(this.downType==0){
+					return false
 				}
-				this.httpUtil.get('/api/school/foodSubType/list',params,(obj)=>{
-					console.log(123,obj)
-					this.typeSubList = obj.rows
+				let that = this
+				uni.showActionSheet({
+					itemList: that.typeList,
+					success(res) {
+						that.food = that.typeList[res.tapIndex]
+						that.foods = []
+						that.foodDetail()
+						
+					},
 				})
 			},
-			foodDetail(id) {
+			navBack(e) {
+				var pages1 = getCurrentPages();
+				let first = pages1[0];
+				if (pages1.length > 1 ) {
+					uni.navigateBack();
+				} else {
+					uni.switchTab({
+						url: '/pages/tabbar/index'
+					})
+				}
+			},
+			getTypeList() {
+				let params = {
+					studentId:1,
+					mealDate: this.date1
+				}
+				this.httpUtil.get('/api/school/book/info', params, (obj) => {
+					console.log(123, obj)
+					for(let i =0;i<obj.data.length;i++){
+						this.typeList.push(obj.data[i].title)
+					}
+					this.getTypeSubList()
+				})
+			},
+			getTypeSubList() {
+				let params = {
+
+				}
+				this.httpUtil.get('/api/school/foodSubType/list', params, (obj) => {
+					console.log(123, obj)
+					this.typeSubList = obj.rows
+					this.foodDetail()
+				})
+			},
+			foodDetail() {
 				let params = {
 					date: this.date1,
-					schoolId: 1,
-					subTypeId: id ? id : this.indexs1
+					schoolId:this.schoolId,
+					subTypeId: this.typeSubList[this.indexs1].id
 
 				}
 				this.httpUtil.get('/api/school/foodplan/list', params, (obj) => {
@@ -187,7 +283,40 @@
 
 				})
 			},
-			reduceClick(id) {
+			reduceClick(id,price) {
+				
+				let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
+				let type = ''
+				if (this.food == '早餐') {
+					type = typeList[0]
+				} else if (this.food == '午餐') {
+					type = typeList[1]
+				} else if (this.food == '晚餐') {
+					type = typeList[2]
+				} else {
+					type = typeList[3]
+				}
+				let shoppingCarList = uni.getStorageSync('shoppingCarList')
+				for(let i =0;i<shoppingCarList[this.date1].length;i++){
+					if(id == shoppingCarList[this.date1][i].id&&shoppingCarList[this.date1][i].type==type){
+						shoppingCarList[this.date1][i].amount--
+						if(shoppingCarList[this.date1][i].amount==0){
+							shoppingCarList[this.date1].splice(i,1)
+						}
+						break
+					}
+				}
+				
+				let prices = ''
+				if (uni.getStorageSync('price')) {
+					prices = uni.getStorageSync('price')
+				} else {
+					prices = 0
+				}
+				prices = prices - price
+				this.price = prices.toFixed(2)
+				uni.setStorageSync("price", prices)
+				uni.setStorageSync("shoppingCarList", shoppingCarList)
 				this.getnum(id,'reduce')
 				// for (let i = 0; i < this.foods.length; i++) {
 				// 	if (this.foods[i].id == id) {
@@ -240,7 +369,8 @@
 								// this.getnum(id)
 								break;
 							}
-							if (shoppingCarList[this.date1][i].id == id) {
+							if (shoppingCarList[this.date1][i].id == id&&shoppingCarList[this.date1][i].type==type) {
+								
 								shoppingCarList[this.date1][i].amount++
 								// this.getnum(id)
 								break;
@@ -302,16 +432,18 @@
 
 			shoppingCarClick() {
 				uni.navigateTo({
-					url: "shoppingCart"
+					url: "shoppingCart?student=" + this.student + '&studentId=' + this.studentId 
 				})
 			},
 			foodTypeClick(e) {
 				this.food = e
+				this.foods = []
 				this.foodDetail()
 			},
 			tPickerClick(e) {
 				this.date = e
 				this.date1 = e.split(' ')[0]
+				this.foods = []
 				this.foodDetail()
 			},
 			indexClick(index) {
@@ -319,10 +451,23 @@
 			},
 			indexClick1(index) {
 				this.indexs1 = index
+				this.foods= []
+				this.foodDetail()
 			},
-			foodClick(id) {
+			foodClick(id,num) {
+				let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
+				let type = ''
+				if (this.food == '早餐') {
+					type = typeList[0]
+				} else if (this.food == '午餐') {
+					type = typeList[1]
+				} else if (this.food == '晚餐') {
+					type = typeList[2]
+				} else {
+					type = typeList[3]
+				}
 				uni.navigateTo({
-					url: 'foodDetail?id=' + id
+					url: 'foodDetail?id=' + id + '&date=' + this.date1 + '&type=' + type + '&num=' + (num?num:0)
 				})
 			},
 			tabClick(type) {
@@ -350,6 +495,86 @@
 </script>
 
 <style>
+	.fontwhite {
+			color: #fff;
+		}
+	
+		.fontblack {
+			color: #000;
+		}
+	
+		.whitebackgroud {
+			background-color: #ffffff;
+		}
+	
+		.alpabackgroud {}
+	
+		.graybackgroud {
+			background-color: #FFBA59;
+		}
+	
+		.status_bar {
+			height: 32px;
+			line-height: 32px;
+			padding-top: var(--status-bar-height);
+			padding-bottom: 5px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 997;
+			/* 		background-color: #F5F5F5;
+	*/
+			width: 100%;
+			overflow: hidden;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			text-align: center;
+			font-weight: Medium;
+			font-size: 36upx;
+		}
+	
+	
+		.back1 {
+			width: 25px;
+			height: 25px;
+		}
+	
+		.customtitlediv {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			width: 200px;
+			margin-left: calc(50% - 100px);
+			position: absolute;
+			font-size: 18px;
+			text-align: center;
+			font-family: PingFang-SC-Medium;
+		}
+	
+		.navback1 {
+			margin-left: 20upx;
+			font-size: 13px;
+			display: flex;
+			align-items: center;
+			line-height: 1;
+			color: #fff;
+		}
+		.icon-jiantou1{
+			font-size: 28upx;
+			color: #FFFFFF;
+			padding-left: 10upx;
+		}
+		.date_view{
+			font-size: 25upx;
+			color: #FFFFFF;
+			display: flex;
+			flex-direction: row;
+			padding-right: 10upx;
+		}
+		/* 自定义导航 下*/
 	.active {
 		background: #ffba59 !important;
 	}
@@ -397,10 +622,6 @@
 		color: #333333;
 	}
 
-	.icon-jiantou1 {
-		font-size: 24upx;
-		color: #FFBA59;
-	}
 
 	.icon-jiantou2 {
 		display: inline-block;
@@ -467,10 +688,10 @@
 	.buy_btn {
 		width: 148upx;
 		height: 68upx;
-		color: #333;
+		color: #fff;
 		font-size: 26upx;
 		line-height: 68upx;
-		background: #FFBA59;
+		background:linear-gradient(270deg,rgba(249,128,80,1) 1%,rgba(255,186,89,1) 100%);
 		border-radius: 44upx;
 		text-align: center;
 	}
@@ -546,5 +767,13 @@
 		border-radius: 34upx;
 		color: #FFFFFF;
 		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
+	}
+	.no_foods{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		padding-top: 100upx;
+		font-size: 32upx;
+		color: #333333;
 	}
 </style>

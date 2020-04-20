@@ -48,16 +48,54 @@ exports.get1 = function(funName, obj, callback,failCallBack = null) {
 exports.post2 = function(funName, _data, callback, failCallBack = null, type = 0, _complete = null, log = true) {
 	console.log("请求http：" +'http://h5.food-edu.net' + funName, _data);
 	let  token = uni.getStorageSync("token");
-	if (token) {
-		_data.token = token;
+	// if (token) {
+	// 	_data.token = token;
+	// }
+	uni.request({
+		url: 'http://h5.food-edu.net' + funName,
+		data: _data,
+		method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+		header: {
+			// 'content-type': 'application/x-www-form-urlencoded',
+			'Authorization' : "Bearer" + ' ' + token
+		}, // 设置请求的 header
+		success: function(res) {
+			if (log)
+				console.log("返回http：" + 'http://h5.food-edu.net/' + funName, res.data);
+			if (res.data.code == 200) {
+				callback(res.data);
+			}else {
+				if (res.data.msg) {
+					toolUtil.showToast(res.data.msg, 1500);
+				}
+				if (failCallBack != null) {
+					failCallBack(res.data);
+				}
+			}
+		},
+		fail: function(err) {
+			console.log(err);
+		},
+		complete: function() {
+			if (_complete != null)
+				_complete();
+		}
+	})
+}
+exports.post3 = function(funName, _data, callback, failCallBack = null, type = 0, _complete = null, log = true) {
+	console.log("请求http：" +'http://h5.food-edu.net' + funName, _data);
+	if(_data){
+		
 	}
+	// if (token) {
+	// 	_data.token = token;
+	// }
 	uni.request({
 		url: 'http://h5.food-edu.net' + funName,
 		data: _data,
 		method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 		header: {
 			'content-type': 'application/x-www-form-urlencoded'
-			
 		}, // 设置请求的 header
 		success: function(res) {
 			if (log)
@@ -95,7 +133,7 @@ exports.post4 = function(url, data, successCallback = null, failCallBack = null,
 		data: data,
 		method: 'POST',
 		header: {
-			'Authorization': 'Bearer' + ' ' + token
+			// 'content-type': 'application/x-www-form-urlencoded'
 		},
 		success: function(rs) {
 			if(rs.data.code == 1){
