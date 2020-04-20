@@ -74,7 +74,7 @@
 			},
 			getClassList(){
 				let params = {
-					schoolId: this.schoolList[this.index]
+					schoolId: this.schoolList[this.index].id
 				}
 				this.httpUtil.get('/api/school/class/list',params,(obj)=>{
 					this.classList = obj.rows
