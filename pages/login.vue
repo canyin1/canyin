@@ -75,10 +75,10 @@
 			},
 			getClassList() {
 				console.log('222', this.schoolList)
-				console.log('333', this.schoolList[this.index -1])
-				console.log('444', this.schoolList[this.index -1].id)
+				console.log('333', this.schoolList[this.index - 1])
+				console.log('444', this.schoolList[this.index - 1].id)
 				let params = {
-					schoolId: this.schoolList[this.index-1].id
+					schoolId: this.schoolList[this.index - 1].id
 				}
 				this.httpUtil.get('/api/school/class/list', params, (obj) => {
 					this.classList = obj.rows
@@ -97,14 +97,8 @@
 				params.schoolId = this.schoolList[this.index - 1].id
 				this.httpUtil.post2('/api/school/parent/bindStudent', params, (obj) => {
 					console.log(obj)
-					if (this.type == 1) {
-						uni.navigateBack({
+					uni.navigateBack({
 
-						})
-						return false
-					}
-					uni.switchTab({
-						url: 'tabbar/index'
 					})
 				})
 			},
