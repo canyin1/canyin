@@ -11,96 +11,100 @@
 			</picker>
 			<input class="input input1" type="text" value="" placeholder="学号" name="studentNumber" placeholder-class="placeholder" />
 			<button form-type="submit">提交</button>
-			
+
 		</form>
 	</view>
 </template>
 
 <script>
 	import navbar from "@/components/navbar/navbar.vue"
-	export default{
+	export default {
 		components: {
 			navbar
 		},
-		data(){
-			return{
-				type:'',
-				schoolList:[],
-				schoolList1:['请选择学校'],
-				classList:[],
-				classList1:['请选择年级'],
-				index:0,
-				index1:0
+		data() {
+			return {
+				type: '',
+				schoolList: [],
+				schoolList1: ['请选择学校'],
+				classList: [],
+				classList1: ['请选择年级'],
+				index: 0,
+				index1: 0
 			}
 		},
 		onLoad(options) {
-			if(options.type==1){
+			if (options.type == 1) {
 				this.type = options.type
 			}
 			this.getSchoolList()
 		},
-		methods:{
-			pickerClick(e){
+		methods: {
+			pickerClick(e) {
 				this.index = e.detail.value
-				if(e.detail.value!=0){
+				if (e.detail.value != 0) {
+					console.log('111', this.index)
 					this.getClassList()
-				}else{
-					this.classList1 =[]
-					this.classList =[]
+				} else {
+					this.classList1 = ['请选择年级']
+					this.classList = []
 				}
 			},
-			pickerClick1(e){
-				if(this.index == 0){
+			pickerClick1(e) {
+				if (this.index == 0) {
 					uni.showToast({
-						title:'请先选择学校',
-						icon:'none',
-						duration:1500
+						title: '请先选择学校',
+						icon: 'none',
+						duration: 1500
 					})
 					return false
 				}
-				
+
 				this.index1 = e.detail.value
 			},
-			getSchoolList(){
+			getSchoolList() {
 				let params = {
-					
+
 				}
-				this.httpUtil.get('/api/school/school/list',params,(obj)=>{
+				this.httpUtil.get('/api/school/school/list', params, (obj) => {
 					this.schoolList = obj.rows
-					for(let i =0;i<obj.rows.length;i++){
+					for (let i = 0; i < obj.rows.length; i++) {
 						this.schoolList1.push(obj.rows[i].name)
 					}
 				})
 			},
-			getClassList(){
+			getClassList() {
+				console.log('222', this.schoolList)
+				console.log('333', this.schoolList[this.index -1])
+				console.log('444', this.schoolList[this.index -1].id)
 				let params = {
-					schoolId: this.schoolList[this.index].id
+					schoolId: this.schoolList[this.index-1].id
 				}
-				this.httpUtil.get('/api/school/class/list',params,(obj)=>{
+				this.httpUtil.get('/api/school/class/list', params, (obj) => {
 					this.classList = obj.rows
-					for(let i =0;i<obj.rows.length;i++){
+					for (let i = 0; i < obj.rows.length; i++) {
 						this.classList1.push(obj.rows[i].name)
 					}
 				})
 			},
-			submitComfire(e){
+			submitComfire(e) {
 				console.log(e.detail.value)
 				let params = e.detail.value
-				if(this.index==0||this.index1==0){
+				if (this.index == 0 || this.index1 == 0) {
 					return false
 				}
-				params.classId = this.classList[this.index1]
-				params.schoolId = this.schoolList[this.index]
-				this.httpUtil.post2('/api/school/parent/bindStudent',params,(obj)=>{
+				params.classId = this.classList[this.index1 - 1].id
+				params.schoolId = this.schoolList[this.index - 1].id
+				this.httpUtil.post2('/api/school/parent/bindStudent', params, (obj) => {
 					console.log(obj)
-					if(this.type==1){
+					if (this.type == 1) {
 						uni.navigateBack({
-							
+
 						})
 						return false
 					}
 					uni.switchTab({
-						url:'tabbar/index'
+						url: 'tabbar/index'
 					})
 				})
 			},
@@ -109,10 +113,11 @@
 </script>
 
 <style>
-	page{
+	page {
 		background: #FFFFFF;
 	}
-	.input{
+
+	.input {
 		width: 70%;
 		font-size: 32upx;
 		color: #333333;
@@ -121,12 +126,14 @@
 		margin: 40upx auto;
 		height: 60upx;
 	}
-	.input1{
+
+	.input1 {
 		position: relative;
 		overflow: visible;
 		border-radius: 10upx;
 		padding-left: 10upx;
 	}
+
 	/* .input1::before{
 		position: absolute;
 		content: "*";
@@ -137,10 +144,11 @@
 		margin-top: -13upx;
 		line-height: 1;
 	} */
-	.placeholder{
+	.placeholder {
 		color: #999999;
 	}
-	button{
+
+	button {
 		width: 600upx;
 		height: 88upx;
 		font-size: 32upx;
@@ -152,7 +160,8 @@
 		border-radius: 44upx;
 		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
 	}
-	picker{
+
+	picker {
 		width: 70%;
 		height: 60upx;
 		margin: 40upx auto;
@@ -162,7 +171,8 @@
 		border: 1upx solid #999;
 		padding-left: 10upx;
 	}
-	picker::before{
+
+	picker::before {
 		position: absolute;
 		content: "*";
 		left: -30upx;
