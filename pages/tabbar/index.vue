@@ -119,8 +119,6 @@
 			}
 		},
 		onLoad(options) {
-			this.loginL()
-			return
 			var url = window.location.href
 			var i = url.split('?')
 			if(i[1]){
@@ -249,7 +247,7 @@
 					return
 				}
 				let params = {
-					code: 'this is code',
+					code: code,
 					schoolId: 1
 				}
 				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
