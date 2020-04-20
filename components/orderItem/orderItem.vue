@@ -28,7 +28,7 @@
 			<view class="order_top">
 				<view class="order_num">订单号：4545684</view>
 				<view class="order_btn_view">
-					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'">取消订单</view>
+					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'" @click="cancelClick(item.id)">取消订单</view>
 					<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
 					<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
 					<view class="order_btn" v-if="item.orderState=='PAID'">确认收货</view>
@@ -46,6 +46,31 @@
 			return {}
 		},
 		methods: {
+			cancelClick(id){
+				let that = this
+				uni.showModal({
+					content:'是否取消订单',
+					cancelColor:'#FFBA59',
+					confirmColor:'#999',
+					confirmText:'取消订单',
+					cancelText:'否',
+					success(res) {
+						if(res.confirm==true){
+							let params={
+								id:id
+							}
+							that.httpUtil.post2('/api/school/order/cancel',params,(obj)=>{
+								uni.showToast({
+									title:'取消成功',
+									icon:'none',
+									duration:1500
+								})
+							})
+						}
+					},
+					
+				})
+			},
 			addCommon(id) {
 				uni.navigateTo({
 					url: "../../pages/index/comment/addComment?id=" + id
