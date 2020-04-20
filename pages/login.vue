@@ -1,13 +1,17 @@
 <template>
 	<view class="page">
-		<navbar title="学生信息登记" :backcolorType='2' :whiteback='2' :showKongPanel="true"></navbar>
+		<navbar title="绑定学生" :backcolorType='2' :whiteback='2' :showKongPanel="true"></navbar>
 		<form @submit="submitComfire" @reset="submitCancel">
 			<input class="input input1" type="text" value="" placeholder="姓名" name="name" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="班级" name="classId" placeholder-class="placeholder" />
-			<input class="input input1" type="text" value="" placeholder="学校" name="schoolId" placeholder-class="placeholder" />
+			<picker mode="selector" :range="schoolList1" @change="pickerClick">
+				<view>{{schoolList1[index]}}</view>
+			</picker>
+			<picker mode="selector" :range="classList1" @change="pickerClick1">
+				<view>{{classList1[index1]}}</view>
+			</picker>
 			<input class="input input1" type="text" value="" placeholder="学号" name="studentNumber" placeholder-class="placeholder" />
 			<button form-type="submit">提交</button>
-			<button form-type="reset">重置</button>
+			
 		</form>
 	</view>
 </template>
@@ -20,18 +24,59 @@
 		},
 		data(){
 			return{
-				type:''
+				type:'',
+				schoolList:[],
+				schoolList1:['请选择学校'],
+				classList:[],
+				classList1:['请选择年级'],
+				index:0,
+				index1:0
 			}
 		},
 		onLoad(options) {
 			if(options.type==1){
 				this.type = options.type
 			}
+			this.getSchoolList()
+			this.getClassList()
 		},
 		methods:{
+			pickerClick(e){
+				this.index = e.detail.value
+			},
+			pickerClick1(e){
+				this.index1 = e.detail.value
+			},
+			getSchoolList(){
+				let params = {
+					
+				}
+				this.httpUtil.get('/api/school/school/list',params,(obj)=>{
+					this.schoolList = obj.rows
+					for(let i =0;i<obj.rows.length;i++){
+						this.schoolList1.push(obj.rows[i].name)
+					}
+				})
+			},
+			getClassList(){
+				let params = {
+					
+				}
+				this.httpUtil.get('/api/school/class/list',params,(obj)=>{
+					this.classList = obj.rows
+					for(let i =0;i<obj.rows.length;i++){
+						this.classList1.push(obj.rows[i].name)
+					}
+				})
+			},
 			submitComfire(e){
 				console.log(e.detail.value)
 				let params = e.detail.value
+				if(this.index==0||this.index1==0){
+					return false
+				}
+				params.classId = this.classList[this.index1]
+				params.schoolId = this.schoolList[this.index]
 				this.httpUtil.post2('/api/school/parent/bindStudent',params,(obj)=>{
 					console.log(obj)
 					if(this.type==1){
@@ -55,17 +100,20 @@
 	}
 	.input{
 		width: 70%;
-		font-size: 34upx;
+		font-size: 32upx;
 		color: #333333;
 		border: 1upx solid #999;
 		background: #F5F5F5;
-		margin: 40upx 60upx;
+		margin: 40upx auto;
+		height: 60upx;
 	}
 	.input1{
 		position: relative;
 		overflow: visible;
+		border-radius: 10upx;
+		padding-left: 10upx;
 	}
-	.input1::before{
+	/* .input1::before{
 		position: absolute;
 		content: "*";
 		left: -30upx;
@@ -74,8 +122,41 @@
 		top: 50%;
 		margin-top: -13upx;
 		line-height: 1;
-	}
+	} */
 	.placeholder{
 		color: #999999;
+	}
+	button{
+		width: 600upx;
+		height: 88upx;
+		font-size: 32upx;
+		line-height: 88upx;
+		color: #FFFFFF;
+		text-align: center;
+		margin: 40upx auto 0;
+		border: none !important;
+		border-radius: 44upx;
+		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
+	}
+	picker{
+		width: 70%;
+		height: 60upx;
+		margin: 40upx auto;
+		font-size: 32upx;
+		background: #F5F5F5;
+		line-height: 60upx;
+		border: 1upx solid #999;
+		padding-left: 10upx;
+	}
+	picker::before{
+		position: absolute;
+		content: "*";
+		left: -30upx;
+		font-size: 26upx;
+		color: #FF374E;
+		top: 50%;
+		margin-top: -13upx;
+		line-height: 1;
+		z-index: 9999;
 	}
 </style>

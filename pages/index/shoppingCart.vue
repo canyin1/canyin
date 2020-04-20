@@ -101,10 +101,10 @@
 				}
 				let shoppingCarList = uni.getStorageSync('shoppingCarList')
 				for (let i = 0; i < shoppingCarList[this.param.index].length; i++) {
-					if (shoppingCarList[this.param.index][i].id == this.param.id && shoppingCarList[this.param.index][i].type == this.param
-						.type) {
-						shoppingCarList[this.param.index][i].amount - this.param.amount
-						if (shoppingCarList[this.param.index][i].amount == this.param.amount) {
+					let o = shoppingCarList[this.param.index][i]
+					if (o.id == this.param.id && o.type == this.param.type) {
+						o.amount = o.amount - this.param.amount
+						if (o.amount == 0) {
 							shoppingCarList[this.param.index].splice(i, 1)
 						}
 						break;
@@ -113,8 +113,9 @@
 				let x = this.param.price * this.param.amount
 				prices = prices - x
 				uni.setStorageSync("price", prices)
-				uni.setStorageSync("shoppingCarList", k)
+				uni.setStorageSync("shoppingCarList", shoppingCarList)
 				this.boxType = false
+				this.value = ''
 				this.param = {}
 				this.getFoodList()
 			},

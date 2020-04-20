@@ -1197,7 +1197,7 @@ exports.getOptions = function(options) {
 	return null;
 }
 
-exports.checkLogin = function(callback, options = null, stillCallBack = false) {
+exports.checkLogin = function(callback, options, stillCallBack = false) {
 	
 	if (uni.getStorageSync('token')) {
 		callback(options);
