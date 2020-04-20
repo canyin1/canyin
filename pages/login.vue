@@ -38,13 +38,27 @@
 				this.type = options.type
 			}
 			this.getSchoolList()
-			this.getClassList()
 		},
 		methods:{
 			pickerClick(e){
 				this.index = e.detail.value
+				if(e.detail.value!=0){
+					this.getClassList()
+				}else{
+					this.classList1 =[]
+					this.classList =[]
+				}
 			},
 			pickerClick1(e){
+				if(this.index == 0){
+					uni.showToast({
+						title:'请先选择学校',
+						icon:'none',
+						duration:1500
+					})
+					return false
+				}
+				
 				this.index1 = e.detail.value
 			},
 			getSchoolList(){
@@ -60,7 +74,7 @@
 			},
 			getClassList(){
 				let params = {
-					
+					schoolId: this.schoolList[this.index]
 				}
 				this.httpUtil.get('/api/school/class/list',params,(obj)=>{
 					this.classList = obj.rows
