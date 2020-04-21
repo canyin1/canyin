@@ -3,10 +3,10 @@
 		<view class="order">
 			<view class="order_top">
 				<view class="order_time">{{item.date}}</view>
-				<view class="order_time" v-if="item.mealTime=='breakfast'">早餐</view>
-				<view class="order_time" v-if="item.mealTime=='lunch'">午餐</view>
-				<view class="order_time" v-if="item.mealTime=='dinner'">晚餐</view>
-				<view class="order_time" v-if="item.mealTime=='supper'">夜宵</view>
+				<view class="order_time" v-if="item.mealTime=='BREAKFAST'">早餐</view>
+				<view class="order_time" v-if="item.mealTime=='LUNCH'">午餐</view>
+				<view class="order_time" v-if="item.mealTime=='DINNER'">晚餐</view>
+				<view class="order_time" v-if="item.mealTime=='SUPPER'">夜宵</view>
 				<view class="order_status" v-if="item.orderState=='NOT_PAY'">未支付</view>
 				<view class="order_status" v-if="item.orderState=='PAID'">未就餐</view>
 				<view class="order_status" v-if="item.orderState=='NOT_COMMENT'">未评论</view>
@@ -15,18 +15,15 @@
 			</view>
 			<view class="order_top" v-for="(items,index2) in item.detailList" :key="index2">
 				<view class="goods_left">
-					<view class="goods_img_view">
-						<image class="good_img" src="/static/微信图片_20200318092008.jpg" mode="aspectFill"></image>
-					</view>
+					
 					<view class="goods_name">{{items.itemName}}</view>
 				</view>
 				<view class="goods_right">
 					<view class="goods_cash">￥{{items.itemPrice}}</view>
-					<view class="goods_num">X{{items.itemAmount}}</view>
 				</view>
 			</view>
 			<view class="order_top">
-				<view class="order_num">订单号：4545684</view>
+				<view class="order_num">总价：￥{{item.totalPrice}}</view>
 				<view class="order_btn_view">
 					<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'" @click="cancelClick(item.id)">取消订单</view>
 					<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
@@ -209,7 +206,6 @@
 		font-size: 26upx;
 		line-height: 1.5;
 		color: #333333;
-		padding-left: 20upx;
 	}
 
 	.good_img {
@@ -236,5 +232,8 @@
 		font-size: 24upx;
 		line-height: 1;
 		color: #999999;
+	}
+	.price_view{
+		font-size: 26upx;
 	}
 </style>

@@ -4,10 +4,10 @@
 		<form @submit="submitComfire" @reset="submitCancel">
 			<input class="input input1" type="text" value="" placeholder="姓名" name="name" placeholder-class="placeholder" />
 			<picker mode="selector" :range="schoolList1" @change="pickerClick">
-				<view>{{schoolList1[index]}}</view>
+				<view :class="index==0?'active':''">{{schoolList1[index]}}</view>
 			</picker>
 			<picker mode="selector" :range="classList1" @change="pickerClick1">
-				<view>{{classList1[index1]}}</view>
+				<view :class="index1==0?'active':''">{{classList1[index1]}}</view>
 			</picker>
 			<input class="input input1" type="text" value="" placeholder="学号" name="studentNumber" placeholder-class="placeholder" />
 			<button form-type="submit">提交</button>
@@ -176,5 +176,8 @@
 		margin-top: -13upx;
 		line-height: 1;
 		z-index: 9999;
+	}
+	.active{
+		color: #999;
 	}
 </style>

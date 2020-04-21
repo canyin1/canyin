@@ -10,7 +10,13 @@
 		</view>
 		<view class="kongHeights"></view>
 		<view class="order_view">
-			<orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem>
+			<block v-if="orders.length>0">
+				<orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem>
+			</block>
+			<block v-if="orders.length==0">
+				<view class="no_order">还没有订单哦~</view>
+				<view class="btn" @click="goIndex">去下单</view>
+			</block>
 		</view>
 	</view>
 </template>
@@ -38,6 +44,11 @@
 			this.orderList()
 		},
 		methods:{
+			goIndex(){
+				uni.switchTab({
+					url:'index'
+				})
+			},
 			orderList(){
 				let params={
 					pageNum:1,
@@ -112,5 +123,24 @@
 		height: 68upx;
 		width: 100%;
 		opacity: 0;
+	}
+	.no_order{
+		color: #999999;
+		font-size: 28upx;
+		width: 100%;
+		text-align: center;
+		margin-top: 300upx;
+	}
+	.btn{
+		width: 140upx;
+		height: 68upx;
+		font-size: 26upx;
+		color: #FFFFFF;
+		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
+		border-radius: 34upx;
+		margin: 40upx auto;
+		text-align: center;
+		line-height: 68upx;
+		box-shadow: 4upx 4upx 10upx 0 rgba(0,0,0,.1);
 	}
 </style>
