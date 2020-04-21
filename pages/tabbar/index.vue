@@ -81,6 +81,7 @@
 				typeSubList: [],
 				indexs: 0,
 				indexs1: 0,
+				cleanType:false,
 				week: [{
 					'week': '周日',
 					'day': '',
@@ -134,6 +135,11 @@
 			}
 			
 			
+		},
+		onShow() {
+			if(this.cleanType==true){
+				this.nextT()
+			}
 		},
 		methods: {
 			getCode() { // 非静默授权，第一次有弹框
@@ -277,6 +283,7 @@
 				this.httpUtil.get('/api/school/foodSubType/list', params, (obj) => {
 					console.log(123, obj)
 					this.typeSubList = obj.rows
+					this.cleanType = true
 				})
 			},
 			indexClick(index) {

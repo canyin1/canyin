@@ -197,20 +197,25 @@
 							'appId': obj.data.appId,
 							'timeStamp': obj.data.timeStamp,
 							'nonceStr': obj.data.nonceStr,
-							'package': obj.data.packageOne,
+							'package': obj.data.package,
 							'signType': obj.data.signType,
 							'paySign': obj.data.paySign
 						}, function(res) {
 							let param = {
 								outTradeNo: obj.data.outTradeNo,
-
 							}
 							if (res.err_msg === 'get_brand_wcpay_request:ok') {
 								param.result = 'PAID'
 								uni.showToast({
-									title: "取消支付",
+									title: "支付成功",
 									icon: "none",
 									duration: 1500
+								})
+								
+								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+									uni.switchTab({
+										url: '../tabbar/myOrder'
+									})
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 								param.result = 'CANCELED'
@@ -219,14 +224,22 @@
 									icon: "none",
 									duration: 1500
 								})
-							}
-							this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-								uni.switchTab({
-									url: '../tabbar/myOrder'
+								
+								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+									uni.switchTab({
+										url: '../tabbar/myOrder'
+									})
 								})
-							})
+							}
 						});
 
+					}
+					else{
+						uni.showToast({
+							title: obj.msg,
+							icon:'none',
+							duration:1500
+						})
 					}
 				})
 			},

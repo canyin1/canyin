@@ -46,7 +46,10 @@
 				</view> -->
 				<scroll-view scroll-y="true" class="scrollX" :style="{height:scrollHeight +'px'}">
 					<block v-if="foods.length>0">
-						<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick(item.id,item.num)">
+						<view class="scroll2" v-for="(item,index2) in foods" :key='index2' @click.stop="foodClick(item.food.id,item.num,item.readyAmount,item.soldAmount)">
+							<view class="no_sale" v-if="item.readyAmount<=item.soldAmount">
+								<view class="no_sale_text">已售罄</view>
+							</view>
 
 							<view class="foods_left">
 								<view class="foods_img_view">
@@ -60,9 +63,9 @@
 							</view>
 							<view class="add_view">
 								<view>
-									<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.id,item.food.price,index2)"></span>
+									<span class="iconfont icon-jianhao" v-if="item.num>0" @click.stop="reduceClick(item.food.id,item.food.price,index2)"></span>
 									<text v-if="item.num>0">{{item.num}}</text>
-									<span class="iconfont icon-jiahao" @click.stop="addClick(item.id,item.food.price,item.food.imgs,item.food.name,index2)"></span>
+									<span class="iconfont icon-jiahao" @click.stop="addClick(item.food.id,item.food.price,item.food.imgs,item.food.name,index2)"></span>
 								</view>
 							</view>
 							<!-- <view class="add_btn">
@@ -136,12 +139,40 @@
 					'cashType': 0,
 				},
 				foods: [
+				// 	{
+				// 	createTime: "2020-04-18 17:46:55",
+				// 	food: {
+				// 		afternoonTea: true,
+				// 		breakfast: true,
+				// 		createTime: "2020-04-21 13:04:05",
+				// 		detail: "培根、青菜",
+				// 		dinner: true,
+				// 		id: 2,
 
+				// 		imgs: "http://food-edu.net/api/profile/upload/2020/04/21/3269d17f5eef941ac527b809abed3915.jpg",
+				// 		lunch: true,
+				// 		monthlySales: 123,
+				// 		morningTea: true,
+				// 		name: "培根肉卷",
+				// 		price: 20,
+				// 		reserve: 100,
+				// 		state: "1",
+				// 		supper: true,
+				// 	},
+				// 	id: 4,
+				// 	mealDate: "2020-04-21 00:00:00",
+				// 	mealTime: "BREAKFAST",
+				// 	merchant: Object,
+				// 	readyAmount: 10,
+				// 	soldAmount:10,
+				// 	school: Object,
+				// },
 				],
 				foodType: ['早餐', '午餐', '晚餐', '宵夜'],
 				food: '早餐',
 				price: 0,
 				typeList: [],
+				typeList1: [],
 				typeListArr: [],
 				typeSubList: [],
 				date1: '',
@@ -149,9 +180,8 @@
 			}
 		},
 		onLoad(options) {
-			if (options.type) {
-				this.food = this.foodType[options.type]
-			}
+			this.food = options.food
+			this.foodTy = options.type
 			this.studentId = options.studentId
 			this.student = options.student
 			this.schoolId = options.schoolId
@@ -161,7 +191,7 @@
 			// let date = Date.parse(new Date())
 		},
 		onShow() {
-			this.foods = []
+			// this.foods = []
 
 			this.getTypeList()
 		},
@@ -187,6 +217,7 @@
 					itemList: that.typeList,
 					success(res) {
 						that.food = that.typeList[res.tapIndex]
+						that.foodTy = that.typeList1[res.tapIndex]
 						that.foods = []
 						that.foodDetail()
 
@@ -213,6 +244,7 @@
 					console.log(123, obj)
 					for (let i = 0; i < obj.data.length; i++) {
 						this.typeList.push(obj.data[i].title)
+						this.typeList1.push(obj.data[i].titleEnum)
 					}
 					this.getTypeSubList()
 				})
@@ -228,21 +260,10 @@
 				})
 			},
 			foodDetail() {
-				let typeList = ['BREAKFAST', 'LUNCH', 'DINNER', 'SUPPER']
-				let type = ''
-				if (this.food == '早餐') {
-					type = typeList[0]
-				} else if (this.food == '午餐') {
-					type = typeList[1]
-				} else if (this.food == '晚餐') {
-					type = typeList[2]
-				} else {
-					type = typeList[3]
-				}
 				let params = {
 					mealDate: this.date1,
 					'school.id': this.schoolId,
-					mealTime: type
+					mealTime: this.foodTy
 
 				}
 				this.httpUtil.get('/api/school/foodplan/list', params, (obj) => {
@@ -250,23 +271,12 @@
 					if (obj.rows) {
 						let foods = obj.rows
 						let shoppingCarList = {}
-						let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
-						let type = ''
-						if (this.food == '早餐') {
-							type = typeList[0]
-						} else if (this.food == '午餐') {
-							type = typeList[1]
-						} else if (this.food == '晚餐') {
-							type = typeList[2]
-						} else {
-							type = typeList[3]
-						}
 						if (uni.getStorageSync('shoppingCarList')) {
 							shoppingCarList = uni.getStorageSync('shoppingCarList')
 							if (shoppingCarList[this.date1]) {
 								for (let x = 0; x < shoppingCarList[this.date1].length; x++) {
 									for (let y = 0; y < foods.length; y++) {
-										if (shoppingCarList[this.date1][x].id == foods[y].id && shoppingCarList[this.date1][x].type == type) {
+										if (shoppingCarList[this.date1][x].id == foods[y].id && shoppingCarList[this.date1][x].type == this.foodTy) {
 											foods[y].num = shoppingCarList[this.date1][x].amount
 										}
 									}
@@ -274,11 +284,12 @@
 								}
 							}
 						}
-						if (obj.rows.length != 0) {
-							for (let i = 0; i < obj.rows.length; i++) {
+						if (foods.length != 0) {
+							for (let i = 0; i < foods.length; i++) {
 								if (foods[i].food.images) {
 									foods[i].food.imgs = JSON.parse(foods[i].food.images)[0]
 								}
+								foods[i].soldAmount = foods[i].soldAmount ? foods[i].soldAmount : 0
 							}
 							this.foods = this.foods.concat(foods)
 
@@ -296,21 +307,9 @@
 				})
 			},
 			reduceClick(id, price) {
-
-				let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
-				let type = ''
-				if (this.food == '早餐') {
-					type = typeList[0]
-				} else if (this.food == '午餐') {
-					type = typeList[1]
-				} else if (this.food == '晚餐') {
-					type = typeList[2]
-				} else {
-					type = typeList[3]
-				}
 				let shoppingCarList = uni.getStorageSync('shoppingCarList')
 				for (let i = 0; i < shoppingCarList[this.date1].length; i++) {
-					if (id == shoppingCarList[this.date1][i].id && shoppingCarList[this.date1][i].type == type) {
+					if (id == shoppingCarList[this.date1][i].id && shoppingCarList[this.date1][i].type == this.foodTy) {
 						shoppingCarList[this.date1][i].amount--
 						if (shoppingCarList[this.date1][i].amount == 0) {
 							shoppingCarList[this.date1].splice(i, 1)
@@ -361,18 +360,6 @@
 					images: '',
 					price: ''
 				}
-				let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
-				let type = ''
-				if (this.food == '早餐') {
-					type = typeList[0]
-				} else if (this.food == '午餐') {
-					type = typeList[1]
-				} else if (this.food == '晚餐') {
-					type = typeList[2]
-				} else {
-					type = typeList[3]
-				}
-
 				if (uni.getStorageSync('shoppingCarList')) {
 					shoppingCarList = uni.getStorageSync('shoppingCarList')
 					if (shoppingCarList[this.date1]) {
@@ -380,7 +367,7 @@
 							if (i == shoppingCarList[this.date1].length) {
 								food.id = id
 								food.amount = 1
-								food.type = type
+								food.type = this.foodTy
 								food.name = name
 								food.price = price
 								food.images = images
@@ -388,7 +375,7 @@
 								// this.getnum(id)
 								break;
 							}
-							if (shoppingCarList[this.date1][i].id == id && shoppingCarList[this.date1][i].type == type) {
+							if (shoppingCarList[this.date1][i].id == id && shoppingCarList[this.date1][i].type == this.foodTy) {
 
 								shoppingCarList[this.date1][i].amount++
 								// this.getnum(id)
@@ -399,7 +386,7 @@
 						shoppingCarList[this.date1] = []
 						food.id = id
 						food.amount = 1
-						food.type = type
+						food.type = this.foodTy
 						food.name = name
 						food.price = price
 						food.images = images
@@ -410,7 +397,7 @@
 					shoppingCarList[this.date1] = []
 					food.id = id
 					food.amount = 1
-					food.type = type
+					food.type = this.foodTy
 					food.name = name
 					food.price = price
 					food.images = images
@@ -450,17 +437,17 @@
 					url: "shoppingCart?student=" + this.student + '&studentId=' + this.studentId
 				})
 			},
-			foodTypeClick(e) {
-				this.food = e
-				this.foods = []
-				this.foodDetail()
-			},
-			tPickerClick(e) {
-				this.date = e
-				this.date1 = e.split(' ')[0]
-				this.foods = []
-				this.foodDetail()
-			},
+			// foodTypeClick(e) {
+			// 	this.food = e
+			// 	this.foods = []
+			// 	this.foodDetail()
+			// },
+			// tPickerClick(e) {
+			// 	this.date = e
+			// 	this.date1 = e.split(' ')[0]
+			// 	this.foods = []
+			// 	this.foodDetail()
+			// },
 			indexClick(index) {
 				this.indexs = index
 			},
@@ -469,20 +456,13 @@
 				this.foods = []
 				this.foodDetail()
 			},
-			foodClick(id, num) {
-				let typeList = ['breakfast', 'lunch', 'dinner', 'supper']
-				let type = ''
-				if (this.food == '早餐') {
-					type = typeList[0]
-				} else if (this.food == '午餐') {
-					type = typeList[1]
-				} else if (this.food == '晚餐') {
-					type = typeList[2]
-				} else {
-					type = typeList[3]
+			foodClick(id, num,readyAmount,soldAmount) {
+				if(readyAmount<=soldAmount){
+					
+					return false
 				}
 				uni.navigateTo({
-					url: 'foodDetail?id=' + id + '&date=' + this.date1 + '&type=' + type + '&num=' + (num ? num : 0)
+					url: 'foodDetail?id=' + id + '&date=' + this.date1 + '&type=' + this.foodTy + '&num=' + (num ? num : 0)
 				})
 			},
 			tabClick(type) {
@@ -662,6 +642,8 @@
 		justify-content: space-between;
 		padding: 0 24upx;
 		box-sizing: border-box;
+		overflow: hidden;
+		position: relative;
 	}
 
 	.scroll2:last-of-type {
@@ -794,5 +776,25 @@
 		padding-top: 100upx;
 		font-size: 32upx;
 		color: #333333;
+	}
+
+	.no_sale {
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		background: #888;
+		opacity: 0.5;
+		z-index: 999;
+		font-size: 80upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #000;
+	}
+
+	.no_sale_text {
+		transform: rotate(35deg);
 	}
 </style>

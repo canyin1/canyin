@@ -1,6 +1,7 @@
 <template>
 	<view class="page">
 		<view class="order">
+			<view class="student">学生：{{item.student.name}}</view>
 			<view class="order_top">
 				<view class="order_time">{{item.date}}</view>
 				<view class="order_time" v-if="item.mealTime=='BREAKFAST'">早餐</view>
@@ -57,6 +58,7 @@
 								id:id
 							}
 							that.httpUtil.post2('/api/school/order/cancel',params,(obj)=>{
+								
 								uni.showToast({
 									title:'取消成功',
 									icon:'none',

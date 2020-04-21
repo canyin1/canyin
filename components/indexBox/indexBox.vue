@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<view class="scroll2"  @click="bugClick(item.title,indexs)">
+		<view class="scroll2"  @click="bugClick(item.title,item.titleEnum,indexs)">
 			<view class="scroll_img_view">
 				<image class="scroll_img" :src="item.image" mode="aspectFill"></image>
 			</view>
@@ -65,7 +65,7 @@
 
 		},
 		methods: {
-			bugClick() {
+			bugClick(food,foodType) {
 			if(this.nowStudentId==''){
 				uni.showToast({
 					title:'请先选择学生',
@@ -75,7 +75,7 @@
 				return false
 			}
 				uni.navigateTo({
-					url: '../index/choose?date=' + this.week[this.indexs].date + '&week=' + this.week[this.indexs].week + '&studentId=' + this.nowStudentId + '&schoolId=' +this.nowSchoolId + '&student=' + this.nowStudent + '&type=' + this.index
+					url: '../index/choose?date=' + this.week[this.indexs].date + '&week=' + this.week[this.indexs].week + '&studentId=' + this.nowStudentId + '&schoolId=' +this.nowSchoolId + '&student=' + this.nowStudent + '&type=' + foodType + '&food=' + food
 				})
 			},
 		}
