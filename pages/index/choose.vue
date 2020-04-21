@@ -74,7 +74,7 @@
 						</view>
 					</block>
 					<block v-if="foods.length==0">
-						<view class="no_foods">还没有商品哦~~</view>
+						<view class="no_foods">{{msg}}</view>
 					</block>
 				</scroll-view>
 			</view>
@@ -164,9 +164,9 @@
 				// 	mealTime: "BREAKFAST",
 				// 	merchant: Object,
 				// 	readyAmount: 10,
-				// 	soldAmount:10,
+				// 	soldAmount: 10,
 				// 	school: Object,
-				// },
+				// }, 
 				],
 				foodType: ['早餐', '午餐', '晚餐', '宵夜'],
 				food: '早餐',
@@ -176,7 +176,8 @@
 				typeListArr: [],
 				typeSubList: [],
 				date1: '',
-				schoolId: ''
+				schoolId: '',
+				msg: ''
 			}
 		},
 		onLoad(options) {
@@ -304,6 +305,10 @@
 						console.log('foods', this.foods)
 					}
 
+				}, (err) => {
+
+					this.msg = obj.msg
+					this.foods = []
 				})
 			},
 			reduceClick(id, price) {
@@ -456,9 +461,9 @@
 				this.foods = []
 				this.foodDetail()
 			},
-			foodClick(id, num,readyAmount,soldAmount) {
-				if(readyAmount<=soldAmount){
-					
+			foodClick(id, num, readyAmount, soldAmount) {
+				if (readyAmount <= soldAmount) {
+
 					return false
 				}
 				uni.navigateTo({
@@ -784,10 +789,10 @@
 		top: 0;
 		height: 100%;
 		width: 100%;
-		background: #888;
+		background: #fff;
 		opacity: 0.5;
 		z-index: 999;
-		font-size: 80upx;
+		font-size: 60upx;
 		display: flex;
 		align-items: center;
 		justify-content: center;

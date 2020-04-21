@@ -1,6 +1,7 @@
 <template>
 	<view class="page">
 		<view class="order">
+			
 			<view class="student">学生：{{item.student.name}}</view>
 			<view class="order_top">
 				<view class="order_time">{{item.date}}</view>

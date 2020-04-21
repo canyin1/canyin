@@ -14,8 +14,8 @@
 		<view class="tab_view" :style='{top:heights +"px"}'>
 			<view class="tab_box">
 				<view class="tab" :class="{active:type==0}" @click="tabClick(0)">全部<view>({{totalAmount}})</view></view>
-				<view class="tab" :class="{active:type==1}" @click="tabClick(1)"><span class='iconfont icon-good' :class='{active:type==1}'></span><view>(50)</view></view>
-				<view class="tab" :class="{active:type==2}" @click="tabClick(2)"><span class='iconfont icon-good icon-good1' :class='{active:type==2}'></span><view>(50)</view></view>
+				<view class="tab" :class="{active:type==1}" @click="tabClick(1)"><span class='iconfont icon-good' :class='{active:type==1}'></span><view>({{recommend}})</view></view>
+				<view class="tab" :class="{active:type==2}" @click="tabClick(2)"><span class='iconfont icon-good icon-good1' :class='{active:type==2}'></span><view>({{complaint}})</view></view>
 			</view>
 		</view>
 		<view class="kongHeights"></view>
@@ -48,7 +48,10 @@
 				level: 1.5,
 				comment:[],
 				kongHeight:'',
-				id:''
+				id:'',
+				totalAmount:0,
+				recommend:0,
+				complaint:0
 			}
 		},
 		onLoad(options) {
@@ -62,10 +65,12 @@
 					foodId: this.id
 				}
 				this.httpUtil.get("/api/school/comment/summary",param,(obj)=>{
+					
+						
+						this.totalAmount = obj.data.totalAmount?obj.data.totalAmount:0
+						this.recommend = obj.data.recommend?obj.data.recommend:0
+						this.complaint = obj.data.complaint?obj.data.complaint:0
 					console.log(obj)
-					this.totalAmount = obj.data.totalAmount
-					this.recommend = obj.data.recommend?obj.data.recommend:0
-					this.complaint = obj.data.complaint?obj.data.complaint:0
 				})
 			},
 			commentList(id){

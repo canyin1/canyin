@@ -17,6 +17,7 @@ exports.get = function(funName, obj, callback,failCallBack = null) {
 				callback(res.data);
 			}
 			else{
+				toolUtil.showToast(res.data.msg, 1500);
 				if (failCallBack != null) {
 					failCallBack(res.data);
 				}
@@ -140,10 +141,9 @@ exports.post4 = function(url, data, successCallback = null, failCallBack = null,
 				successCallback(rs.data)
 			}
 			if(rs.data.code == 0){
+				toolUtil.showToast(res.data.msg, 1500);
 				if (failCallBack != null) {
 					failCallBack(rs.data)
-				} else {
-					toolUtil.showToast(rs.data.msg);
 				}
 			}
 		},

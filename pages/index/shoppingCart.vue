@@ -146,14 +146,10 @@
 					date.push(j)
 				}
 				for (let k = 0; k < date.length; k++) {
-					console.log(date[k])
+					
 					let z = date[k]
 					let toFoods = {
 						date: '',
-						breakfast: [],
-						lunch: [],
-						dinner: [],
-						supper: []
 					}
 					let foods = {
 						id: '',
@@ -161,26 +157,12 @@
 					}
 					toFoods.date = z
 					for (let o = 0; o < i[z].length; o++) {
-						if (i[z][o].type == 'breakfast') {
-							foods.id = i[z][o].id
-							foods.amount = i[z][o].amount
-							toFoods.breakfast.push(foods)
+						if(!toFoods[i[z][o].type]){
+							toFoods[i[z][o].type]=[]
 						}
-						if (i[z][o].type == 'lunch') {
-							foods.id = i[z][o].id
-							foods.amount = i[z][o].amount
-							toFoods.lunch.push(foods)
-						}
-						if (i[z][o].type == 'dinner') {
-							foods.id = i[z][o].id
-							foods.amount = i[z][o].amount
-							toFoods.dinner.push(foods)
-						}
-						if (i[z][o].type == 'supper') {
-							foods.id = i[z][o].id
-							foods.amount = i[z][o].amount
-							toFoods.supper.push(foods)
-						}
+						foods.id = i[z][o].id
+						foods.amount = i[z][o].amount
+						toFoods[i[z][o].type].push(foods)
 					}
 					toFoodsList.push(toFoods)
 

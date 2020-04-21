@@ -41,7 +41,7 @@
 							<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'" @click="cancelClick(item.id)">取消订单</view>
 							<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
 							<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
-							<view class="order_btn" v-if="item.orderState=='PAID'">确认收货</view>
+							
 						</view>
 					</view>
 				</view>
@@ -74,6 +74,10 @@
 			}
 		},
 		onLoad() {
+			
+		},
+		onShow() {
+			this.orders = []
 			this.orderList()
 		},
 		methods:{
@@ -271,5 +275,118 @@
 		text-align: center;
 		line-height: 68upx;
 		box-shadow: 4upx 4upx 10upx 0 rgba(0,0,0,.1);
+	}
+	.order {
+		width: 710upx;
+		padding: 32upx;
+		border-radius: 14upx;
+		margin: 10upx auto 0;
+		background: #FFFFFF;
+		box-sizing: border-box;
+		box-shadow: 10upx 10upx 40upx rgba(0, 0, 0, .1);
+	}
+	
+	.order_top {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 20upx;
+	}
+	
+	.order_top:last-of-type {
+		padding-bottom: 0;
+	}
+	
+	.order_num {
+		font-size: 26upx;
+		color: #333333;
+		line-height: 1;
+	}
+	
+	.order_status {
+		font-size: 24upx;
+		color: #999999;
+		line-height: 1;
+	}
+	
+	.order_time {
+		font-size: 26upx;
+		color: #333333;
+		line-height: 1;
+	}
+	
+	.order_btn_view {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	.order_btn {
+		width: 148upx;
+		height: 48upx;
+		line-height: 48upx;
+		background: #FFBA59;
+		text-align: center;
+		font-size: 24upx;
+		color: #FFFFFF;
+		border-radius: 24upx;
+		margin-left: 10upx;
+	}
+	
+	.order_btn1 {
+		background: #FFFFFF !important;
+		color: #999 !important;
+		width: 144upx !important;
+		height: 44upx !important;
+		line-height: 44upx !important;
+		border: 2upx solid #999 !important;
+	}
+	
+	.goods_left {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: 80%;
+	}
+	
+	.goods_img_view {
+		font-size: 0;
+	}
+	
+	.goods_name {
+		font-size: 26upx;
+		line-height: 1.5;
+		color: #333333;
+	}
+	
+	.good_img {
+		width: 120upx;
+		height: 120upx;
+		border-radius: 9upx;
+	}
+	
+	.goods_right {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		width: 20%;
+	}
+	
+	.goods_cash {
+		font-size: 26upx;
+		line-height: 1;
+		color: #333333;
+	
+	}
+	
+	.goods_num {
+		font-size: 24upx;
+		line-height: 1;
+		color: #999999;
+	}
+	.price_view{
+		font-size: 26upx;
 	}
 </style>

@@ -120,6 +120,12 @@
 			}
 		},
 		onLoad(options) {
+			// let test = true
+			let test = false
+			if(test){
+				this.loginL1()
+				return false
+			}
 			var url = window.location.href
 			var i = url.split('?')
 			if(i[1]){
@@ -181,6 +187,7 @@
 						uni.navigateTo({
 							url: "../login"
 						})
+					this.cleanType = true
 					} else {
 						this.student = obj.rows
 						this.nowStudentId = obj.rows[0].id,
@@ -242,18 +249,31 @@
 
 			},
 			loginL(code) {
-				// uni.removeStorage({
-				// 	key: 'token',
-				// 	success(res) {
-
-				// 	}
-				// })
 				if(uni.getStorageSync('token')){
 					this.nextT()
 					return
 				}
 				let params = {
 					code: code,
+					schoolId: 1
+				}
+				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
+					if(obj.code==200){
+						uni.setStorageSync('token',obj.token)
+						this.nextT()
+					}
+					if(obj.code==401){
+						window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+					}
+				})
+			},
+			loginL1(code) {
+				if(uni.getStorageSync('token')){
+					this.nextT()
+					return
+				}
+				let params = {
+					code: '061Flund1XPvUw0LLgnd1K5qnd1FlunV',
 					schoolId: 1
 				}
 				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
@@ -288,10 +308,11 @@
 			},
 			indexClick(index) {
 				this.indexs = index
+				this.getTypeList()
 			},
-			indexClick1(index) {
-				this.indexs1 = index
-			},
+			// indexClick1(index) {
+			// 	this.indexs1 = index
+			// },
 		}
 	}
 </script>

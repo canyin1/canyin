@@ -1,6 +1,8 @@
 <template>
 	<view class="page">
-		<view class="scroll2"  @click="bugClick(item.title,item.titleEnum,indexs)">
+		<view class="scroll2"  @click="bugClick(item.title,item.titleEnum,item.itemState,indexs)">
+			<view class="no" v-if="item.itemState=='STOPPED'"></view>
+			<view class="state_view">{{item.itemStateText}}</view>
 			<view class="scroll_img_view">
 				<image class="scroll_img" :src="item.image" mode="aspectFill"></image>
 			</view>
@@ -65,7 +67,10 @@
 
 		},
 		methods: {
-			bugClick(food,foodType) {
+			bugClick(food,foodType,itemState) {
+			if(itemState=='STOPPED'){
+				return false
+			}
 			if(this.nowStudentId==''){
 				uni.showToast({
 					title:'请先选择学生',
@@ -135,7 +140,7 @@
 		width: 710upx;
 		background-color: #FFFFFF;
 		height: 240upx;
-		
+		position: relative;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -145,8 +150,29 @@
 		border-radius: 14upx;
 		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
 	}
-
+	
 	.scroll2:last-of-type {
 		border: none;
+	}
+	.state_view{
+		position: absolute;
+		right: 0;
+		top: 20upx;
+		border-top-left-radius: 24upx;
+		color: #FFFFFF;
+		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
+		padding: 10upx 20upx;
+		font-size: 24upx;
+		font-weight: 400;
+	}
+	.no{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		background: #fff;
+		opacity: 0.5;
+		z-index: 999;
 	}
 </style>
