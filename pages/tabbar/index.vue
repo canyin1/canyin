@@ -204,7 +204,7 @@
 				// console.log(weekStartDay)
 				let i = weekStartDay.split('-')
 				this.week[0].day = i[2]
-				this.week[0].date = weekStartDate
+				this.week[0].date = weekStartDay
 				// this.week[nowDayOfWeek].date = nowYear + ((nowMonth>9)?nowMonth:nowMonth + 1) + nowDay
 				// this.week[nowDayOfWeek].day = nowDay
 				for (let x = 1; x < 7; x++) {
