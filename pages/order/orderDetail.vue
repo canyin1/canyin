@@ -129,7 +129,7 @@
 							'appId': obj.data.appId,
 							'timeStamp': obj.data.timeStamp,
 							'nonceStr': obj.data.nonceStr,
-							'package': obj.data.packageOne,
+							'package': obj.data.package,
 							'signType': obj.data.signType,
 							'paySign': obj.data.paySign
 						}, function(res) {
