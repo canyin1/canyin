@@ -59,11 +59,13 @@
 				student: '',
 				boxType: false,
 				param: {},
-				value: ''
+				value: '',
+				studentId:''
 			}
 		},
 		onLoad(options) {
 			this.student = options.student
+			this.studentId = options.studentId
 			this.price = uni.getStorageSync('price').toFixed(2)
 			this.getFoodList()
 		},
@@ -168,7 +170,7 @@
 
 				}
 				let params = {
-					childId: 1,
+					childId: this.studentId,
 					bookInfo: toFoodsList
 				}
 				console.log(toFoodsList)
@@ -195,9 +197,7 @@
 								})
 								
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.switchTab({
-										url: '../tabbar/myOrder'
-									})
+									
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 								param.result = 'CANCELED'
@@ -208,11 +208,12 @@
 								})
 								
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.switchTab({
-										url: '../tabbar/myOrder'
-									})
+									
 								})
 							}
+							uni.switchTab({
+								url: '../tabbar/myOrder'
+							})
 						});
 
 					}

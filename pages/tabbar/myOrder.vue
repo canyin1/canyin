@@ -12,7 +12,7 @@
 		<view class="order_view">
 			<block v-if="orders.length>0">
 				<!-- <orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem> -->
-				<view class="order" v-for='(item,index) in orders' :key="index">
+				<view class="order" v-for='(item,index) in orders' :key="index" @click="detailClick(item.id)">
 					<view class="student">用户：{{item.student.name}}</view>
 					<view class="order_top">
 						<view class="order_time">{{item.date}}</view>
@@ -72,8 +72,8 @@
 			return {
 				tabType: 0,
 				heights: '',
-				page:1,
-				
+				page: 1,
+
 				orders: [],
 				orderState: ''
 			}
@@ -83,6 +83,7 @@
 		},
 		onShow() {
 			this.orders = []
+			this.page = 1
 			this.orderList()
 		},
 		onReachBottom() {
@@ -156,9 +157,7 @@
 									duration: 1500
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.switchTab({
-										url: '../tabbar/myOrder'
-									})
+
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 								param.result = 'CANCELED'
@@ -168,11 +167,12 @@
 									duration: 1500
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.switchTab({
-										url: '../tabbar/myOrder'
-									})
+
 								})
 							}
+							this.orders = []
+							this.page = 1
+							this.orderList()
 
 						});
 
@@ -183,6 +183,11 @@
 							duration: 1500
 						})
 					}
+				})
+			},
+			detailClick(id) {
+				uni.navigateTo({
+					url: '../order/orderDetail?id=' + id
 				})
 			},
 			goIndex() {
@@ -197,8 +202,8 @@
 					orderState: this.orderState
 				}
 				this.httpUtil.get("/api/school/order/list", params, (obj) => {
-					if(obj.rows.length==0){
-						if(this.page>1){
+					if (obj.rows.length == 0) {
+						if (this.page > 1) {
 							this.page--
 						}
 					}
@@ -207,11 +212,11 @@
 						orders[i].date = orders[i].mealDate.split(' ')[0]
 					}
 
-					console.log(111,this.orders)
+					console.log(111, this.orders)
 					this.orders = this.orders.concat(orders)
 					this.$forceUpdate()
-					console.log(222,orders)
-					console.log(333,this.orders)
+					console.log(222, orders)
+					console.log(333, this.orders)
 				})
 			},
 			tabClick(type) {

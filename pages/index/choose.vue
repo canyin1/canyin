@@ -192,8 +192,9 @@
 			// let date = Date.parse(new Date())
 		},
 		onShow() {
-			// this.foods = []
-
+			this.foods = []
+			this.typeList1 = []
+			this.typeList = []
 			this.getTypeList()
 		},
 		methods: {
@@ -277,7 +278,7 @@
 							if (shoppingCarList[this.date1]) {
 								for (let x = 0; x < shoppingCarList[this.date1].length; x++) {
 									for (let y = 0; y < foods.length; y++) {
-										if (shoppingCarList[this.date1][x].id == foods[y].id && shoppingCarList[this.date1][x].type == this.foodTy) {
+										if (shoppingCarList[this.date1][x].id == foods[y].food.id && shoppingCarList[this.date1][x].type == this.foodTy) {
 											foods[y].num = shoppingCarList[this.date1][x].amount
 										}
 									}

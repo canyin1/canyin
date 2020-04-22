@@ -78,15 +78,16 @@
 				}
 			}
 		},
-		onLoad() {
-
+		onLoad(options) {
+			this.id = options.id
+			this.getDetail()
 		},
 		methods: {
 			getDetail() {
 				let params = this.id
 				this.httpUtil.get1('/api/school/order/', params, (obj) => {
 					console.log(obj)
-					obj.data.date = obj.data.mealDate.split(' ')[0]
+					
 					this.order = obj.data
 				})
 			},
@@ -149,9 +150,7 @@
 									duration: 1500
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.navigateBack({
-
-									})
+									
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 								param.result = 'CANCELED'
@@ -161,11 +160,12 @@
 									duration: 1500
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
-									uni.navigateBack({
-
-									})
+									
 								})
 							}
+							uni.navigateBack({
+							
+							})
 
 						});
 
