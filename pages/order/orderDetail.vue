@@ -6,6 +6,9 @@
 		<view class="order_status" v-if="order.orderState=='NOT_COMMENT'">未评论</view>
 		<view class="order_status" v-if="order.orderState=='FINISH'">订单已完成</view>
 		<view class="order_status" v-if="order.orderState=='CANCELED'">订单已取消</view>
+		<view class="order_status" v-if="order.orderState=='DELIVERING'">订单配送中</view>
+		<view class="order_status" v-if="order.orderState=='REFUNDING'">正在退款</view>
+		<view class="order_status" v-if="order.orderState=='CANCEL_PENDING'">退款中，等待商家确认</view>
 
 		<view class="foods_view">
 			<view class="title">订单菜品</view>
@@ -22,7 +25,7 @@
 			<view class="order_time">下单时间：{{order.createTime}}</view>
 		</view>
 		<view class="bottom_view">
-			<view class="order_btn order_btn1" v-if="order.orderState!='FINISH'||order.orderState!='CANCELED'" @click="cancelClick">取消订单</view>
+			<view class="order_btn order_btn1" v-if="order.orderState=='NOT_PAY'||order.orderState=='PAID'" @click="cancelClick">取消订单</view>
 			<view class="order_btn" v-if="order.orderState=='NOT_PAY'" @click="payClick">立即支付</view>
 			<view class="order_btn" v-if="order.orderState=='NOT_COMMENT'" @click="addCommon">立即评论</view>
 		</view>
@@ -147,7 +150,7 @@
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
 									uni.navigateBack({
-										
+
 									})
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
@@ -159,7 +162,7 @@
 								})
 								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
 									uni.navigateBack({
-										
+
 									})
 								})
 							}

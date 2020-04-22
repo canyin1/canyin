@@ -307,7 +307,7 @@
 
 				}, (err) => {
 
-					this.msg = obj.msg
+					this.msg = err.msg
 					this.foods = []
 				})
 			},
@@ -580,6 +580,7 @@
 	/* 自定义导航 下*/
 	.active {
 		background: #ffba59 !important;
+		color: #FFFFFf !important;
 	}
 
 	.active1 {
@@ -598,11 +599,12 @@
 	}
 
 	.scroll1 {
-		height: 100upx;
-		line-height: 100upx;
+		height: 80upx;
+		line-height: 80upx;
 		text-align: center;
-		background: #F1F1F1;
-		font-size: 28upx;
+		background: #FFFFFF;
+		font-size: 26upx;
+		color: #333333;
 	}
 
 	.scrollX_view {
@@ -779,8 +781,8 @@
 		display: flex;
 		justify-content: center;
 		padding-top: 100upx;
-		font-size: 32upx;
-		color: #333333;
+		font-size: 26upx;
+		color: #666;
 	}
 
 	.no_sale {

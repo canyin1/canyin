@@ -5,7 +5,7 @@
 			<view class="top_view">
 				<view class="pingfen">
 					<text>总分：</text>
-					<level :levels="4" :fontSizeType='1'></level>
+					<level :levels="levels" :fontSizeType='1'></level>
 				</view>
 				<checkbox-group>
 					<label @click='checkClick'>
@@ -31,11 +31,12 @@
 				</view>
 			</view>
 			<view class="input_view">
-				<textarea @input="inputClick" type="text" value="" />
-				<view class="img_view">
-					<image v-for="(item,index1) in img" :src="item" mode="aspectFill" v-if="img.length>0" :key="index1" @click="imageClick(index1)"></image>
-					<span class="iconfont icon-jiahao1" @click='addImg' v-if="img.length<3"></span>
-				</view>
+				<textarea @input="inputClick" type="text" value="" maxlength="200" />
+				
+			</view>
+			<view class="img_view">
+				<image v-for="(item,index1) in img" :src="item" mode="aspectFill" v-if="img.length>0" :key="index1" @click="imageClick(index1)"></image>
+				<span class="iconfont icon-jiahao1" @click='addImg' v-if="img.length<3"></span>
 			</view>
 			<view class="comfire_btn" @click="comfireClick">立即评论</view>
 		</view>
@@ -52,7 +53,7 @@
 		},
 		data() {
 			return {
-				levels: '1',
+				levels: 0,
 				value:'',
 				'tasteArr': ['', '', '', '', ''],
 				'healthArr': ['', '', '', '', ''],
@@ -104,6 +105,26 @@
 			},
 			evaluateClick(type, index) {
 				this.params[type] = index + 1
+				this.allLevels()
+			},
+			allLevels(){
+				let levels = this.params.taste + this.params.health + this.params.weight
+				console.log(levels)
+				if(levels<=3){
+					this.levels = 1
+				}
+				if(levels>3&&levels<=6){
+					this.levels = 2
+				}
+				if(levels>6&&levels<=9){
+					this.levels = 3
+				}
+				if(levels>9&&levels<=12){
+					this.levels = 4
+				}
+				if(levels>12){
+					this.levels = 5
+				}
 			},
 			addImg(){
 				let that = this
@@ -119,7 +140,7 @@
 								let item = teamparr.pop()
 								
 								uni.uploadFile({
-								    url: 'http://food-edu.net/api/common/upload', //仅为示例，非真实的接口地址
+								    url: 'http://h5.food-edu.net/api/common/upload', //仅为示例，非真实的接口地址
 								    filePath: item,
 									header:{
 										'Authorization':  "Bearer" + ' ' + uni.getStorageSync("token")
@@ -166,8 +187,10 @@
 				if(this.img.length!=0){
 					params.images = JSON.stringify(this.img)
 				}
-				this.httpUtil.post4("/api/school/comment",params,(obj)=>{
-					console.log(obj)
+				this.httpUtil.post2("/api/school/comment",params,(obj)=>{
+					uni.switchTab({
+						url:'../../tabbar/myOrder'
+					})
 				})
 			},
 		}
@@ -239,14 +262,17 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		padding-left: 24upx;
 	}
 	.img_view image{
 		width: 120upx;
 		height: 120upx;
 		margin-right: 10upx;
+		
 	}
 	textarea{
 		font-size: 32upx;
+		height: 200upx;
 		color: #333333;
 	}
 	.comfire_btn{

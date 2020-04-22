@@ -1,6 +1,7 @@
 <template>
 	<view class="page">
 		<!-- <navbar title="订餐" :backcolorType='2' :showKongPanel="true" :whiteback='2'></navbar> -->
+		
 		<view class="address_view">
 			<image class="index_img" src="/static/index_bg.png" mode="aspectFill"></image>
 			<view class="address">
@@ -376,8 +377,8 @@
 		flex-direction: row;
 		align-items: center;
 		padding-top: 10upx;
-		font-size: 28upx;
-		padding: 10upx 40upx;
+		font-size: 22upx;
+		padding: 4upx 16upx;
 		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
 		color: #FFFFFF;
 		height: 30upx;

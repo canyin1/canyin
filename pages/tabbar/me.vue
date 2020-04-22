@@ -1,5 +1,6 @@
 <template>
 	<view class="page">
+		<button type="default" @click="testClick">清缓存</button>
 		<view class="top_view">
 			<image class="me_BG" src="/static/index_bg.png" mode=""></image>
 			<view class="player_view">
@@ -64,6 +65,9 @@
 			this.getUserInfo()
 		},
 		methods: {
+			testClick(){
+				uni.clearStorage()
+			},
 			getUserInfo(){
 				let params = {}
 				this.httpUtil.get('/api/getInfo',params,(obj)=>{
@@ -223,5 +227,12 @@
 
 	.icon-cedaohang-hezuohuoba {
 		color: #6DD2C0;
+	}
+	button{
+		position: fixed;
+		top: 40upx;
+		right: 140upx;
+		z-index: 99999999;
+		font-size: 26upx;
 	}
 </style>

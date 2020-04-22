@@ -13,7 +13,7 @@
 			<block v-if="orders.length>0">
 				<!-- <orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem> -->
 				<view class="order" v-for='(item,index) in orders' :key="index">
-					<view class="student">学生：{{item.student.name}}</view>
+					<view class="student">用户：{{item.student.name}}</view>
 					<view class="order_top">
 						<view class="order_time">{{item.date}}</view>
 						<view class="order_time" v-if="item.mealTime=='BREAKFAST'">早餐</view>
@@ -25,10 +25,13 @@
 						<view class="order_status" v-if="item.orderState=='NOT_COMMENT'">未评论</view>
 						<view class="order_status" v-if="item.orderState=='FINISH'">已完成</view>
 						<view class="order_status" v-if="item.orderState=='CANCELED'">已取消</view>
+						<view class="order_status" v-if="item.orderState=='DELIVERING'">配送中</view>
+						<view class="order_status" v-if="item.orderState=='REFUNDING'">正在退款</view>
+						<view class="order_status" v-if="item.orderState=='CANCEL_PENDING'">待商家确认退款</view>
 					</view>
 					<view class="order_top" v-for="(items,index2) in item.detailList" :key="index2">
 						<view class="goods_left">
-							
+
 							<view class="goods_name">{{items.itemName}}</view>
 						</view>
 						<view class="goods_right">
@@ -38,10 +41,10 @@
 					<view class="order_top">
 						<view class="order_num">总价：￥{{item.totalPrice}}</view>
 						<view class="order_btn_view">
-							<view class="order_btn order_btn1" v-if="item.orderState!='FINISH'||item.orderState!='CANCELED'" @click="cancelClick(item.id)">取消订单</view>
+							<view class="order_btn order_btn1" v-if="item.orderState=='NOT_PAY'||item.orderState=='PAID'" @click="cancelClick(item.id)">取消订单</view>
 							<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
 							<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
-							
+
 						</view>
 					</view>
 				</view>
@@ -65,39 +68,45 @@
 			navbar,
 			orderItem
 		},
-		data(){
-			return{
-				tabType:0,
-				heights:'',
-				orders:[],
-				orderState:''
+		data() {
+			return {
+				tabType: 0,
+				heights: '',
+				page:1,
+				
+				orders: [],
+				orderState: ''
 			}
 		},
 		onLoad() {
-			
+
 		},
 		onShow() {
 			this.orders = []
 			this.orderList()
 		},
-		methods:{
-			cancelClick(id){
+		onReachBottom() {
+			this.page++
+			this.orderList()
+		},
+		methods: {
+			cancelClick(id) {
 				let that = this
 				uni.showModal({
-					content:'是否取消订单',
-					cancelColor:'#FFBA59',
-					confirmColor:'#999',
-					confirmText:'取消订单',
-					cancelText:'否',
+					content: '是否取消订单',
+					cancelColor: '#FFBA59',
+					confirmColor: '#999',
+					confirmText: '取消订单',
+					cancelText: '否',
 					success(res) {
-						if(res.confirm==true){
-							let params={
-								id:id
+						if (res.confirm == true) {
+							let params = {
+								id: id
 							}
-							that.httpUtil.post2('/api/school/order/cancel',params,(obj)=>{
+							that.httpUtil.post2('/api/school/order/cancel', params, (obj) => {
 								let orders = that.orders
-								for(let i =0;i<orders.length;i++){
-									if(orders[i].id ==id){
+								for (let i = 0; i < orders.length; i++) {
+									if (orders[i].id == id) {
 										orders[i].orderState = 'CANCELED'
 										break;
 									}
@@ -105,14 +114,14 @@
 								that.orders = orders
 								that.$forceUpdate()
 								uni.showToast({
-									title:'取消成功',
-									icon:'none',
-									duration:1500
+									title: '取消成功',
+									icon: 'none',
+									duration: 1500
 								})
 							})
 						}
 					},
-					
+
 				})
 			},
 			addCommon(id) {
@@ -134,10 +143,10 @@
 							'signType': obj.data.signType,
 							'paySign': obj.data.paySign
 						}, function(res) {
-			
+
 							let param = {
 								outTradeNo: obj.data.outTradeNo,
-			
+
 							}
 							if (res.err_msg === 'get_brand_wcpay_request:ok') {
 								param.result = 'PAID'
@@ -146,11 +155,11 @@
 									icon: "none",
 									duration: 1500
 								})
-							this.httpUtil.post2('/api/school/order/pay-result',param,(obj)=>{
-								uni.switchTab({
-									url: '../tabbar/myOrder'
+								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+									uni.switchTab({
+										url: '../tabbar/myOrder'
+									})
 								})
-							})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
 								param.result = 'CANCELED'
 								uni.showToast({
@@ -158,54 +167,62 @@
 									icon: "none",
 									duration: 1500
 								})
-							this.httpUtil.post2('/api/school/order/pay-result',param,(obj)=>{
-								uni.switchTab({
-									url: '../tabbar/myOrder'
+								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+									uni.switchTab({
+										url: '../tabbar/myOrder'
+									})
 								})
-							})
 							}
-							
+
 						});
-			
-					}
-					else{
+
+					} else {
 						uni.showToast({
 							title: obj.msg,
-							icon:'none',
-							duration:1500
+							icon: 'none',
+							duration: 1500
 						})
 					}
 				})
 			},
-			goIndex(){
+			goIndex() {
 				uni.switchTab({
-					url:'index'
+					url: 'index'
 				})
 			},
-			orderList(){
-				let params={
-					pageNum:1,
-					pageSize:10,
+			orderList() {
+				let params = {
+					pageNum: this.page,
+					pageSize: 10,
 					orderState: this.orderState
 				}
-				this.httpUtil.get("/api/school/order/list",params,(obj)=>{
-					for(let i = 0 ;i<obj.rows.length;i++){
-						obj.rows[i].date = obj.rows[i].mealDate.split(' ')[0]
+				this.httpUtil.get("/api/school/order/list", params, (obj) => {
+					if(obj.rows.length==0){
+						if(this.page>1){
+							this.page--
+						}
 					}
-					
-					this.orders = this.orders.concat(obj.rows)
-					console.log(obj)
+					let orders = obj.rows
+					for (let i = 0; i < orders.length; i++) {
+						orders[i].date = orders[i].mealDate.split(' ')[0]
+					}
+
+					console.log(111,this.orders)
+					this.orders = this.orders.concat(orders)
+					this.$forceUpdate()
+					console.log(222,orders)
+					console.log(333,this.orders)
 				})
 			},
-			tabClick(type){
+			tabClick(type) {
 				this.tabType = type
-				if(type==0){
+				if (type == 0) {
 					this.orderState = ''
 				}
-				if(type==1){
+				if (type == 1) {
 					this.orderState = 'FINISH'
 				}
-				if(type==2){
+				if (type == 2) {
 					this.orderState = 'NOT_COMMENT'
 				}
 				this.orders = []
@@ -231,7 +248,8 @@
 		justify-content: center;
 		z-index: 9999999;
 	}
-	.tab_box{
+
+	.tab_box {
 		height: 48upx;
 		border-radius: 64upx;
 		background: #F5F5F5;
@@ -239,7 +257,8 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.tab{
+
+	.tab {
 		width: 160upx;
 		font-size: 28upx;
 		color: #333333;
@@ -248,23 +267,27 @@
 		height: 48upx;
 		border-radius: 64upx;
 	}
-	.active{
+
+	.active {
 		background: #FFBA59 !important;
 		color: #FFFFFF !important;
 	}
-	.kongHeights{
+
+	.kongHeights {
 		height: 68upx;
 		width: 100%;
 		opacity: 0;
 	}
-	.no_order{
+
+	.no_order {
 		color: #999999;
 		font-size: 28upx;
 		width: 100%;
 		text-align: center;
 		margin-top: 300upx;
 	}
-	.btn{
+
+	.btn {
 		width: 140upx;
 		height: 68upx;
 		font-size: 26upx;
@@ -274,8 +297,9 @@
 		margin: 40upx auto;
 		text-align: center;
 		line-height: 68upx;
-		box-shadow: 4upx 4upx 10upx 0 rgba(0,0,0,.1);
+		box-shadow: 4upx 4upx 10upx 0 rgba(0, 0, 0, .1);
 	}
+
 	.order {
 		width: 710upx;
 		padding: 32upx;
@@ -285,7 +309,7 @@
 		box-sizing: border-box;
 		box-shadow: 10upx 10upx 40upx rgba(0, 0, 0, .1);
 	}
-	
+
 	.order_top {
 		width: 100%;
 		display: flex;
@@ -294,35 +318,35 @@
 		justify-content: space-between;
 		padding-bottom: 20upx;
 	}
-	
+
 	.order_top:last-of-type {
 		padding-bottom: 0;
 	}
-	
+
 	.order_num {
 		font-size: 26upx;
 		color: #333333;
 		line-height: 1;
 	}
-	
+
 	.order_status {
 		font-size: 24upx;
 		color: #999999;
 		line-height: 1;
 	}
-	
+
 	.order_time {
 		font-size: 26upx;
 		color: #333333;
 		line-height: 1;
 	}
-	
+
 	.order_btn_view {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
-	
+
 	.order_btn {
 		width: 148upx;
 		height: 48upx;
@@ -334,7 +358,7 @@
 		border-radius: 24upx;
 		margin-left: 10upx;
 	}
-	
+
 	.order_btn1 {
 		background: #FFFFFF !important;
 		color: #999 !important;
@@ -343,50 +367,57 @@
 		line-height: 44upx !important;
 		border: 2upx solid #999 !important;
 	}
-	
+
 	.goods_left {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		width: 80%;
 	}
-	
+
 	.goods_img_view {
 		font-size: 0;
 	}
-	
+
 	.goods_name {
 		font-size: 26upx;
 		line-height: 1.5;
 		color: #333333;
 	}
-	
+
 	.good_img {
 		width: 120upx;
 		height: 120upx;
 		border-radius: 9upx;
 	}
-	
+
 	.goods_right {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
 		width: 20%;
 	}
-	
+
 	.goods_cash {
 		font-size: 26upx;
 		line-height: 1;
 		color: #333333;
-	
+
 	}
-	
+
 	.goods_num {
 		font-size: 24upx;
 		line-height: 1;
 		color: #999999;
 	}
-	.price_view{
+
+	.price_view {
 		font-size: 26upx;
+	}
+
+	.student {
+		font-size: 32upx;
+		color: #333333;
+		padding-bottom: 20upx;
 	}
 </style>

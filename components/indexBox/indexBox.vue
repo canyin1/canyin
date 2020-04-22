@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<view class="scroll2"  @click="bugClick(item.title,item.titleEnum,item.itemState,indexs)">
+		<view class="scroll2"  @click="bugClick(item.title,item.titleEnum,item.itemState,item.bookingState,indexs)">
 			<view class="no" v-if="item.itemState=='STOPPED'"></view>
 			<view class="state_view">{{item.itemStateText}}</view>
 			<view class="scroll_img_view">
@@ -67,8 +67,14 @@
 
 		},
 		methods: {
-			bugClick(food,foodType,itemState) {
+			bugClick(food,foodType,itemState,bookingState) {
 			if(itemState=='STOPPED'){
+				return false
+			}
+			if(bookingState=='BOOKED'){
+				uni.switchTab({
+					url:'../../pages/tabbar/myOrder'
+				})
 				return false
 			}
 			if(this.nowStudentId==''){
@@ -161,8 +167,8 @@
 		border-top-left-radius: 24upx;
 		color: #FFFFFF;
 		background: linear-gradient(270deg, rgba(249, 128, 80, 1) 1%, rgba(255, 186, 89, 1) 100%);
-		padding: 10upx 20upx;
-		font-size: 24upx;
+		padding: 4upx 20upx;
+		font-size: 22upx;
 		font-weight: 400;
 	}
 	.no{
