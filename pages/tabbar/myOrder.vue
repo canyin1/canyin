@@ -12,7 +12,7 @@
 		<view class="order_view">
 			<block v-if="orders.length>0">
 				<!-- <orderItem v-for='(item,index) in orders' :key="index" :item='item'></orderItem> -->
-				<view class="order" v-for='(item,index) in orders' :key="index" @click="detailClick(item.id)">
+				<view class="order" v-for='(item,index) in orders' :key="index" @click.stop="detailClick(item.id)">
 					<view class="student">用户：{{item.student.name}}</view>
 					<view class="order_top">
 						<view class="order_time">{{item.date}}</view>
@@ -41,9 +41,9 @@
 					<view class="order_top">
 						<view class="order_num">总价：￥{{item.totalPrice}}</view>
 						<view class="order_btn_view">
-							<view class="order_btn order_btn1" v-if="item.orderState=='NOT_PAY'||item.orderState=='PAID'" @click="cancelClick(item.id)">取消订单</view>
-							<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click="payClick(item.id)">立即支付</view>
-							<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click="addCommon(item.id)">立即评论</view>
+							<view class="order_btn order_btn1" v-if="item.orderState=='NOT_PAY'||item.orderState=='PAID'" @click.stop="cancelClick(item.id)">取消订单</view>
+							<view class="order_btn" v-if="item.orderState=='NOT_PAY'" @click.stop="payClick(item.id)">立即支付</view>
+							<view class="order_btn" v-if="item.orderState=='NOT_COMMENT'" @click.stop="addCommon(item.id)">立即评论</view>
 
 						</view>
 					</view>
@@ -73,8 +73,9 @@
 				tabType: 0,
 				heights: '',
 				page: 1,
-
+				pageNum: 10,
 				orders: [],
+				total: -1,
 				orderState: ''
 			}
 		},
@@ -84,6 +85,8 @@
 		onShow() {
 			this.orders = []
 			this.page = 1
+			this.pageNum = 10
+			this.total = -1
 			this.orderList()
 		},
 		onReachBottom() {
@@ -196,13 +199,23 @@
 				})
 			},
 			orderList() {
+				if (this.pageNum == 0 || this.total >= this.orders.length) {
+					return false
+				}
 				let params = {
+					orderByColumn:'create_time',
+					isAsc:'desc',
 					pageNum: this.page,
-					pageSize: 10,
+					pageSize: this.pageNum,
 					orderState: this.orderState
 				}
 				this.httpUtil.get("/api/school/order/list", params, (obj) => {
+					this.total = obj.total
+					if(obj.total<=this.orders.length){
+						this.pageNum =0
+					}
 					if (obj.rows.length == 0) {
+						
 						if (this.page > 1) {
 							this.page--
 						}
@@ -231,6 +244,9 @@
 					this.orderState = 'NOT_COMMENT'
 				}
 				this.orders = []
+				this.page = 1
+				this.pageNum = 10
+				this.total = -1
 				this.orderList()
 			},
 		}

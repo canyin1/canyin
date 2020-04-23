@@ -141,6 +141,7 @@
 			},
 			payClick() {
 				let i = this.foods
+				let that = this
 				// let toFoods = {}
 				let toFoodsList = []
 				let date = []
@@ -177,6 +178,8 @@
 				this.httpUtil.post2('/api/school/book', params, (obj) => {
 
 					if (obj.code == 200) {
+						uni.removeStorageSync('shoppingCarList')
+						uni.removeStorageSync('price')
 						WeixinJSBridge.invoke('getBrandWCPayRequest', {
 							'appId': obj.data.appId,
 							'timeStamp': obj.data.timeStamp,
@@ -196,7 +199,7 @@
 									duration: 1500
 								})
 								
-								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+								that.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
 									
 								})
 							} else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
@@ -207,13 +210,13 @@
 									duration: 1500
 								})
 								
-								this.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
+								that.httpUtil.post2('/api/school/order/pay-result', param, (obj) => {
 									
 								})
 							}
-							uni.switchTab({
-								url: '../tabbar/myOrder'
-							})
+								uni.switchTab({
+									url: '../tabbar/myOrder'
+								})
 						});
 
 					}

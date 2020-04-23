@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<!-- <navbar title="订餐" :backcolorType='2' :showKongPanel="true" :whiteback='2'></navbar> -->
-		
+
 		<view class="address_view">
 			<image class="index_img" src="/static/index_bg.png" mode="aspectFill"></image>
 			<view class="address">
@@ -82,36 +82,66 @@
 				typeSubList: [],
 				indexs: 0,
 				indexs1: 0,
-				cleanType:false,
+				cleanType: false,
 				week: [{
-					'week': '周日',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周一',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周二',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周三',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周四',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周五',
-					'day': '',
-					'date': ''
-				}, {
-					'week': '周六',
-					'day': '',
-					'date': ''
-				}],
+						'week': '周日',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周一',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周二',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周三',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周四',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周五',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周六',
+						'day': '',
+						'date': ''
+					},
+					{
+						'week': '周日',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周一',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周二',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周三',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周四',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周五',
+						'day': '',
+						'date': ''
+					}, {
+						'week': '周六',
+						'day': '',
+						'date': ''
+					}
+				],
 				indexList: [],
 				student: [],
 				nowStudent: '未选中',
@@ -123,28 +153,30 @@
 		onLoad(options) {
 			// let test = true
 			let test = false
-			if(test){
+			if (test) {
 				this.loginL1()
 				return false
 			}
 			var url = window.location.href
 			var i = url.split('?')
-			if(i[1]){
+			if (i[1]) {
 				var j = i[1].split('&')
 				var x = j[0].split('=')
-				if(x[1]){
+				if (x[1]) {
 					this.loginL(x[1])
-				}else{
-					window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+				} else {
+					window.location.href =
+						'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
 				}
-			}else{
-				window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+			} else {
+				window.location.href =
+					'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
 			}
-			
-			
+
+
 		},
 		onShow() {
-			if(this.cleanType==true){
+			if (this.cleanType == true) {
 				this.nextT()
 			}
 		},
@@ -154,10 +186,11 @@
 				var local = window.location.href // 获取页面url
 				this.code = this.getUrlCode().code // 截取code
 				if (this.code == null || this.code === '') { // 如果没有code，则去请求
-					window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+					window.location.href =
+						'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
 				} else {
 					this.loginL()
-					uni.setStorageSync('code',this.code)
+					uni.setStorageSync('code', this.code)
 				}
 			},
 
@@ -188,7 +221,7 @@
 						uni.navigateTo({
 							url: "../login"
 						})
-					this.cleanType = true
+						this.cleanType = true
 					} else {
 						this.student = obj.rows
 						this.nowStudentId = obj.rows[0].id,
@@ -221,7 +254,7 @@
 				this.week[0].date = weekStartDay
 				// this.week[nowDayOfWeek].date = nowYear + ((nowMonth>9)?nowMonth:nowMonth + 1) + nowDay
 				// this.week[nowDayOfWeek].day = nowDay
-				for (let x = 1; x < 7; x++) {
+				for (let x = 1; x < this.week.length; x++) {
 					var time = x * 86400000 + weekStarttime
 					var date = this.toolUtil.getTimeStrOnlyDate(time)
 					let y = date.split('-')
@@ -250,7 +283,7 @@
 
 			},
 			loginL(code) {
-				if(uni.getStorageSync('token')){
+				if (uni.getStorageSync('token')) {
 					this.nextT()
 					return
 				}
@@ -259,17 +292,18 @@
 					schoolId: 1
 				}
 				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
-					if(obj.code==200){
-						uni.setStorageSync('token',obj.token)
+					if (obj.code == 200) {
+						uni.setStorageSync('token', obj.token)
 						this.nextT()
 					}
-					if(obj.code==401){
-						window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+					if (obj.code == 401) {
+						window.location.href =
+							'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
 					}
 				})
 			},
 			loginL1(code) {
-				if(uni.getStorageSync('token')){
+				if (uni.getStorageSync('token')) {
 					this.nextT()
 					return
 				}
@@ -278,18 +312,19 @@
 					schoolId: 1
 				}
 				this.httpUtil.post3("/api/parentLogin", params, (obj) => {
-					if(obj.code==200){
-						uni.setStorageSync('token',obj.token)
+					if (obj.code == 200) {
+						uni.setStorageSync('token', obj.token)
 						this.nextT()
 					}
-					if(obj.code==401){
-						window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+					if (obj.code == 401) {
+						window.location.href =
+							'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx24d9b21c348d1ed9&redirect_uri=http%3A%2F%2Fh5.food-edu.net&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
 					}
 				})
 			},
 			getTypeList() {
 				let params = {
-					studentId: 1,
+					studentId: this.nowStudentId,
 					mealDate: this.week[this.indexs].date
 				}
 				this.httpUtil.get('/api/school/book/info', params, (obj) => {

@@ -299,7 +299,7 @@
 							this.foods = []
 						}
 						if (uni.getStorageSync('price')) {
-							this.price = uni.getStorageSync('price').toFixed(2)
+							this.price = uni.getStorageSync('price')
 						} else {
 							this.price = 0
 						}
@@ -338,7 +338,7 @@
 					}
 				};
 				prices = prices - price
-				this.price = prices.toFixed(2)
+				this.price = prices
 				uni.setStorageSync("price", prices)
 				uni.setStorageSync("shoppingCarList", k)
 				this.getnum(id, 'reduce')
@@ -413,7 +413,7 @@
 
 				this.getnum(id, 'add')
 				prices = prices + price
-				this.price = prices.toFixed(2)
+				this.price = prices
 				console.log(111, shoppingCarList)
 				uni.setStorageSync("shoppingCarList", shoppingCarList)
 				uni.setStorageSync("price", prices)
@@ -422,7 +422,7 @@
 			getnum(id, type) {
 				let food = this.foods
 				for (let j = 0; j < food.length; j++) {
-					if (food[j].id == id) {
+					if (food[j].food.id == id) {
 						if (!food[j].num) {
 							food[j].num = 0
 						}
