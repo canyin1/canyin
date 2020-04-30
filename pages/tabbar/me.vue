@@ -22,20 +22,20 @@
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view> -->
-			<view class="hengview1" @click="goClick(1)">
+			<view class="hengview1" @click="goClick(0)">
 				<view class="hengLeft">
 					<span class="iconfont icon-fuwu icon-s"></span>
 					<view class="hengname">绑定学生</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
 			</view>
-			<!-- <view class="hengview1" @click="goClick(2)">
+			<view class="hengview1" @click="goClick(1)">
 				<view class="hengLeft">
-					<span class="iconfont icon-aixin icon-s"></span>
-					<view class="hengname">我的收藏</view>
+					<span class="iconfont icon-cedaohang-hezuohuoba icon-s"></span>
+					<view class="hengname">就餐人员</view>
 				</view>
 				<span class="iconfont icon-jiantou"></span>
-			</view> -->
+			</view>
 			<!-- <view class="hengview1">
 				<view class="hengLeft">
 					<span class="iconfont icon-fuwu icon-s"></span>
@@ -76,7 +76,7 @@
 				})
 			},
 			goClick(type){
-				let url = ['../me/myWallet','../login','../me/myCollect']
+				let url = ['../login','../me/dininStaff']
 				uni.navigateTo({
 					url:url[type]
 				})
@@ -159,6 +159,7 @@
 		background: #FFFFFF;
 		border-radius: 34upx;
 		margin: 40upx auto 0;
+		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
 	}
 
 	.hengview1 {
@@ -172,7 +173,6 @@
 		box-sizing: border-box;
 		position: relative;
 		border-radius: 34upx;
-		box-shadow: 10upx 10upx 40upx rgba(0,0,0,.1);
 	}
 	.hengview1:last-of-type{
 		position: initial;

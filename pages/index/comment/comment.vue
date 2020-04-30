@@ -20,7 +20,7 @@
 		</view>
 		<view class="kongHeights"></view>
 		<view class="commentDetail_view">
-			<commentDetail v-for='(item,index) in comment' :key='index' ></commentDetail>
+			<commentDetail v-for='(item,index) in comment' :key='index' :item="comment"></commentDetail>
 		</view>
 		
 	</view>

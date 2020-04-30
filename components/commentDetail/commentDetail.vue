@@ -27,7 +27,7 @@
 	import level from '@/components/level/level.vue'
 	export default{
 		name: 'commentDetail',
-		props:{},
+		props:['item'],
 		components:{
 			level
 		},

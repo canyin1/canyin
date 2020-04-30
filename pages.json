@@ -84,6 +84,12 @@
 			"navigationBarTitleText": "",
 			"navigationStyle":"custom"
 		}
+	},{
+		"path": "pages/me/dininStaff",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle":"custom"
+		}
 	}
 	],
 	"globalStyle": {
